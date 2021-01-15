@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  reverse-proxy:
+
+    image: traefik
+    # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      # Front ports
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $PWD/config_files/traefik/acme.json:/acme.json
+      - $PWD/config_files/traefik/appsrv-proxy.toml:/traefik.toml
