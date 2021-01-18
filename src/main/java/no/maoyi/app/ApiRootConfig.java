@@ -10,7 +10,7 @@ import javax.ws.rs.ApplicationPath;
 public class ApiRootConfig extends ResourceConfig {
     public ApiRootConfig() {
         register(MultiPartFeature.class);
-        packages(true,"no.twct.recipeheaven" );
+        packages(true,"no.***REMOVED***.app" );
     }
 
 }
