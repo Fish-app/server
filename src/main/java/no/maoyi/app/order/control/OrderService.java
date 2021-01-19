@@ -1,7 +1,7 @@
 package no.maoyi.app.order.control;
 
-import no.maoyi.app.order.entity.Order;
-import no.maoyi.app.user.boundry.AuthenticationService;
+import no.maoyi.app.order.entity.BuyBaseOrder;
+import no.maoyi.app.user.boundry.UserResource;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.inject.Inject;
@@ -17,10 +17,10 @@ public class OrderService {
     JsonWebToken token;
 
     @Inject
-    AuthenticationService authenticationService;
+    UserResource userResource;
 
-    public Order newOrder(){
+    public BuyBaseOrder newBuyOrder() {
         // logict to create and presist comes here
-        return new Order();
+        return new BuyBaseOrder();
     }
 }
