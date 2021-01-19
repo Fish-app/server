@@ -37,6 +37,7 @@ services:
       COMPOSE_DB_BASE: ${DB_NAME}
       COMPOSE_DB_USER: ${DB_USER}
       COMPOSE_DB_PASSWD: ${DB_PASSWD}
+      PAYARA_MASTERPASS: ${PAYARA_MASTERPASS}
     labels:
       - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.routers.api.rule=Host(`localhost`)"
