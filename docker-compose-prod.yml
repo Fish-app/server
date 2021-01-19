@@ -2,7 +2,7 @@ version: "3.8"
 services:
   database:
     image: "postgres:13"
-    container_name: app-database
+    container_name: fishapp-database
     restart: on-failure
     expose:
       - "5432"
@@ -14,7 +14,7 @@ services:
       - database-data:/var/lib/postgresql/data
 
   api:
-    container_name: app-api
+    container_name: fishapp-api
     restart: on-failure
     build:
       context: .
@@ -22,9 +22,6 @@ services:
       target: prod
     expose:
       - "8080"
-    ports:
-      - "127.0.0.1:8181:8181"
-      - "127.0.0.1:4848:4848"
     depends_on:
       - "database"
     environment:
@@ -43,7 +40,7 @@ services:
       - api-pictures:/opt/payara/images
 
   reverse-proxy:
-    container_name: frivillig-proxy
+    container_name: fishapp-proxy
     image: traefik:v2.2
     # Enables the web UI and tells Traefik to listen to docker
     ports:
@@ -53,8 +50,8 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${PWD}/config/cert.json:/acme.json
-      - ${PWD}/config/traefik.toml:/traefik.toml
+      - ${PWD}/config/traefik/cert.json:/acme.json
+      - ${PWD}/config/traefik/config.toml:/traefik.toml
 volumes:
   database-data:
   api-pictures:

@@ -25,3 +25,5 @@ server
 *.war
 
 .env
+# traefik cert
+.cert.json

@@ -2,7 +2,7 @@ version: "3.8"
 services:
   database:
     image: "postgres:13"
-    container_name: app-database
+    container_name: fishapp-database
     restart: on-failure
     ports:
       - "5432:5432"
@@ -18,7 +18,7 @@ services:
 #        target: /docker-entrypoint-initdb.d
 
   api:
-    container_name: app-api
+    container_name: fishapp-api
     restart: on-failure
     build:
       context: .
@@ -33,7 +33,7 @@ services:
     depends_on:
       - "database"
     environment:
-      COMPOSE_DB_HOST: app-database
+      COMPOSE_DB_HOST: fishapp-database
       COMPOSE_DB_BASE: ${DB_NAME}
       COMPOSE_DB_USER: ${DB_USER}
       COMPOSE_DB_PASSWD: ${DB_PASSWD}
@@ -44,7 +44,7 @@ services:
       - "traefik.http.middlewares.api-add-prefix.addprefix.prefix=/api"
 
   reverse-proxy:
-    container_name: app-proxy
+    container_name: fishapp-proxy
     image: traefik:v2.2
     # Enables the web UI and tells Traefik to listen to docker
     command: --api.insecure=true --providers.docker
