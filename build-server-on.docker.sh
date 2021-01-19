@@ -7,5 +7,4 @@ echo "Stopping docker compose $COMPOSE_DEV_FILE"
 docker-compose -f $COMPOSE_DEV_FILE down --remove-orphans &&
 docker-compose -f $COMPOSE_DEV_FILE up -d --build database api reverse-proxy
 echo "The was the api was rebuilt if any files changed, use CTRL-C to detach from the log console"
-sleep 1.5
 docker-compose -f $COMPOSE_DEV_FILE logs -f
