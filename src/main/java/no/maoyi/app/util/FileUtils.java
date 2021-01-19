@@ -1,8 +1,13 @@
 package no.***REMOVED***.app.util;
 
-import java.io.File;
-import java.io.IOException;
+import no.***REMOVED***.app.user.control.KeyService;
+import org.w3c.dom.ls.LSOutput;
+
+import java.io.*;
 import java.nio.file.Files;
+import java.security.KeyPair;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FileUtils {
 
@@ -67,28 +72,65 @@ public class FileUtils {
     /**
      * Utility method for getting the file ending of the provided file.
      * If no ending is found null is returned.
-     * The dot is included so abc.jpg yields .jpg and abc yields null
+     * The dot is included so abc.jpg yields .jpg and abc yields null.
      *
      * @param file the file to get the file extention from
-     * @return the file extension to the file at the provided path inclusive the dot null if no extension
+     *
+     * @return the file extension to the file at the provided path inclusive the dot null if no extension.
      */
     public static String getFileExtension(File file){
         return getFilePathExtension(file.getAbsolutePath());
     }
+
     /**
      * Utility method for getting the file ending of the provided file path.
      * If no ending is found null is returned.
-     * The dot is included so abc.jpg yields .jpg and abc yields null
+     * The dot is included so abc.jpg yields .jpg and abc yields null.
      *
-     * @param filePath the filepath to get the extension from
-     * @return the file extension to the file at the provided path inclusive the dot null if no extension
+     * @param filePath the filepath to get the extension from.
+     *
+     * @return the file extension to the file at the provided path inclusive the dot null if no extension.
      */
-    public static String getFilePathExtension(String filePath){
+    public static String getFilePathExtension(String filePath) {
         int lastDot = filePath.lastIndexOf(".");
         if (lastDot > 0) {
-            return  filePath.substring(lastDot);
+            return filePath.substring(lastDot);
         } else {
             return null;
         }
+    }
+
+    /**
+     * Tries to deserialize the provided file in to the provided objet type. Try to find a better solution.
+     * this is not ideal.
+     *
+     * @param file the file to deserialize from.
+     * @param <T>  the type to deserialize in to.
+     *
+     * @return the deserialized objet
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public static <T> T deserializeObjetFromFile(File file) throws IOException, ClassNotFoundException {
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+
+        return (T) objectInputStream.readObject();
+
+    }
+
+    /**
+     * Serializes the provided objet to the provided file.
+     *
+     * @param object the objet to serialize.
+     * @param file   the file to serialize to.
+     *
+     * @throws IOException
+     */
+    public static void serializeObjetToFile(Object object, String file) throws IOException {
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(
+                file)));
+        objectOutputStream.writeObject(object);
+        objectOutputStream.close();
     }
 }
