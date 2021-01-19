@@ -58,11 +58,11 @@ public class User implements Serializable {
     @ManyToMany
     @JsonbTransient
     //@JoinTable(name = "user_groups", joinColumns = @JoinColumn(name = "email", referencedColumnName = "email"), inverseJoinColumns = @JoinColumn(name = "groups_name", referencedColumnName = "name"))
+
     @JoinTable(
             name = "user_groups",
-            joinColumns = @JoinColumn(name = "email", referencedColumnName = "email"),
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "groups_name", referencedColumnName = "name"))
-
     List<Group> groups;
 
 

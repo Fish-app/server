@@ -22,8 +22,8 @@ import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 // Adds credential validation queries to validation store.
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "java:global/jdbc/DemoDataSource",
-        callerQuery = "select password from users where email = ?",
-        groupsQuery = "select groups_name from user_groups where email = ?",
+        callerQuery = "select password from users as us where cast(us.id as text)  = ?",
+        groupsQuery = "select groups_name from user_groups as ug, users as us where cast(us.id as text) = ? and us.id = ug.user_id",
         priority = 80)
 
 // Roles allowed for authentication
