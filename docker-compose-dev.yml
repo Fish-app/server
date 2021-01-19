@@ -1,0 +1,61 @@
+version: "3.8"
+services:
+  database:
+    image: "postgres:13"
+    container_name: app-database
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWD}
+    volumes:
+      - database-data:/var/lib/postgresql/data
+# PRESERVED FOR FUTURE USE (autorun by PSQL)
+#      - type: bind
+#        source: ./scripts/db_init
+#        target: /docker-entrypoint-initdb.d
+
+  api:
+    container_name: app-api
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    ports:
+      - "8080:8080"
+      - "8181:8181"
+      - "4848:4848"
+    volumes:
+    - payara-images:/opt/payara/images
+    depends_on:
+      - "database"
+    environment:
+      COMPOSE_DB_HOST: app-database
+      COMPOSE_DB_BASE: ${DB_NAME}
+      COMPOSE_DB_USER: ${DB_USER}
+      COMPOSE_DB_PASSWD: ${DB_PASSWD}
+    labels:
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.routers.api.middlewares=api-add-prefix@docker"
+      - "traefik.http.middlewares.api-add-prefix.addprefix.prefix=/api"
+
+  reverse-proxy:
+    container_name: app-proxy
+    image: traefik:v2.2
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8088:8080" # 8088 on localhost
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  database-data:
+  payara-images:
