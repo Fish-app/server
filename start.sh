@@ -7,6 +7,8 @@ if [ ! -f .env ]; then
   cat .env
   echo "\nPlease wait...\n"
   sleep 10
+  echo "From now on use the build and kill .sh scripts!"
+  sleep 3
 fi
 
 ./build-server-on.docker.sh
