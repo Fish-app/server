@@ -8,7 +8,7 @@ COPY src ./src
 RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package
 
 ## Copy isolated build from intermediate container(useful on server)
-FROM payara/micro:5.2020.7 AS prod
+FROM payara/micro:5.2020.7-jdk11 AS prod
 ## Fixes clock in payara log
 ENV TZ Europe/Oslo
 COPY --from=build /app/target/maoyi-1.0.war $DEPLOY_DIR/maoyi-1.0.war
