@@ -7,15 +7,18 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWD}
+      # Excluded vars below are automatically defined by PSQL
+      #POSTGRES_DB: ${DB_NAME}
+      #POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWD}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWD: ${DB_PASSWD}
     volumes:
       - database-data:/var/lib/postgresql/data
-# PRESERVED FOR FUTURE USE (autorun by PSQL)
-#      - type: bind
-#        source: ./scripts/db_init
-#        target: /docker-entrypoint-initdb.d
+      - type: bind
+        source: ./scripts/db_init
+        target: /docker-entrypoint-initdb.d
 
   api:
     container_name: fishapp-api
@@ -37,6 +40,7 @@ services:
       COMPOSE_DB_BASE: ${DB_NAME}
       COMPOSE_DB_USER: ${DB_USER}
       COMPOSE_DB_PASSWD: ${DB_PASSWD}
+      PAYARA_MASTERPASS: ${PAYARA_MASTERPASS}
     labels:
       - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.routers.api.rule=Host(`localhost`)"
