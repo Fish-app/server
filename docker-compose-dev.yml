@@ -15,7 +15,9 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWD: ${DB_PASSWD}
     volumes:
-      - database-data:/var/lib/postgresql/data
+      - type: volume
+        source: database-data
+        target: /var/lib/postgresql/data
       - type: bind
         source: ./scripts/db_init
         target: /docker-entrypoint-initdb.d
