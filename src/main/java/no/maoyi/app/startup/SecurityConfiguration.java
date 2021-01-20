@@ -12,13 +12,15 @@ import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 
 @DataSourceDefinition(
         name = "java:global/jdbc/DemoDataSource",
-        className = "org.postgresql.ds.PGSimpleDataSource",
-        serverName = "${ENV=POSTGRES_IP}",  // set the property
-        portNumber = 5432,        // set the property
-        databaseName = "${ENV=USER_DB_NAME}",    // set the property
-        user = "${ENV=USER_USERNAME}",
-        password = "${ENV=USER_PASSWORD}")
-
+        className       = "org.postgresql.ds.PGSimpleDataSource",
+        serverName      = "${MPCONFIG=dataSource.serverName}",
+        portNumber      = 5432,
+        databaseName    = "${MPCONFIG=dataSource.databaseName}",
+        user            = "${MPCONFIG=dataSource.user}",
+        password        = "${MPCONFIG=dataSource.password}",
+        minPoolSize     = 10,
+        maxPoolSize     = 50
+)
 // Adds credential validation queries to validation store.
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "java:global/jdbc/DemoDataSource",
