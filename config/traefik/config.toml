@@ -14,8 +14,10 @@ address = ":80"
 [entryPoints.websecure]
 address = ":443"
 
+# Now this works, but for loose coupling
+# fix this using variables in the future
 [certificatesResolvers.buypass.acme]
-email = "${SSL_ACME_CONTACT_EMAIL}"
+email = "abuse@gaupne.net"
 storage = "acme.json"
 caServer = "https://api.buypass.com/acme/directory"
 
