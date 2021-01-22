@@ -10,10 +10,10 @@ services:
       # Excluded vars below are automatically defined by PSQL
       #POSTGRES_DB: ${DB_NAME}
       #POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWD}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWD: ${DB_PASSWD}
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWD:?Err DB admin password is not set! Run ./start.sh to generate}
+      DB_NAME: ${DB_NAME:?Err Name of database must be set.}
+      DB_USER: ${DB_USER:?Err User to create must be set}
+      DB_PASSWD: ${DB_PASSWD:?Err Password for user is missing.}
     volumes:
       - type: volume
         source: database-data
@@ -39,10 +39,11 @@ services:
       - "database"
     environment:
       COMPOSE_DB_HOST: fishapp-database
-      COMPOSE_DB_BASE: ${DB_NAME}
-      COMPOSE_DB_USER: ${DB_USER}
-      COMPOSE_DB_PASSWD: ${DB_PASSWD}
-      PAYARA_MASTERPASS: ${PAYARA_MASTERPASS}
+      COMPOSE_DB_BASE: ${DB_NAME:?Err Server must have configured an database!}
+      COMPOSE_DB_USER: ${DB_USER:?Err Server must have configured a database user.}
+      COMPOSE_DB_PASSWD: ${DB_PASSWD:?Err Unable to get database password. Server halted.}
+      # Only in use with full Payara Server FIXME: Unsure if working
+      #PAYARA_MASTERPASS: ${PAYARA_MASTERPASS:? The Payara Server UI is missing a password.}
     labels:
       - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.routers.api.rule=Host(`localhost`)"

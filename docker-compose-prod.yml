@@ -10,12 +10,15 @@ services:
       # Excluded vars below are automatically defined by PSQL
       #POSTGRES_DB: ${DB_NAME}
       #POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWD}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWD: ${DB_PASSWD}
+      # FIXME: USE SECRETS!
+      POSTGRES_PASSWORD: ${DB_ADMIN_PASSWD:?Err DB admin password is not set! Run ./start.sh to generate}
+      DB_NAME: ${DB_NAME:?Err Name of database must be set.}
+      DB_USER: ${DB_USER:?Err User to create must be set}
+      DB_PASSWD: ${DB_PASSWD:?Err Password for user is missing.}
     volumes:
-      - database-data:/var/lib/postgresql/data
+      - type: volume
+        source: database-data
+        target: /var/lib/postgresql/data
       - type: bind
         source: ./scripts/db_init
         target: /docker-entrypoint-initdb.d
@@ -32,11 +35,10 @@ services:
     depends_on:
       - "database"
     environment:
-      COMPOSE_DB_HOST: app-database
-      COMPOSE_DB_BASE: ${DB_NAME}
-      COMPOSE_DB_USER: ${DB_USER}
-      COMPOSE_DB_PASSWD: ${DB_PASSWD}
-      PAYARA_MASTERPASS: ${PAYARA_MASTERPASS}
+      COMPOSE_DB_HOST: fishapp-database
+      COMPOSE_DB_BASE: ${DB_NAME:?Err Server must have configured an database!}
+      COMPOSE_DB_USER: ${DB_USER:?Err Server must have configured a database user.}
+      COMPOSE_DB_PASSWD: ${DB_PASSWD:?Err Unable to get database password. Server halted.}
     labels:
       - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.routers.api.rule=Host(`${API_TLD}`)"
@@ -45,7 +47,7 @@ services:
       - "traefik.http.routers.api.tls=true"
       - "traefik.http.routers.api.tls.certresolver=buypass"
     volumes:
-      - api-pictures:/opt/payara/images
+      - payara-images:/opt/payara/images
 
   reverse-proxy:
     container_name: fishapp-proxy
@@ -55,11 +57,16 @@ services:
       # Front ports
       - "80:80"
       - "443:443"
+    #environment:
+      #TODO: WHY YOU SAY EMAIL IS EMPTY buypass ???? FIX LATER, MANUAL MAIL IN CONFIG IS OK.
+      #TRAEFIK_CERTIFICATESRESOLVERS_buypass_ACME_EMAIL: ${SSL_ACME_CONTACT_MAIL:? Contact email for ACME is required.}
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      # TODO: Use secrets to improve security
       - ${PWD}/config/traefik/cert.json:/acme.json
       - ${PWD}/config/traefik/config.toml:/traefik.toml
+
 volumes:
   database-data:
-  api-pictures:
+  payara-images:
