@@ -57,12 +57,16 @@ services:
       # Front ports
       - "80:80"
       - "443:443"
+    #environment:
+      #TODO: WHY YOU SAY EMAIL IS EMPTY buypass ???? FIX LATER, MANUAL MAIL IN CONFIG IS OK.
+      #TRAEFIK_CERTIFICATESRESOLVERS_buypass_ACME_EMAIL: ${SSL_ACME_CONTACT_MAIL:? Contact email for ACME is required.}
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      # FIXME: Use secrets to improve security
+      # TODO: Use secrets to improve security
       - ${PWD}/config/traefik/cert.json:/acme.json
       - ${PWD}/config/traefik/config.toml:/traefik.toml
+
 volumes:
   database-data:
   payara-images:
