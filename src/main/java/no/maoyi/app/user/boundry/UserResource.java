@@ -3,6 +3,7 @@ package no.***REMOVED***.app.user.boundry;
 import no.***REMOVED***.app.user.control.AuthenticationService;
 import no.***REMOVED***.app.user.control.KeyService;
 import no.***REMOVED***.app.user.entity.Group;
+import no.***REMOVED***.app.user.entity.Seller;
 import no.***REMOVED***.app.user.entity.User;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -80,7 +81,7 @@ public class UserResource {
      */
     @GET
     @Path("currentuser")
-    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME})
     public Response getCurrentUser() {
         ResponseBuilder resp;
         User            user = authService.getLoggedInUser();
@@ -139,7 +140,7 @@ public class UserResource {
     }
 
     /**
-     * Creates a new userin the system.
+     * Creates a new user in the system.
      *
      * @param name     the first name of the user
      * @param username the last name of the user
@@ -175,6 +176,27 @@ public class UserResource {
     }
 
     @POST
+    @Path("createseller")
+    public Response createSeller(@HeaderParam("name") String name, @HeaderParam("username") String username,
+                                 @HeaderParam("email") String email, @HeaderParam("password") String password,
+                                 @HeaderParam("accountNumber") String accountNumber, @HeaderParam("regNumber") String regNumber
+    ) {
+        ResponseBuilder resp;
+        try {
+            Seller seller = authService.getSellerFromEmail(email);
+            if (seller == null) {
+                Seller newSeller = authService.createSeller(name, username, email, password, accountNumber, regNumber);
+                resp = Response.ok(newSeller);
+            } else {
+                resp = Response.ok("Seller already exists, please try another email");
+            }
+        } catch (PersistenceException e) {
+            resp = Response.ok("Unexpected error creating the seller").status(500);
+        }
+        return resp.build();
+    }
+
+    @POST
     @Path("credentialTest")
     @RolesAllowed("admin")
     public Response credentialTest() {
@@ -183,7 +205,7 @@ public class UserResource {
 
     @PUT
     @Path("changepassword")
-    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME})
     public Response changePassword(@HeaderParam("password") String newPassword) {
 
         try {
