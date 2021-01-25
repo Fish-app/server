@@ -29,3 +29,5 @@ server
 .cert.json
 # Compose is symlinked, and may be different for diff situations
 docker-compose.yml
+
+.gradle/
