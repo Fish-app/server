@@ -143,7 +143,6 @@ public class UserResource {
      * Creates a new user in the system.
      *
      * @param name     the first name of the user
-     * @param username the last name of the user
      * @param password desired password for the user
      * @param email    email for the user
      *
@@ -151,15 +150,15 @@ public class UserResource {
      */
     @POST
     @Path("create")
-    public Response createUser(@HeaderParam("name") String name, @HeaderParam("username") String username,
-                               @HeaderParam("email") String email, @HeaderParam("password") String password
+    public Response createUser(@HeaderParam("name") String name, @HeaderParam("email") String email,
+                               @HeaderParam("password") String password
     ) {
         ResponseBuilder resp;
         try {
             User user = authService.getUserFromEmail(email);
             if (user == null) {
 
-                User newUser = authService.createUser(name, username, email, password);
+                User newUser = authService.createUser(name, email, password);
                 resp = Response.ok(newUser);
 
 
@@ -177,15 +176,15 @@ public class UserResource {
 
     @POST
     @Path("createseller")
-    public Response createSeller(@HeaderParam("name") String name, @HeaderParam("username") String username,
-                                 @HeaderParam("email") String email, @HeaderParam("password") String password,
-                                 @HeaderParam("accountNumber") String accountNumber, @HeaderParam("regNumber") String regNumber
+    public Response createSeller(@HeaderParam("name") String name, @HeaderParam("email") String email,
+                                 @HeaderParam("password") String password, @HeaderParam("accountNumber") String accountNumber,
+                                 @HeaderParam("regNumber") String regNumber
     ) {
         ResponseBuilder resp;
         try {
             Seller seller = authService.getSellerFromEmail(email);
             if (seller == null) {
-                Seller newSeller = authService.createSeller(name, username, email, password, accountNumber, regNumber);
+                Seller newSeller = authService.createSeller(name, email, password, accountNumber, regNumber);
                 resp = Response.ok(newSeller);
             } else {
                 resp = Response.ok("Seller already exists, please try another email");

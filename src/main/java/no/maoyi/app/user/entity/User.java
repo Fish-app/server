@@ -42,10 +42,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String username;
-
     @Email
     @Column(nullable = false, unique = true)
     private String email;
@@ -80,10 +76,9 @@ public class User implements Serializable {
     List<BaseOrder> userCreatedOrders;
 
 
-    public User(String email, String name, String username, String password) {
+    public User(String email, String name, String password) {
         this.setEmail(email);
         this.setName(name);
-        this.setUsername(username);
         this.setPassword(password);
     }
 

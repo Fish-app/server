@@ -28,8 +28,8 @@ public class Seller extends User{
     @Column(nullable = false)
     String regNumber;
 
-    public Seller (String name, String username, String email, String password, String bankAccountNumber, String regNumber) {
-        super(name, username, email, password);
+    public Seller (String name, String email, String password, String bankAccountNumber, String regNumber) {
+        super(name, email, password);
         this.setBankAccountNumber(bankAccountNumber);
         this.setRegNumber(regNumber);
     }
