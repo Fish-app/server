@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.transaction.entity.Transaction;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -25,7 +26,16 @@ public class OfferListing extends Listing {
     @Column(nullable = false, name = "max_ammount")
     int maxAmount;
 
+    // TODO: sjekke om det her blir med som et felt eller om man treng og jør nå constructor shenanagans
+    public int getAmountLeft() {
+        if (transactions != null) {
+            return maxAmount - transactions.stream().map(Transaction::getAmount).reduce(0, Integer::sum);
+        }
+        return maxAmount;
+    }
+
     @OneToMany
+    @JsonbTransient
     List<Transaction> transactions;
 
 
