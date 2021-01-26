@@ -4,9 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Data
@@ -18,7 +20,12 @@ public class Seller extends User{
 
     public static final String SELLER_BY_EMAIL = "Seller.getByEmail";
 
+    @NotBlank
+    @Column(nullable = false)
     String bankAccountNumber;
+
+    @NotBlank
+    @Column(nullable = false)
     String regNumber;
 
     public Seller (String name, String username, String email, String password, String bankAccountNumber, String regNumber) {
