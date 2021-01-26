@@ -34,18 +34,18 @@ public class CommodityService {
     @ConfigProperty(name = "photo.storage.path", defaultValue = "photos")
     String photoSaveDir;
 
-    public boolean addNewCommodity(String name, FormDataMultiPart photo) throws IOException {
+    public Commodity addNewCommodity(String name, FormDataMultiPart photo) throws IOException {
         Commodity   commodity = new Commodity();
         List<Image> images    = imageUtil.saveImages(photo, new File(photoSaveDir), "image");
 
 
         if (images.isEmpty()) {
-            return false;
+            return null;
         } else {
             commodity.setName(name);
             commodity.setCommodityImage(images.get(0));
             entityManager.persist(commodity);
-            return true;
+            return commodity;
         }
     }
 
