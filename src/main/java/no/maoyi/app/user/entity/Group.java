@@ -17,8 +17,9 @@ import javax.persistence.Table;
 public class Group {
 
     public static final String USER_GROUP_NAME = "user";
+    public static final String SELLER_GROUP_NAME = "seller";
     public static final String ADMIN_GROUP_NAME = "admin";
-    public static final String[] GROUPS = {USER_GROUP_NAME, ADMIN_GROUP_NAME};
+    public static final String[] GROUPS = {USER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME};
 
     @Id
     String name;
