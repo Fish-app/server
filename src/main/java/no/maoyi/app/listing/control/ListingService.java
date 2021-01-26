@@ -1,6 +1,5 @@
-package no.***REMOVED***.app.order.control;
+package no.***REMOVED***.app.listing.control;
 
-import no.***REMOVED***.app.order.entity.BuyBaseOrder;
 import no.***REMOVED***.app.user.boundry.UserResource;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -8,7 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-public class OrderService {
+public class ListingService {
 
     @PersistenceContext
     EntityManager entityManager;
@@ -19,8 +18,8 @@ public class OrderService {
     @Inject
     UserResource userResource;
 
-    public BuyBaseOrder newBuyOrder() {
+    public void newBuyOrder() {
         // logict to create and presist comes here
-        return new BuyBaseOrder();
+
     }
 }
