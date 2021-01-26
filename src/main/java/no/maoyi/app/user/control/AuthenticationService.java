@@ -100,9 +100,9 @@ public class AuthenticationService {
     }
 
 
-    public User createUser(String name, String username, String email, String password) {
+    public User createUser(String name, String email, String password) {
 
-        User  newUser   = new User(email, name, username, password);
+        User  newUser   = new User(email, name, password);
         Group usergroup = entityManager.find(Group.class, Group.USER_GROUP_NAME);
         newUser.setPassword(hasher.generate(password.toCharArray()));
         newUser.getGroups().add(usergroup);
@@ -113,8 +113,8 @@ public class AuthenticationService {
 
     }
 
-    public Seller createSeller(String name, String username, String email, String password, String bankAccountNumber, String regNumber) {
-        Seller newSeller = new Seller(name, username, email, password, bankAccountNumber, regNumber);
+    public Seller createSeller(String name, String email, String password, String bankAccountNumber, String regNumber) {
+        Seller newSeller = new Seller(name, email, password, bankAccountNumber, regNumber);
         newSeller.getGroups().add(entityManager.find(Group.class, Group.USER_GROUP_NAME));
         newSeller.getGroups().add(entityManager.find(Group.class, Group.SELLER_GROUP_NAME));
         newSeller.setPassword(hasher.generate(password.toCharArray()));
