@@ -36,7 +36,7 @@ public class CommodityService {
 
     public boolean addNewCommodity(String name, FormDataMultiPart photo) throws IOException {
         Commodity   commodity = new Commodity();
-        List<Image> images    = imageUtil.saveImages(photo, new File(photoSaveDir));
+        List<Image> images    = imageUtil.saveImages(photo, new File(photoSaveDir), "image");
 
 
         if (images.isEmpty()) {
