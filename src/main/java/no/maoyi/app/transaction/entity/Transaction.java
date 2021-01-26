@@ -1,21 +1,19 @@
-package no.maoyi.app.order.entity;
+package no.maoyi.app.transaction.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.maoyi.app.conversation.entity.Conversation;
+import no.maoyi.app.listing.entity.Listing;
 import no.maoyi.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
-public abstract class BaseOrder {
-
+@NoArgsConstructor
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     BigInteger id;
@@ -23,10 +21,21 @@ public abstract class BaseOrder {
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    User creator;
+    //    @ManyToOne
+    //    @JsonbTransient
+    //    Listing transactionListing;
 
-    Boolean isOrderOpen;
+    @Column(nullable = false)
+    int amount;
+
+    @Column(nullable = false)
+    int price;
+
+    @ManyToOne
+    User maker;
+
+    @ManyToOne
+    User taker;
 
     @PrePersist
     protected void onCreate() {
