@@ -1,4 +1,4 @@
-package no.***REMOVED***.app.order.entity;
+package no.***REMOVED***.app.listing.entity;
 
 
 import lombok.Data;
@@ -7,11 +7,16 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 
+
 @Data
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BuyBaseOrder extends BaseOrder {
+public class BuyRequest extends Listing {
+
+    protected String listingType = "order_listing";
+
+    int amount;
 
 
 }

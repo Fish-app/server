@@ -4,7 +4,7 @@ package no.***REMOVED***.app.conversation.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.***REMOVED***.app.order.entity.BaseOrder;
+import no.***REMOVED***.app.listing.entity.Listing;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ConversationDTO {
 
     BigInteger id;
 
-    BaseOrder baseOrder;
+    Listing baseOrder;
 
     List<MessageDTO> messages;
 

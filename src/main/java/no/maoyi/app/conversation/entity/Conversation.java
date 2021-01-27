@@ -4,7 +4,7 @@ package no.***REMOVED***.app.conversation.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.***REMOVED***.app.order.entity.BaseOrder;
+import no.***REMOVED***.app.listing.entity.Listing;
 
 import javax.persistence.*;
 import java.math.BigInteger;
@@ -21,7 +21,7 @@ public class Conversation {
     BigInteger id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    BaseOrder baseOrder;
+    Listing baseOrder;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<Message> messages;

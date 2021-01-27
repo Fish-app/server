@@ -1,8 +1,7 @@
-package no.***REMOVED***.app.order.boundry;
+package no.***REMOVED***.app.listing.boundry;
 
 
-import no.***REMOVED***.app.order.control.OrderService;
-import no.***REMOVED***.app.order.entity.BuyBaseOrder;
+import no.***REMOVED***.app.listing.control.ListingService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -12,10 +11,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 @Path("buy-order")
-public class BuyOrderResource {
+public class ListingResource {
 
     @Inject
-    OrderService orderService;
+    ListingService listingService;
 
     @POST
     @Path("new")
@@ -25,9 +24,8 @@ public class BuyOrderResource {
             @FormDataParam("osv...") int dopdido,
             FormDataMultiPart photos
     ) {
-        BuyBaseOrder returnBuyOrder = orderService.newBuyOrder();
 
-        return Response.ok(returnBuyOrder).build();
+        return Response.ok().build();
 
     }
 }
