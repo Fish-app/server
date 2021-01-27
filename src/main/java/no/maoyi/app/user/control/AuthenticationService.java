@@ -113,8 +113,8 @@ public class AuthenticationService {
 
     }
 
-    public Seller createSeller(String name, String email, String password, String bankAccountNumber, String regNumber) {
-        Seller newSeller = new Seller(name, email, password, bankAccountNumber, regNumber);
+    public Seller createSeller(String name, String email, String password, String regNumber) {
+        Seller newSeller = new Seller(name, email, password, regNumber);
         newSeller.getGroups().add(entityManager.find(Group.class, Group.USER_GROUP_NAME));
         newSeller.getGroups().add(entityManager.find(Group.class, Group.SELLER_GROUP_NAME));
         newSeller.setPassword(hasher.generate(password.toCharArray()));

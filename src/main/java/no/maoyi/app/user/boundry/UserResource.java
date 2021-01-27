@@ -177,14 +177,13 @@ public class UserResource {
     @POST
     @Path("createseller")
     public Response createSeller(@HeaderParam("name") String name, @HeaderParam("email") String email,
-                                 @HeaderParam("password") String password, @HeaderParam("accountNumber") String accountNumber,
-                                 @HeaderParam("regNumber") String regNumber
+                                 @HeaderParam("password") String password, @HeaderParam("regNumber") String regNumber
     ) {
         ResponseBuilder resp;
         try {
             Seller seller = authService.getSellerFromEmail(email);
             if (seller == null) {
-                Seller newSeller = authService.createSeller(name, email, password, accountNumber, regNumber);
+                Seller newSeller = authService.createSeller(name, email, password, regNumber);
                 resp = Response.ok(newSeller);
             } else {
                 resp = Response.ok("Seller already exists, please try another email");
