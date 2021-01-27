@@ -3,7 +3,7 @@ package no.maoyi.app.user.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.conversation.entity.Conversation;
-import no.maoyi.app.order.entity.BaseOrder;
+import no.maoyi.app.listing.entity.Listing;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
@@ -53,8 +53,6 @@ public class User implements Serializable {
 
     @ManyToMany
     @JsonbTransient
-    //@JoinTable(name = "user_groups", joinColumns = @JoinColumn(name = "email", referencedColumnName = "email"), inverseJoinColumns = @JoinColumn(name = "groups_name", referencedColumnName = "name"))
-
     @JoinTable(
             name = "user_groups",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -66,14 +64,12 @@ public class User implements Serializable {
 
     @OneToMany
     @JsonbTransient
-    // May have two lists here one with active one with archived
     List<Conversation> userConversations;
 
 
     @OneToMany
     @JsonbTransient
-    // May have two lists here one with active one with archived
-    List<BaseOrder> userCreatedOrders;
+    List<Listing> userCreatedOrders;
 
 
     public User(String email, String name, String password) {

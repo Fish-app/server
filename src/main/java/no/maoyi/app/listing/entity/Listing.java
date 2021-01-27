@@ -1,20 +1,21 @@
-package no.maoyi.app.order.entity;
+package no.maoyi.app.listing.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.maoyi.app.conversation.entity.Conversation;
+import no.maoyi.app.commodity.entity.Commodity;
 import no.maoyi.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
-public abstract class BaseOrder {
+@NoArgsConstructor
+public abstract class Listing {
+
+    protected String listingType;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,20 @@ public abstract class BaseOrder {
     @ManyToOne(cascade = CascadeType.ALL)
     User creator;
 
-    Boolean isOrderOpen;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name = "end_date")
+    Date endDate;
+
+    @ManyToOne
+    @JsonbTransient
+    Commodity commodity;
+
+    @Column(nullable = false)
+    int price;
+
+    @Column(name = "is_open")
+    Boolean isOpen;
+
 
     @PrePersist
     protected void onCreate() {

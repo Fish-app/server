@@ -1,7 +1,7 @@
-package no.maoyi.app.order.boundry;
+package no.maoyi.app.listing.boundry;
 
 
-import no.maoyi.app.order.control.OrderService;
+import no.maoyi.app.listing.control.ListingService;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -10,15 +10,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-@Path("sell-order")
-public class SellOrderResource {
+@Path("buy-order")
+public class ListingResource {
 
     @Inject
-    OrderService orderService;
+    ListingService listingService;
 
     @POST
     @Path("new")
-    public Response newSellOrder(
+    public Response newBuyOrder(
             @FormDataParam("title") String title,
             @FormDataParam("desk") String description,
             @FormDataParam("osv...") int dopdido,
