@@ -20,12 +20,12 @@ public class Seller extends User{
 
     public static final String SELLER_BY_EMAIL = "Seller.getByEmail";
 
-    @NotBlank
-    @Column(nullable = false)
+    //@NotBlank
+    // @Column(nullable = false)
     String bankAccountNumber;
 
-    @NotBlank
-    @Column(nullable = false)
+    //@NotBlank
+    //@Column(nullable = false)
     String regNumber;
 
     public Seller (String name, String email, String password, String regNumber) {
