@@ -23,7 +23,6 @@ public class Commodity {
     String name;
 
     @OneToOne
-    @Column(name = "commodity_image")
     Image commodityImage;
 
 
