@@ -24,6 +24,7 @@ A user has a An ID, email, first name, last name and password.
 @Data
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "U")
 @Table(name = "users")
 @NamedQuery(name = User.USER_BY_EMAIL, query = "SELECT e FROM User e WHERE e.email = :email")
 public class User implements Serializable {
