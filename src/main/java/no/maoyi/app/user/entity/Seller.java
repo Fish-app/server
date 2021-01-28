@@ -10,8 +10,8 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Data
 @NoArgsConstructor
-@DiscriminatorValue("S")
-@Table(name = "seller")
+//@DiscriminatorValue("S")
+//@Table(name = "seller")
 @EqualsAndHashCode(callSuper = true)
 @NamedQuery(name = Seller.SELLER_BY_EMAIL, query = "SELECT e FROM Seller e WHERE e.email = :email")
 public class Seller extends User{
