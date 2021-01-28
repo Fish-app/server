@@ -6,28 +6,29 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
-@Entity
+@Entity()
 @Data
 @NoArgsConstructor
-//@DiscriminatorValue("S")
-//@Table(name = "seller")
+@Table(name = "seller")
 @EqualsAndHashCode(callSuper = true)
 @NamedQuery(name = Seller.SELLER_BY_EMAIL, query = "SELECT e FROM Seller e WHERE e.email = :email")
 public class Seller extends User{
 
     public static final String SELLER_BY_EMAIL = "Seller.getByEmail";
 
-    //@NotBlank
-    // @Column(nullable = false)
     String bankAccountNumber;
 
-    //@NotBlank
-    //@Column(nullable = false)
+    @NotBlank
+    @Column(nullable = false)
     String regNumber;
 
     public Seller (String name, String email, String password, String regNumber) {
-        super(name, email, password);
+        super(email, name, password);
+        System.out.println("----------------------------------------------------------------------------------------");
         this.setRegNumber(regNumber);
     }
+
+
 }
