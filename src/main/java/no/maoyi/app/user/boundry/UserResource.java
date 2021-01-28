@@ -117,7 +117,7 @@ public class UserResource {
         try {
             User user = authService.getUserFromEmail(email);
             if (user == null) {
-                response = Response.ok("Wrong username / password");
+                response = Response.ok("Wrong username / password").status(Response.Status.UNAUTHORIZED);
             } else {
                 CredentialValidationResult result = authService.gerValidationResult(user.getId(), password);
                 if (authService.isAuthValid(result)) {
@@ -127,7 +127,7 @@ public class UserResource {
                                                         "Bearer " + token
                     );
                 } else {
-                    response = Response.ok("Wrong username / password");
+                    response = Response.ok("Wrong username / password").status(Response.Status.UNAUTHORIZED);
                 }
             }
 
@@ -165,7 +165,7 @@ public class UserResource {
 
             } else {
                 resp = Response.ok(
-                        "User already exist, please try another email");
+                        "User already exist, please try another email").status(Response.Status.CONFLICT);
             }
 
         } catch (PersistenceException e) {
