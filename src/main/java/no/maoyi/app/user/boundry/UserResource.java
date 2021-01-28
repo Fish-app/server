@@ -19,6 +19,7 @@ import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -186,10 +187,10 @@ public class UserResource {
                 Seller newSeller = authService.createSeller(name, email, password, regNumber);
                 resp = Response.ok(newSeller);
             } else {
-                resp = Response.ok("Seller already exists, please try another email");
+                resp = Response.ok("Seller already exists, please try another email").status(Response.Status.CONFLICT);
             }
         } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the seller").status(500);
+            resp = Response.ok("Unexpected error creating the seller").status(Response.Status.INTERNAL_SERVER_ERROR);
         }
         return resp.build();
     }
@@ -203,7 +204,7 @@ public class UserResource {
 
     @PUT
     @Path("changepassword")
-    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME})
+    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response changePassword(@HeaderParam("password") String newPassword) {
 
         try {
@@ -217,4 +218,22 @@ public class UserResource {
 
     }
 
+//-----------------------------For Testing----------------------------------
+    @GET
+    @Path("getseller")
+    public Response getSeller(@QueryParam("email") String email) {
+        ResponseBuilder resp;
+        try {
+            Seller seller = authService.getSellerFromEmail(email);
+            if (seller == null) {
+                resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
+            } else {
+                resp = Response.ok(seller);
+            }
+
+        } catch (Exception e) {
+            resp = Response.ok("Something went wrong").status(500);
+        }
+        return resp.build();
+    }
 }

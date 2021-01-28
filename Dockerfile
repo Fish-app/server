@@ -6,9 +6,9 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 # adjust for your own needs
-#RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package
+RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package
 #RUN --mount=type=bind,source=./.m2,target=/root/.m2,target=$HOME/.m2 mvn -f pom.xml clean package
-RUN mvn -f pom.xml clean package
+#RUN mvn -f pom.xml clean package
 
 ## Copy isolated build from intermediate container(useful on server)
 FROM payara/micro:5.2020.7-jdk11 AS prod
