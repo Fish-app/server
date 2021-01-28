@@ -23,6 +23,7 @@ A user has a An ID, email, first name, last name and password.
 @Entity
 @Data
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 @NamedQuery(name = User.USER_BY_EMAIL, query = "SELECT e FROM User e WHERE e.email = :email")
 public class User implements Serializable {
@@ -34,6 +35,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 
+    @Column
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;
 
@@ -73,6 +75,7 @@ public class User implements Serializable {
 
 
     public User(String email, String name, String password) {
+        System.out.println("----------------------------------------------------------------------------------------");
         this.setEmail(email);
         this.setName(name);
         this.setPassword(password);

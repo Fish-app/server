@@ -103,9 +103,9 @@ public class AuthenticationService {
     public User createUser(String name, String email, String password) {
 
         User  newUser   = new User(email, name, password);
-        Group usergroup = entityManager.find(Group.class, Group.USER_GROUP_NAME);
+        Group userGroup = entityManager.find(Group.class, Group.USER_GROUP_NAME);
         newUser.setPassword(hasher.generate(password.toCharArray()));
-        newUser.getGroups().add(usergroup);
+        newUser.getGroups().add(userGroup);
 
         entityManager.persist(newUser);
 
