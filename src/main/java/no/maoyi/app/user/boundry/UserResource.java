@@ -203,7 +203,7 @@ public class UserResource {
 
     @PUT
     @Path("changepassword")
-    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME})
+    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response changePassword(@HeaderParam("password") String newPassword) {
 
         try {
@@ -217,4 +217,22 @@ public class UserResource {
 
     }
 
+
+    @GET
+    @Path("getseller")
+    public Response getSeller(String email) {
+        ResponseBuilder resp;
+        try {
+            Seller seller = authService.getSellerFromEmail(email);
+            if (seller == null) {
+                resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
+            } else {
+                resp = Response.ok(seller);
+            }
+
+        } catch (Exception e) {
+            resp = Response.ok("Something went wrong").status(500);
+        }
+        return resp.build();
+    }
 }

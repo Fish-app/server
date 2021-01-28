@@ -23,6 +23,7 @@ A user has a An ID, email, first name, last name and password.
 @Entity
 @Data
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 @NamedQuery(name = User.USER_BY_EMAIL, query = "SELECT e FROM User e WHERE e.email = :email")
 public class User implements Serializable {
