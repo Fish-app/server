@@ -1,0 +1,261 @@
+_type: export
+__export_format: 4
+__export_date: 2021-01-28T15:17:31.292Z
+__export_source: insomnia.desktop.app:v2020.5.2
+resources:
+  - _id: req_8c31a970710d49779e06267fb97990fe
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1611842644611
+    created: 1611842274161
+    url: "{{ _.baseURL }}/authentication/changepassword"
+    name: auth-change-password
+    description: ""
+    method: PUT
+    body: {}
+    parameters: []
+    headers:
+      - name: password
+        value: test123
+        description: ""
+        id: pair_7be50471c6ef4610ba035265a715f776
+    authentication:
+      type: bearer
+      token: "
+        eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImFiYy0xMjM0NTY3ODkwIn0.eyJ\
+        zdWIiOiIxIiwianRpIjoiOGVmMDFmYTAtOTA5OS00ZDk2LWJmOTEtNjAzZjNlZmQ3ZjY4Ii\
+        wiaXNzIjoibWFveWkiLCJpYXQiOjE2MTE4NDI1ODUsImV4cCI6MTYxMTkyODk4NSwidXBuI\
+        joiMSIsImdyb3VwcyI6WyJ1c2VyIl0sImF1ZCI6ImF1ZCIsImF1dGhfdGltZSI6MTYxMTg0\
+        MjU4NTUyM30.Nhv6pJCZpx7VCvqIvyYnZ13iwD5BdrpHbOID_14CjxnEg5v8iMRxss1K3Lg\
+        fknTg9v9qGT_fCAy3cwYfuJMh7LdWbkfo6rW2CtQX5COWyU8xuAW9NJrbHPyhGmzRuL1pBD\
+        6ZsEoLpHbPmnJfQxeSqgkcwiH7MlHTMZ56pJHizILJKJ-SDy4oax2K5SDrLDW8JoskQpKay\
+        popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
+        EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
+    metaSortKey: -1611756927435
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5098519e12f6447683d056249f042c66
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1611758253902
+    created: 1611758253902
+    name: auth
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1611758253902
+    _type: request_group
+  - _id: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    parentId: null
+    modified: 1611781677649
+    created: 1611756889251
+    name: App-API
+    description: ""
+    scope: null
+    _type: workspace
+  - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1611780599075
+    created: 1611758246180
+    url: "{{ _.baseURL }}/authentication/create"
+    name: auth-create-user
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: name
+        value: Oluf
+        description: ""
+        id: pair_3735fecdc834458982814b3d9d2ae716
+      - name: email
+        value: oluf@example.com
+        description: ""
+        id: pair_aee64b165237416285897a93fba5bf8c
+      - name: password
+        value: Passord123
+        description: ""
+        id: pair_a67f4b62939542fea88c57f3b3d6a801
+    authentication: {}
+    metaSortKey: -1611756927385
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1611780586828
+    created: 1611756927335
+    url: "{{ _.baseURL }}/authentication/login"
+    name: auth-login
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: email
+        value: oluf@example.com
+        id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
+      - name: password
+        value: Passord123
+        id: pair_6a97a4b373e8418c9bf9e78a43a250cf
+    authentication: {}
+    metaSortKey: -1611756927335
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_c03126a970a2473cb927235fb435eabe
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1611781637826
+    created: 1611780826271
+    url: "{{ _.baseURL }}/authentication/currentuser"
+    name: auth-currentuser
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_cbd0e651f9dd48d0896e53b06a478922
+    authentication: {}
+    metaSortKey: -1611756927285
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4fb46cb3fd6c43a2a346787ee4d8e960
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1611846483868
+    created: 1611845697304
+    url: "{{ _.baseURL }}/authentication/getseller"
+    name: aut-get-seller
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: email
+        value: testesen@example.com
+        description: ""
+        id: pair_16f18359360943cc98ae350322f96983
+    authentication: {}
+    metaSortKey: -1611756927260
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_ddb8c568a3344e5bb2eed2d0dc3fd79f
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1611845587277
+    created: 1611840925356
+    url: "{{ _.baseURL }}/authentication/createseller"
+    name: auth-create-seller
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: name
+        value: test
+        description: ""
+        id: pair_d2f5a8219e874a06b328ce424eaabef6
+      - name: email
+        value: testesen@example.com
+        description: ""
+        id: pair_4bcc05044eb94b1fa85b221b3daeb3ef
+      - name: password
+        value: test123
+        description: ""
+        id: pair_c5e85dd592d744f188adbcd0a8036579
+      - name: regNumber
+        value: test123456789
+        description: ""
+        id: pair_3c8cfb770b9c471188e5eb50dbb62503
+    authentication: {}
+    metaSortKey: -1611756927235
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1611756889288
+    created: 1611756889288
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: null
+    color: null
+    isPrivate: false
+    metaSortKey: 1611756889288
+    _type: environment
+  - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1611756889289
+    created: 1611756889289
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_360be69129b747259668373eeced49e6
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1611756889252
+    created: 1611756889252
+    fileName: Insomnia
+    contents: ""
+    contentType: yaml
+    _type: api_spec
+  - _id: env_0ad3b1e7fd714bcba278ee5675765f45
+    parentId: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
+    modified: 1611780535048
+    created: 1611779980099
+    name: Development
+    data:
+      baseURL: http://localhost:8080/api
+    dataPropertyOrder:
+      "&":
+        - baseURL
+    color: "#ff0000"
+    isPrivate: false
+    metaSortKey: 1611779980099
+    _type: environment
+  - _id: env_55c845e445e6491bb74296b3d5176804
+    parentId: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
+    modified: 1611780553415
+    created: 1611780153750
+    name: Production
+    data:
+      baseURL: https://www.domain.com/api
+    dataPropertyOrder:
+      "&":
+        - baseURL
+    color: "#009bff"
+    isPrivate: false
+    metaSortKey: 1611780153750
+    _type: environment
