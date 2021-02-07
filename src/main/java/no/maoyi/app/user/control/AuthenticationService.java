@@ -93,9 +93,7 @@ public class AuthenticationService {
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
 
-    public CredentialValidationResult gerValidationResult(BigInteger userId, String password) {
-        System.out.println(userId);
-        System.out.println(password);
+    public CredentialValidationResult getValidationResult(BigInteger userId, String password) {
         return identityStoreHandler.validate(new UsernamePasswordCredential(String.valueOf(userId), password));
     }
 
