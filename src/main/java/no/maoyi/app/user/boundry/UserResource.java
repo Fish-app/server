@@ -11,7 +11,6 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
@@ -19,14 +18,12 @@ import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -119,14 +116,16 @@ public class UserResource {
             if (user == null) {
                 response = Response.ok("Wrong username / password").status(Response.Status.UNAUTHORIZED);
             } else {
-                CredentialValidationResult result = authService.gerValidationResult(user.getId(), password);
+                CredentialValidationResult result = authService.getValidationResult(user.getId(), password);
                 if (authService.isAuthValid(result)) {
+                    System.out.println("AUTH: Login OK:'" + email + "', UID:" + user.getId().toString());
 
                     String token = keyService.generateNewJwtToken(email, user.getId(), result.getCallerGroups());
                     response = Response.ok(user).header(HttpHeaders.AUTHORIZATION,
                                                         "Bearer " + token
                     );
                 } else {
+                    System.out.println("AUTH: Login REJECT :'" + email + "', UID:" + user.getId().toString());
                     response = Response.ok("Wrong username / password").status(Response.Status.UNAUTHORIZED);
                 }
             }
