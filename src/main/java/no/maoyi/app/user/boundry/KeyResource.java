@@ -16,6 +16,11 @@ public class KeyResource {
     @Inject
     private KeyService keyService;
 
+    /**
+     * returns the public key for the jwt signing
+     *
+     * @return a text response with the pub key
+     */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response publicKey() {
