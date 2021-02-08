@@ -66,6 +66,7 @@ public class AuthenticationService {
 
     public User getUserFromEmail(String email) {
 
+        email = email.toLowerCase();
         TypedQuery<User> query = entityManager.createQuery(GET_USER_FROM_EMAIL, User.class);
         query.setParameter("mail", "%" + email + "%");
         try {
