@@ -10,20 +10,19 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
+import javax.transaction.Transactional;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +53,7 @@ public class AuthResource {
      */
     @POST
     @Path("login")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response login(
             @HeaderParam("email") String email,
             @HeaderParam("password") String password,
@@ -64,7 +64,7 @@ public class AuthResource {
         try {
             User user = userService.getUserFromEmail(email);
             if (user == null) {
-                response = Response.ok("Wrong username / password").status(Response.Status.UNAUTHORIZED);
+                response = Response.ok().status(Response.Status.UNAUTHORIZED);
             } else {
                 CredentialValidationResult result = authService.getValidationResult(user.getId(), password);
                 if (authService.isAuthValid(result)) {
@@ -76,13 +76,13 @@ public class AuthResource {
                     );
                 } else {
                     System.out.println("AUTH: Login REJECT :'" + email + "', UID:" + user.getId().toString());
-                    response = Response.ok("Wrong username / password").status(Response.Status.UNAUTHORIZED);
+                    response = Response.ok("{}").status(Response.Status.UNAUTHORIZED);
                 }
             }
 
         } catch (Exception e) {
             Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, "Login error", e);
-            response = Response.ok("Unexpected login error")
+            response = Response.ok("{}")
                                .status(500);
         }
 
@@ -104,25 +104,97 @@ public class AuthResource {
 
 
     /**
-     * Changes the password for the current user to the new one provided
+     * Changes the password for a user by setting the email address.
+     * Users need to verify their old password, in order to do a change.
+     * Administators (Group.ADMIN) can change password for users,
+     * without entering the current password of the user.
      *
-     * @param newPassword the new password
-     *
-     * @return Statuscode ok if ok 500 if not TODO: change this
+     * @param emailAccess Email address of user to change password
+     * @param newPasswd New password
+     * @param oldPasswd Old Password (not required for admins)
+     * @param sc
+     * @return
      */
     @PUT
     @Path("changepassword")
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
-    public Response changePassword(@HeaderParam("password") String newPassword) {
+    public Response changePassword(
+            @HeaderParam("email") String emailAccess,
+            @HeaderParam("pwd") String newPasswd,
+            @HeaderParam("oldpwd") String oldPasswd,
+            @Context SecurityContext sc) {
 
-        try {
-            authService.ChangePassword(newPassword);
-            return Response.ok("Successfully changed password").build();
-        } catch (Exception e) {
-            return Response.ok("Failed to change password").status(500).build();
+        if (emailAccess == null || newPasswd == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-    }
+        StringBuilder logMesg = new StringBuilder();
+        logMesg.append("AUTH: Change password for '" + emailAccess + "'");
 
+        User accessUser = userService.getUserFromEmail(emailAccess);
+        if (accessUser == null) {
+            logMesg.append(" - FAIL (User not found");
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        BigInteger id = accessUser.getId();
+        Boolean authorizedToChange = false;
+
+        logMesg.append(" - REQUEST BY (" + id + ", " + accessUser.getEmail() + ") ");
+
+
+        // The user initiating the password change request (aka the caller)
+        String authuser = sc.getUserPrincipal() != null ? sc.getUserPrincipal().getName() : null;
+
+        Response.Status state = Response.Status.BAD_REQUEST;
+
+        if ((newPasswd == null || newPasswd.length() < 6)) {
+            logMesg.append(" - FAIL(Password unsatisfied)");
+        } else {
+            // Admin rolegroup has permission to change password for other users (and overrides the checks below)
+            if (sc.isUserInRole(Group.ADMIN_GROUP_NAME)) {
+                state = Response.Status.OK;
+                authorizedToChange = true;
+
+                // 1. Verify caller has RoleGroup.USER
+                // 2. Verify caller IS SAME user as will change password to (Zero difference in strings (== 0))
+                // 3, Verify that caller has entered old password (admins shall never req usr old passwd!)
+            } else if (sc.isUserInRole(Group.USER_GROUP_NAME) && authuser.compareToIgnoreCase(id.toString()) == 0  && oldPasswd != null) {
+                CredentialValidationResult result = authService.getValidationResult(id, oldPasswd);
+
+                switch (result.getStatus()) {
+                    case VALID:
+                        authorizedToChange = true;
+                        state = Response.Status.OK;
+                        logMesg.append("OK");
+                        break;
+
+                    case INVALID:
+                        state = Response.Status.FORBIDDEN;
+                        logMesg.append("FORBIDDEN");
+                        break;
+
+                    case NOT_VALIDATED:
+                        // The database or something went horribly wrong
+                        state = Response.Status.SERVICE_UNAVAILABLE;
+                        break;
+                }
+            } else {
+                state = Response.Status.UNAUTHORIZED;
+                logMesg.append("UNAUTHORIZED");
+            }
+        }
+
+        if (authorizedToChange) {
+            authService.ChangePassword(newPasswd);
+            state = Response.Status.fromStatusCode(200);
+            logMesg.append(" -> Change successful");
+        } else {
+            logMesg.append(" -> Change aborted");
+        }
+
+        System.out.println(logMesg);
+        return Response.status(state).build();
+    }
 
 }

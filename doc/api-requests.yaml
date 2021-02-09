@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-08T15:17:08.885Z
+__export_date: 2021-02-09T10:34:03.598Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_ddb8c568a3344e5bb2eed2d0dc3fd79f
@@ -172,7 +172,7 @@ resources:
     _type: request
   - _id: req_8c31a970710d49779e06267fb97990fe
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1612796144645
+    modified: 1612866776540
     created: 1611842274161
     url: "{{ _.baseURL }}/authentication/changepassword"
     name: auth-change-password
@@ -186,10 +186,22 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
         id: pair_990a4b0fce7e4642929990f60112f85e
-      - name: password
-        value: test123
+        disabled: false
+      - name: oldpwd
+        value: Passord123
         description: ""
         id: pair_7be50471c6ef4610ba035265a715f776
+        disabled: false
+      - name: pwd
+        value: Passord123
+        description: ""
+        id: pair_da226c838bf14c5580d6dcf3b1378ee1
+        disabled: false
+      - name: email
+        value: "{% response 'body', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::JC5lbWFpbA==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_66d2a786f2c24330b74905ecef0707b8
     authentication:
       type: bearer
       token: "
@@ -202,6 +214,7 @@ resources:
         6ZsEoLpHbPmnJfQxeSqgkcwiH7MlHTMZ56pJHizILJKJ-SDy4oax2K5SDrLDW8JoskQpKay\
         popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
         EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
+      disabled: true
     metaSortKey: -1611756927435
     isPrivate: false
     settingStoreCookies: true
@@ -221,9 +234,46 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1611758253902
     _type: request_group
+  - _id: req_cb9ed43f0303464bb9c6c3eb7b89df1b
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1611843537920
+    created: 1611843387718
+    url: "{{ _.baseURL }}/authentication/createseller"
+    name: auth-create-seller
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: name
+        value: Oluf
+        description: ""
+        id: pair_3735fecdc834458982814b3d9d2ae716
+      - name: email
+        value: oluf@example.com
+        description: ""
+        id: pair_aee64b165237416285897a93fba5bf8c
+      - name: password
+        value: Passord123
+        description: ""
+        id: pair_a67f4b62939542fea88c57f3b3d6a801
+      - name: regNumber
+        value: sdfsdfsd
+        description: ""
+        id: pair_480a4500c7634d208094000f9371d729
+    authentication: {}
+    metaSortKey: -1611756927360
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: false
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1611780586828
+    modified: 1612866779993
     created: 1611756927335
     url: "{{ _.baseURL }}/authentication/login"
     name: auth-login
@@ -238,6 +288,10 @@ resources:
       - name: password
         value: Passord123
         id: pair_6a97a4b373e8418c9bf9e78a43a250cf
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_02123ef6eaeb45a8b9733b0804ce73cd
     authentication: {}
     metaSortKey: -1611756927335
     isPrivate: false
@@ -261,7 +315,7 @@ resources:
     _type: environment
   - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1612794070760
+    modified: 1612861848032
     created: 1611756889289
     name: Default Jar
     cookies:
@@ -273,7 +327,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.749Z
         lastAccessed: 2021-02-08T14:21:10.749Z
-        id: "2501591700261012"
+        id: "9085622869787042"
       - key: Currency
         value: USD
         domain: domain.com
@@ -282,7 +336,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.753Z
         lastAccessed: 2021-02-08T14:21:10.753Z
-        id: "18128620397759665"
+        id: "32538521455185987"
       - key: Currency_Symbol
         value: "%24"
         domain: domain.com
@@ -291,7 +345,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.755Z
         lastAccessed: 2021-02-08T14:21:10.755Z
-        id: "40619671792613965"
+        id: "04240461485574887"
       - key: eigi-geolocated-country-code
         value: no
         expires: 2022-02-08T14:21:10.000Z
@@ -301,16 +355,15 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.756Z
         lastAccessed: 2021-02-08T14:21:10.756Z
-        id: "299048426142825"
+        id: "8039955591193468"
       - key: host
-        value: U2FsdGVkX18UIbK2WzjJyO528ZPfQHRAWUl3LN%2BDUw4%2Byb7hw6HqU2NXJ1dXnDvfaB%2BTOmcWEDl4fJwCeyhoCNTGff%2FcY4P0ZGG%2BPsr8SCM%3D
+        value: U2FsdGVkX1%2F5qZV9bzKB50MS5%2B8nbrjOepzyHYL8GfNWwzaBLYKSB0Sc%2F%2BileMYDtBLa3xZbSsVIPnBi7WrkwN4donuBf0uiuCWp1eTr8zY%3D
         domain: domain.com
         path: /
-        secure: true
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
-        lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "3746038026091536"
+        lastAccessed: 2021-02-09T09:10:48.023Z
+        id: "2295336713058589"
       - key: session_id
         value: 4ec600152db7bb3e5c806f685866d2397
         domain: domain.com
@@ -319,19 +372,17 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "03494430873693544"
+        id: "8140660708136884"
       - key: customerpixel
-        value: "%7B%22visits%22%3A1%2C%22current_visit%22%3A%222021-02-08%2014%3A21%3A1\
-          0%22%2C%22last_visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22first_\
+        value: "%7B%22visits%22%3A2%2C%22last_visit%22%3A%222021-02-08%2014%3A21%3A10%2\
+          2%2C%22current_visit%22%3A%222021-02-09%2009%3A10%3A47%22%2C%22first_\
           visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22login%22%3A0%7D"
-        expires: 2022-02-08T14:21:10.000Z
         domain: domain.com
         path: /
-        secure: true
         hostOnly: false
         creation: 2021-02-08T14:21:10.758Z
-        lastAccessed: 2021-02-08T14:21:10.758Z
-        id: "9314219622857829"
+        lastAccessed: 2021-02-09T09:10:48.023Z
+        id: "26286299989190454"
     _type: cookie_jar
   - _id: spc_360be69129b747259668373eeced49e6
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
