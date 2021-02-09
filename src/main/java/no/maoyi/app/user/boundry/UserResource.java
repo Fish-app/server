@@ -44,7 +44,7 @@ public class UserResource {
      */
     @GET
     @Path("current")
-    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME})
+    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response getCurrentUser() {
         ResponseBuilder resp;
         User            user = userService.getLoggedInUser();
@@ -73,6 +73,7 @@ public class UserResource {
     ) {
         ResponseBuilder resp;
         try {
+            email = email.toLowerCase();
             User user = userService.getUserFromEmail(email);
             if (user == null) {
                 User newUser = userService.createUser(name, email, password);
