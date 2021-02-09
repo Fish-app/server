@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-09T10:34:03.598Z
+__export_date: 2021-02-09T11:04:38.432Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_ddb8c568a3344e5bb2eed2d0dc3fd79f
@@ -139,7 +139,7 @@ resources:
     _type: request_group
   - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
     parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    modified: 1612794003055
+    modified: 1612867932529
     created: 1611758246180
     url: "{{ _.baseURL }}/user/create"
     name: create-user
@@ -172,7 +172,7 @@ resources:
     _type: request
   - _id: req_8c31a970710d49779e06267fb97990fe
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1612866776540
+    modified: 1612867966630
     created: 1611842274161
     url: "{{ _.baseURL }}/authentication/changepassword"
     name: auth-change-password
@@ -198,10 +198,9 @@ resources:
         id: pair_da226c838bf14c5580d6dcf3b1378ee1
         disabled: false
       - name: email
-        value: "{% response 'body', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::JC5lbWFpbA==::46b', 'never', 60 %}"
+        value: OLUF@examPLE.com
         description: ""
-        id: pair_66d2a786f2c24330b74905ecef0707b8
+        id: pair_4a70d9b00705452a90943bc2da63a484
     authentication:
       type: bearer
       token: "
@@ -273,7 +272,7 @@ resources:
     _type: request
   - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1612866779993
+    modified: 1612867937232
     created: 1611756927335
     url: "{{ _.baseURL }}/authentication/login"
     name: auth-login
@@ -283,7 +282,7 @@ resources:
     parameters: []
     headers:
       - name: email
-        value: oluf@example.com
+        value: oluf@examPLE.com
         id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
       - name: password
         value: Passord123
