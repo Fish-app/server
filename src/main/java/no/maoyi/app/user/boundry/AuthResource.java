@@ -117,7 +117,7 @@ public class AuthResource {
      */
     @PUT
     @Path("changepassword")
-    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response changePassword(
             @HeaderParam("email") String emailAccess,
             @HeaderParam("pwd") String newPasswd,
@@ -160,24 +160,33 @@ public class AuthResource {
                 // 2. Verify caller IS SAME user as will change password to (Zero difference in strings (== 0))
                 // 3, Verify that caller has entered old password (admins shall never req usr old passwd!)
             } else if (sc.isUserInRole(Group.USER_GROUP_NAME) && authuser.compareToIgnoreCase(id.toString()) == 0  && oldPasswd != null) {
-                CredentialValidationResult result = authService.getValidationResult(id, oldPasswd);
+                try {
+                    CredentialValidationResult result = authService.getValidationResult(id, oldPasswd);
 
-                switch (result.getStatus()) {
-                    case VALID:
-                        authorizedToChange = true;
-                        state = Response.Status.OK;
-                        logMesg.append("OK");
-                        break;
+                    switch (result.getStatus()) {
+                        case VALID:
+                            authorizedToChange = true;
+                            state = Response.Status.OK;
+                            logMesg.append("OK");
+                            break;
 
-                    case INVALID:
-                        state = Response.Status.FORBIDDEN;
-                        logMesg.append("FORBIDDEN");
-                        break;
+                        case INVALID:
+                            state = Response.Status.FORBIDDEN;
+                            logMesg.append("FORBIDDEN");
+                            break;
 
-                    case NOT_VALIDATED:
-                        // The database or something went horribly wrong
-                        state = Response.Status.SERVICE_UNAVAILABLE;
-                        break;
+                        case NOT_VALIDATED:
+                            // The server was unable to validate the credentials,
+                            // thus a failure code is returned
+                            state = Response.Status.SERVICE_UNAVAILABLE;
+                            logMesg.append("VALIDATION FAILED");
+                            break;
+                    }
+                } catch (Exception e) {
+                    // The server entered an exception state
+                    state = Response.Status.INTERNAL_SERVER_ERROR;
+                    logMesg.append("SERVER EXCEPTION");
+
                 }
             } else {
                 state = Response.Status.UNAUTHORIZED;
