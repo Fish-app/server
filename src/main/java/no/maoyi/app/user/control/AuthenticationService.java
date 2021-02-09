@@ -12,6 +12,7 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
+import javax.transaction.Transactional;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
@@ -65,6 +66,7 @@ public class AuthenticationService {
      *
      * @param newPassword the new password to set.
      */
+    @Transactional
     public void ChangePassword(String newPassword) {
         User user = userService.getLoggedInUser();
         user.setPassword(hasher.generate(newPassword.toCharArray()));
