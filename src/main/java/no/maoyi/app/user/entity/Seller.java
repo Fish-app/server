@@ -6,17 +6,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.math.BigInteger;
 import java.util.Date;
 
 @Entity()
 @Data
 @NoArgsConstructor
 @Table(name = "seller")
-@EqualsAndHashCode(callSuper = true)
-@NamedQuery(name = Seller.SELLER_BY_EMAIL, query = "SELECT e FROM Seller e WHERE e.email = :email")
-public class Seller extends User{
+public class Seller {
 
-    public static final String SELLER_BY_EMAIL = "Seller.getByEmail";
+    @Id
+    private BigInteger id;
 
     String bankAccountNumber;
 
@@ -24,10 +24,13 @@ public class Seller extends User{
     @Column(nullable = false)
     String regNumber;
 
-    public Seller (String name, String email, String password, String regNumber) {
-        super(email, name, password);
-        System.out.println("----------------------------------------------------------------------------------------");
-        this.setRegNumber(regNumber);
+    @OneToOne
+    User user;
+
+    public Seller(User user, String regNumber) {
+        this.id        = user.getId();
+        this.user      = user;
+        this.regNumber = regNumber;
     }
 
 
