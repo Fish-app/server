@@ -62,6 +62,7 @@ public class AuthResource {
 
         Response.ResponseBuilder response;
         try {
+            email = email.toLowerCase();
             User user = userService.getUserFromEmail(email);
             if (user == null) {
                 response = Response.ok().status(Response.Status.UNAUTHORIZED);
@@ -90,18 +91,6 @@ public class AuthResource {
     }
 
 
-    /**
-     * TODO: what is this is it needed?
-     *
-     * @return
-     */
-    @POST
-    @Path("credentialTest")
-    @RolesAllowed("admin")
-    public Response credentialTest() {
-        return Response.ok(webToken.getGroups()).build();
-    }
-
 
     /**
      * Changes the password for a user by setting the email address.
@@ -128,6 +117,7 @@ public class AuthResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
+        emailAccess = emailAccess.toLowerCase();
         StringBuilder logMesg = new StringBuilder();
         logMesg.append("AUTH: Change password for '" + emailAccess + "'");
 
