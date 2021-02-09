@@ -80,7 +80,7 @@ public class User implements Serializable {
         this.setName(name);
         this.setPassword(password);
     }
-
+    
     public List<Group> getGroups() {
         if (groups == null) {
             groups = new ArrayList<>();
