@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Transactional
 public class AuthenticationService {
 
     @Inject
@@ -66,7 +67,6 @@ public class AuthenticationService {
      *
      * @param newPassword the new password to set.
      */
-    @Transactional
     public void ChangePassword(String newPassword) {
         User user = userService.getLoggedInUser();
         user.setPassword(hasher.generate(newPassword.toCharArray()));

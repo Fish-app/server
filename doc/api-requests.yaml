@@ -1,11 +1,11 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-09T11:04:38.432Z
+__export_date: 2021-02-11T10:52:15.197Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_ddb8c568a3344e5bb2eed2d0dc3fd79f
     parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1612796107311
+    modified: 1613040687426
     created: 1611840925356
     url: "{{ _.baseURL }}/seller/create"
     name: create-seller
@@ -19,21 +19,6 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
         id: pair_4e1a7af07981489f96399c0905e9fc66
-      - name: name
-        value: test
-        description: ""
-        id: pair_d2f5a8219e874a06b328ce424eaabef6
-        disabled: true
-      - name: email
-        value: testesen@example.com
-        description: ""
-        id: pair_4bcc05044eb94b1fa85b221b3daeb3ef
-        disabled: true
-      - name: password
-        value: test123
-        description: ""
-        id: pair_c5e85dd592d744f188adbcd0a8036579
-        disabled: true
       - name: regNumber
         value: test12345678
         description: ""
@@ -66,13 +51,13 @@ resources:
     description: ""
     scope: null
     _type: workspace
-  - _id: req_4fb46cb3fd6c43a2a346787ee4d8e960
+  - _id: req_e60bffa3973942da85ba359b5a5af70e
     parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1612796137685
-    created: 1611845697304
-    url: "{{ _.baseURL }}/seller/getseller"
-    name: get-seller
-    description: ""
+    modified: 1613040567991
+    created: 1613040497755
+    url: "{{ _.baseURL }}/seller/current"
+    name: current-seller
+    description: seems to use the current user, so we need to login to get a token
     method: GET
     body: {}
     parameters: []
@@ -82,13 +67,9 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
         id: pair_626a85aa58624a03a20b479d96e0c035
-      - name: email
-        value: testesen@example.com
-        description: ""
-        id: pair_16f18359360943cc98ae350322f96983
     authentication:
       type: bearer
-    metaSortKey: -1611756927185
+    metaSortKey: -1611756927135
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -314,7 +295,7 @@ resources:
     _type: environment
   - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1612861848032
+    modified: 1613040338127
     created: 1611756889289
     name: Default Jar
     cookies:
@@ -326,7 +307,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.749Z
         lastAccessed: 2021-02-08T14:21:10.749Z
-        id: "9085622869787042"
+        id: "017762045267621485"
       - key: Currency
         value: USD
         domain: domain.com
@@ -335,7 +316,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.753Z
         lastAccessed: 2021-02-08T14:21:10.753Z
-        id: "32538521455185987"
+        id: "3018236878042331"
       - key: Currency_Symbol
         value: "%24"
         domain: domain.com
@@ -344,7 +325,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.755Z
         lastAccessed: 2021-02-08T14:21:10.755Z
-        id: "04240461485574887"
+        id: "08030299715532019"
       - key: eigi-geolocated-country-code
         value: no
         expires: 2022-02-08T14:21:10.000Z
@@ -354,7 +335,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.756Z
         lastAccessed: 2021-02-08T14:21:10.756Z
-        id: "8039955591193468"
+        id: "6576876573180253"
       - key: host
         value: U2FsdGVkX1%2F5qZV9bzKB50MS5%2B8nbrjOepzyHYL8GfNWwzaBLYKSB0Sc%2F%2BileMYDtBLa3xZbSsVIPnBi7WrkwN4donuBf0uiuCWp1eTr8zY%3D
         domain: domain.com
@@ -362,7 +343,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-09T09:10:48.023Z
-        id: "2295336713058589"
+        id: "10897679962580975"
       - key: session_id
         value: 4ec600152db7bb3e5c806f685866d2397
         domain: domain.com
@@ -371,17 +352,17 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "8140660708136884"
+        id: "8735683467705659"
       - key: customerpixel
-        value: "%7B%22visits%22%3A2%2C%22last_visit%22%3A%222021-02-08%2014%3A21%3A10%2\
-          2%2C%22current_visit%22%3A%222021-02-09%2009%3A10%3A47%22%2C%22first_\
+        value: "%7B%22visits%22%3A4%2C%22last_visit%22%3A%222021-02-11%2010%3A45%3A35%2\
+          2%2C%22current_visit%22%3A%222021-02-11%2010%3A45%3A37%22%2C%22first_\
           visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22login%22%3A0%7D"
         domain: domain.com
         path: /
         hostOnly: false
         creation: 2021-02-08T14:21:10.758Z
-        lastAccessed: 2021-02-09T09:10:48.023Z
-        id: "26286299989190454"
+        lastAccessed: 2021-02-11T10:45:38.127Z
+        id: "47518321773204497"
     _type: cookie_jar
   - _id: spc_360be69129b747259668373eeced49e6
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
