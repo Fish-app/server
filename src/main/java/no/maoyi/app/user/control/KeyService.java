@@ -112,15 +112,15 @@ public class KeyService {
                                 .setHeaderParam("typ", "JWT")               // type
                                 .setHeaderParam("alg", "RS256")             // algorithm
                                 .setHeaderParam("kid", "abc-1234567890")    // key id
-                                .setSubject(userId.toString())
+                                .setSubject(mail)
                                 .setId(UUID.randomUUID().toString())                    // id
                                 .claim("iss", issuer)
                                 .setIssuedAt(now)
                                 .setExpiration(expiration)
                                 .claim("upn", userId.toString()) // user principal name
                                 .claim("groups", groups)
-                                .claim("aud", "aud")
-                                .claim("auth_time", now)
+                                //                       .claim("aud", "aud")
+                                //                      .claim("auth_time", now)
                                 .signWith(keyPair.getPrivate());
             return jb.compact();
         } catch (InvalidKeyException t) {
