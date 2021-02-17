@@ -3,7 +3,7 @@ package no.***REMOVED***.app.commodity.boundry;
 
 import no.***REMOVED***.app.commodity.control.CommodityService;
 import no.***REMOVED***.app.commodity.entity.Commodity;
-import no.***REMOVED***.app.user.entity.Group;
+import no.***REMOVED***.app.auth.entity.Group;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
