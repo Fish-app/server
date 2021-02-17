@@ -1,7 +1,6 @@
 package no.***REMOVED***.app.listing.boundry;
 
 
-import no.***REMOVED***.app.commodity.entity.Commodity;
 import no.***REMOVED***.app.listing.control.ListingService;
 import no.***REMOVED***.app.listing.entity.BuyRequest;
 import no.***REMOVED***.app.listing.entity.OfferListing;
@@ -13,6 +12,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -43,24 +43,24 @@ public class ListingResource {
     @Path("newOfferListing")
     @RolesAllowed(value = {Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newOfferListing(
-            @FormDataParam("endDate") long endDate,
-            @FormDataParam("commodity") BigInteger commodityId,
-            @FormDataParam("price") double price,
-            @FormDataParam("maxAmount") int maxAmount,
-            @FormDataParam("latitude") double latitude,
-            @FormDataParam("longitude") double longitude
+            @NotNull @FormDataParam("endDate") long endDate,
+            @NotNull @FormDataParam("commodity") BigInteger commodityId,
+            @NotNull @FormDataParam("price") double price,
+            @NotNull @FormDataParam("maxAmount") int maxAmount,
+            @NotNull @FormDataParam("latitude") double latitude,
+            @NotNull @FormDataParam("longitude") double longitude
     ) {
         Response.ResponseBuilder resp;
         User user = userService.getLoggedInUser();
         if (user == null) {
-            resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
+            resp = Response.ok("Could not find user").status(Response.Status.FORBIDDEN);
         } else {
             try {
                 OfferListing offerListing = listingService.newOfferListing(endDate, commodityId, price, maxAmount,
                         latitude, longitude, user);
                 resp = Response.ok(offerListing);
             } catch (PersistenceException e) {
-                resp = Response.ok("Unexpected error creating the offer listing").status(500);
+                resp = Response.ok("Unexpected error creating the offer listing").status(Response.Status.INTERNAL_SERVER_ERROR);
             }
         }
         return resp.build();
@@ -82,24 +82,24 @@ public class ListingResource {
     @Path("newBuyRequest")
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newBuyRequest(
-            @FormDataParam("endDate") long endDate,
-            @FormDataParam("commodity") BigInteger commodityId,
-            @FormDataParam("price") double price,
-            @FormDataParam("amount") int amount,
+            @NotNull @FormDataParam("endDate") long endDate,
+            @NotNull @FormDataParam("commodity") BigInteger commodityId,
+            @NotNull @FormDataParam("price") double price,
+            @NotNull @FormDataParam("amount") int amount,
             @FormDataParam("info") String info,
-            @FormDataParam("maxDistance") double maxDistance
+            @NotNull @FormDataParam("maxDistance") double maxDistance
     ) {
         Response.ResponseBuilder resp;
         User user = userService.getLoggedInUser();
         if (user == null) {
-            resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
+            resp = Response.ok("Could not find user").status(Response.Status.FORBIDDEN);
         } else {
             try {
                 BuyRequest buyRequest = listingService.newBuyRequest(endDate, commodityId, price, amount, info,
                         maxDistance, user);
                 resp = Response.ok(buyRequest);
             } catch (PersistenceException e) {
-                resp = Response.ok("Unexpected error creating the offer listing").status(500);
+                resp = Response.ok("Unexpected error creating the offer listing").status(Response.Status.INTERNAL_SERVER_ERROR);
             }
         }
         return resp.build();
