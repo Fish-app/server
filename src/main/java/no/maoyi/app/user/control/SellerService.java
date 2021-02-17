@@ -1,18 +1,12 @@
 package no.***REMOVED***.app.user.control;
 
-import no.***REMOVED***.app.user.entity.Group;
+import no.***REMOVED***.app.auth.entity.Group;
 import no.***REMOVED***.app.user.entity.Seller;
 import no.***REMOVED***.app.user.entity.User;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.security.enterprise.identitystore.IdentityStoreHandler;
-import javax.security.enterprise.identitystore.PasswordHash;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
 
 
 public class SellerService {
@@ -24,19 +18,12 @@ public class SellerService {
     UserService userService;
 
 
-    /**
-     * Makes the logged inn user a seller and persists it to the db
-     *
-     * @param regNumber TODO: fill in
-     *
-     * @return the created seller
-     */
-    public Seller createSeller(String regNumber) {
+    public Seller createSeller(String name, String email, String password, String regNumber) {
         User user = userService.getLoggedInUser();
         user.getGroups().add(entityManager.find(Group.class, Group.SELLER_GROUP_NAME));
         entityManager.persist(user);
 
-        Seller newSeller = new Seller(user, regNumber);
+        Seller newSeller = new Seller(name, email, password, regNumber);
         entityManager.persist(newSeller);
 
         return newSeller;
