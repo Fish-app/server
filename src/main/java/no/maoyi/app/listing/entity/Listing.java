@@ -4,10 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.commodity.entity.Commodity;
 import no.maoyi.app.user.entity.User;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -21,22 +23,21 @@ public abstract class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     BigInteger id;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    Date created;
+    @Column(nullable = false, name = "created")
+    long created;
 
     @ManyToOne(cascade = CascadeType.ALL)
     User creator;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name = "end_date")
-    Date endDate;
+    @Column(nullable = false, name = "end_date")
+    long endDate;
 
     @ManyToOne
     @JsonbTransient
     Commodity commodity;
 
     @Column(nullable = false)
-    int price;
+    double price;
 
     @Column(name = "is_open")
     Boolean isOpen;
@@ -44,7 +45,8 @@ public abstract class Listing {
 
     @PrePersist
     protected void onCreate() {
-        created = new Date();
+        created = System.currentTimeMillis() / 1000L;
+        isOpen = true;
     }
 
 
