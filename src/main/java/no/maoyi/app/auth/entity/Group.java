@@ -1,4 +1,4 @@
-package no.maoyi.app.user.entity;
+package no.maoyi.app.auth.entity;
 
 import lombok.Data;
 
@@ -13,13 +13,14 @@ import javax.persistence.Table;
 */
 @Data
 @Entity
-@Table(name = "Groups")
+@Table(name = "group_names")
 public class Group {
 
+    public static final String BUYER_GROUP_NAME = "buyer";
     public static final String USER_GROUP_NAME = "user";
     public static final String SELLER_GROUP_NAME = "seller";
     public static final String ADMIN_GROUP_NAME = "admin";
-    public static final String[] GROUPS = {USER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME};
+    public static final String[] GROUPS = {USER_GROUP_NAME, BUYER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME};
 
     @Id
     String name;
