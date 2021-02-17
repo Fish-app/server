@@ -29,12 +29,8 @@ public class AuthenticationService {
     @PersistenceContext
     EntityManager entityManager;
 
-
     @Inject
     PasswordHash hasher;
-
-    @Inject
-    UserService userService;
 
     @Inject
     JsonWebToken webToken;
