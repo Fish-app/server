@@ -4,17 +4,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.commodity.entity.Commodity;
 import no.maoyi.app.user.entity.User;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.time.Instant;
-import java.util.Date;
 
 @Data
 @Entity
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Listing {
 
     protected String listingType;
@@ -26,7 +24,7 @@ public abstract class Listing {
     @Column(nullable = false, name = "created")
     long created;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     User creator;
 
     @Column(nullable = false, name = "end_date")
@@ -48,6 +46,5 @@ public abstract class Listing {
         created = System.currentTimeMillis() / 1000L;
         isOpen = true;
     }
-
 
 }

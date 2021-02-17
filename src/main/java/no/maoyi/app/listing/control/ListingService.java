@@ -3,23 +3,19 @@ package no.maoyi.app.listing.control;
 import no.maoyi.app.commodity.entity.Commodity;
 import no.maoyi.app.listing.entity.BuyRequest;
 import no.maoyi.app.listing.entity.OfferListing;
-import no.maoyi.app.user.boundry.UserResource;
-import no.maoyi.app.user.control.UserService;
 import no.maoyi.app.user.entity.User;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.math.BigInteger;
 
+@Transactional
 public class ListingService {
 
     @PersistenceContext
     EntityManager entityManager;
 
-    @Inject
-    UserService userService;
 
     /**
      * Creates a new offer listing
@@ -52,6 +48,7 @@ public class ListingService {
         newOffer.setLatitude(latitude);
         newOffer.setLongitude(longitude);
         newOffer.setCreator(user);
+        newOffer.setListingType("offer_listing");
 
         entityManager.persist(newOffer);
 
@@ -91,6 +88,9 @@ public class ListingService {
         newBuy.setInfo(info);
         newBuy.setMaxDistance(maxDistance);
         newBuy.setCreator(user);
+        newBuy.setListingType("order_listing");
+
+        entityManager.persist(newBuy);
 
         return newBuy;
     }

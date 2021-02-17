@@ -18,18 +18,14 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class BuyRequest extends Listing {
 
-    protected String listingType = "order_listing";
-
     //Amount you want to buy
     @Column(nullable = false, name = "amount")
     int amount;
 
     //Additional info about the request
-    @Column(name = "info")
     String info;
 
     //Maximum distance you want to travel
-    @Column(name = "maxDistance")
     double maxDistance;
 
 }
