@@ -22,9 +22,9 @@ public class MessageDTO {
         return messageDTO;
     }
 
-    BigInteger id;
+    long id;
 
     String content;
 
-    BigInteger senderId;
+    long senderId;
 }
