@@ -1,6 +1,6 @@
 package no.maoyi.app.startup;
 
-import no.maoyi.app.user.entity.Group;
+import no.maoyi.app.auth.entity.Group;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;

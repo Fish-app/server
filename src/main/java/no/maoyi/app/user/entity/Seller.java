@@ -7,16 +7,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigInteger;
-import java.util.Date;
 
-@Entity()
+
 @Data
+@Entity
 @NoArgsConstructor
-@Table(name = "seller")
-public class Seller {
-
-    @Id
-    private BigInteger id;
+@Table(name = "sellers")
+@EqualsAndHashCode(callSuper = true)
+public class Seller extends User {
 
     String bankAccountNumber;
 
@@ -24,12 +22,9 @@ public class Seller {
     @Column(nullable = false)
     String regNumber;
 
-    @OneToOne
-    User user;
 
-    public Seller(User user, String regNumber) {
-        this.id        = user.getId();
-        this.user      = user;
+    public Seller(String email, String name, String password, String regNumber) {
+        super(email, name, password);
         this.regNumber = regNumber;
     }
 
