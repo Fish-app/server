@@ -1,11 +1,11 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-11T13:06:24.569Z
+__export_date: 2021-02-18T09:49:03.367Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_ddb8c568a3344e5bb2eed2d0dc3fd79f
     parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1613040687426
+    modified: 1612796107311
     created: 1611840925356
     url: "{{ _.baseURL }}/seller/create"
     name: create-seller
@@ -19,6 +19,21 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
         id: pair_4e1a7af07981489f96399c0905e9fc66
+      - name: name
+        value: test
+        description: ""
+        id: pair_d2f5a8219e874a06b328ce424eaabef6
+        disabled: true
+      - name: email
+        value: testesen@example.com
+        description: ""
+        id: pair_4bcc05044eb94b1fa85b221b3daeb3ef
+        disabled: true
+      - name: password
+        value: test123
+        description: ""
+        id: pair_c5e85dd592d744f188adbcd0a8036579
+        disabled: true
       - name: regNumber
         value: test12345678
         description: ""
@@ -51,13 +66,13 @@ resources:
     description: ""
     scope: null
     _type: workspace
-  - _id: req_e60bffa3973942da85ba359b5a5af70e
+  - _id: req_4fb46cb3fd6c43a2a346787ee4d8e960
     parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1613048755561
-    created: 1613040497755
-    url: "{{ _.baseURL }}/seller/current"
-    name: current-seller
-    description: seems to use the current user, so we need to login to get a token
+    modified: 1612796137685
+    created: 1611845697304
+    url: "{{ _.baseURL }}/seller/getseller"
+    name: get-seller
+    description: ""
     method: GET
     body: {}
     parameters: []
@@ -67,10 +82,13 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
         id: pair_626a85aa58624a03a20b479d96e0c035
+      - name: email
+        value: testesen@example.com
+        description: ""
+        id: pair_16f18359360943cc98ae350322f96983
     authentication:
       type: bearer
-      disabled: true
-    metaSortKey: -1611756927135
+    metaSortKey: -1611756927185
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -81,9 +99,9 @@ resources:
     _type: request
   - _id: req_c03126a970a2473cb927235fb435eabe
     parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    modified: 1612795895356
+    modified: 1613564067466
     created: 1611780826271
-    url: "{{ _.baseURL }}/user/current"
+    url: "{{ _.baseURL }}/buyer/current"
     name: currentuser
     description: ""
     method: GET
@@ -121,9 +139,9 @@ resources:
     _type: request_group
   - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
     parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    modified: 1612867932529
+    modified: 1613559702615
     created: 1611758246180
-    url: "{{ _.baseURL }}/user/create"
+    url: "{{ _.baseURL }}/buyer/create"
     name: create-user
     description: ""
     method: POST
@@ -154,7 +172,7 @@ resources:
     _type: request
   - _id: req_8c31a970710d49779e06267fb97990fe
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1612867966630
+    modified: 1612796144645
     created: 1611842274161
     url: "{{ _.baseURL }}/authentication/changepassword"
     name: auth-change-password
@@ -168,21 +186,10 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
         id: pair_990a4b0fce7e4642929990f60112f85e
-        disabled: false
-      - name: oldpwd
-        value: Passord123
+      - name: password
+        value: test123
         description: ""
         id: pair_7be50471c6ef4610ba035265a715f776
-        disabled: false
-      - name: pwd
-        value: Passord123
-        description: ""
-        id: pair_da226c838bf14c5580d6dcf3b1378ee1
-        disabled: false
-      - name: email
-        value: OLUF@examPLE.com
-        description: ""
-        id: pair_4a70d9b00705452a90943bc2da63a484
     authentication:
       type: bearer
       token: "
@@ -195,7 +202,6 @@ resources:
         6ZsEoLpHbPmnJfQxeSqgkcwiH7MlHTMZ56pJHizILJKJ-SDy4oax2K5SDrLDW8JoskQpKay\
         popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
         EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
-      disabled: true
     metaSortKey: -1611756927435
     isPrivate: false
     settingStoreCookies: true
@@ -215,46 +221,9 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1611758253902
     _type: request_group
-  - _id: req_cb9ed43f0303464bb9c6c3eb7b89df1b
-    parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1611843537920
-    created: 1611843387718
-    url: "{{ _.baseURL }}/authentication/createseller"
-    name: auth-create-seller
-    description: ""
-    method: POST
-    body: {}
-    parameters: []
-    headers:
-      - name: name
-        value: Oluf
-        description: ""
-        id: pair_3735fecdc834458982814b3d9d2ae716
-      - name: email
-        value: oluf@example.com
-        description: ""
-        id: pair_aee64b165237416285897a93fba5bf8c
-      - name: password
-        value: Passord123
-        description: ""
-        id: pair_a67f4b62939542fea88c57f3b3d6a801
-      - name: regNumber
-        value: sdfsdfsd
-        description: ""
-        id: pair_480a4500c7634d208094000f9371d729
-    authentication: {}
-    metaSortKey: -1611756927360
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: false
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
   - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1612867937232
+    modified: 1613129484400
     created: 1611756927335
     url: "{{ _.baseURL }}/authentication/login"
     name: auth-login
@@ -264,15 +233,11 @@ resources:
     parameters: []
     headers:
       - name: email
-        value: oluf@examPLE.com
+        value: oluf@example.com
         id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
       - name: password
         value: Passord123
         id: pair_6a97a4b373e8418c9bf9e78a43a250cf
-      - name: ""
-        value: ""
-        description: ""
-        id: pair_02123ef6eaeb45a8b9733b0804ce73cd
     authentication: {}
     metaSortKey: -1611756927335
     isPrivate: false
@@ -296,7 +261,7 @@ resources:
     _type: environment
   - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1613040338127
+    modified: 1612794070760
     created: 1611756889289
     name: Default Jar
     cookies:
@@ -308,7 +273,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.749Z
         lastAccessed: 2021-02-08T14:21:10.749Z
-        id: "017762045267621485"
+        id: "2501591700261012"
       - key: Currency
         value: USD
         domain: domain.com
@@ -317,7 +282,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.753Z
         lastAccessed: 2021-02-08T14:21:10.753Z
-        id: "3018236878042331"
+        id: "18128620397759665"
       - key: Currency_Symbol
         value: "%24"
         domain: domain.com
@@ -326,7 +291,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.755Z
         lastAccessed: 2021-02-08T14:21:10.755Z
-        id: "08030299715532019"
+        id: "40619671792613965"
       - key: eigi-geolocated-country-code
         value: no
         expires: 2022-02-08T14:21:10.000Z
@@ -336,15 +301,16 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.756Z
         lastAccessed: 2021-02-08T14:21:10.756Z
-        id: "6576876573180253"
+        id: "299048426142825"
       - key: host
-        value: U2FsdGVkX1%2F5qZV9bzKB50MS5%2B8nbrjOepzyHYL8GfNWwzaBLYKSB0Sc%2F%2BileMYDtBLa3xZbSsVIPnBi7WrkwN4donuBf0uiuCWp1eTr8zY%3D
+        value: U2FsdGVkX18UIbK2WzjJyO528ZPfQHRAWUl3LN%2BDUw4%2Byb7hw6HqU2NXJ1dXnDvfaB%2BTOmcWEDl4fJwCeyhoCNTGff%2FcY4P0ZGG%2BPsr8SCM%3D
         domain: domain.com
         path: /
+        secure: true
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
-        lastAccessed: 2021-02-09T09:10:48.023Z
-        id: "10897679962580975"
+        lastAccessed: 2021-02-08T14:21:10.757Z
+        id: "3746038026091536"
       - key: session_id
         value: 4ec600152db7bb3e5c806f685866d2397
         domain: domain.com
@@ -353,17 +319,19 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "8735683467705659"
+        id: "03494430873693544"
       - key: customerpixel
-        value: "%7B%22visits%22%3A4%2C%22last_visit%22%3A%222021-02-11%2010%3A45%3A35%2\
-          2%2C%22current_visit%22%3A%222021-02-11%2010%3A45%3A37%22%2C%22first_\
+        value: "%7B%22visits%22%3A1%2C%22current_visit%22%3A%222021-02-08%2014%3A21%3A1\
+          0%22%2C%22last_visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22first_\
           visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22login%22%3A0%7D"
+        expires: 2022-02-08T14:21:10.000Z
         domain: domain.com
         path: /
+        secure: true
         hostOnly: false
         creation: 2021-02-08T14:21:10.758Z
-        lastAccessed: 2021-02-11T10:45:38.127Z
-        id: "47518321773204497"
+        lastAccessed: 2021-02-08T14:21:10.758Z
+        id: "9314219622857829"
     _type: cookie_jar
   - _id: spc_360be69129b747259668373eeced49e6
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
