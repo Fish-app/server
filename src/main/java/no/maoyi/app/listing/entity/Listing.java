@@ -19,7 +19,7 @@ public abstract class Listing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    BigInteger id;
+    long id;
 
     @Column(nullable = false, name = "created")
     long created;
