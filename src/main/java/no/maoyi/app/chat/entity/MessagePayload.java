@@ -1,8 +1,8 @@
 package no.***REMOVED***.app.chat.entity;
 
-public interface MessagePayload {
-    Generic getMessagePayLoad();
-    Boolean setMessagePayload(String payload);
+public class MessagePayload< T > {
+    T payload;
+    PayloadType type;
 
     enum PayloadType{
         IMAGE,
