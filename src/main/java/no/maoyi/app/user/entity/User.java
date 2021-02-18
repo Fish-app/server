@@ -75,7 +75,6 @@ public class User implements Serializable {
 
 
     public User(String email, String name, String password) {
-        System.out.println("----------------------------------------------------------------------------------------");
         this.setEmail(email);
         this.setName(name);
         this.setPassword(password);

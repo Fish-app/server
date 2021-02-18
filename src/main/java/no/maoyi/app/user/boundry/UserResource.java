@@ -47,7 +47,7 @@ public class UserResource {
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response getCurrentUser() {
         ResponseBuilder resp;
-        User            user = userService.getLoggedInUser();
+        User user = userService.getLoggedInUser();
         if (user == null) {
             resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } else {

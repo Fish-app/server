@@ -18,8 +18,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class OfferListing extends Listing {
 
-    protected String listingType = "offer_listing";
-
     /**
      * The max ammount the seller is capable of offering
      */
@@ -45,6 +43,5 @@ public class OfferListing extends Listing {
     @OneToMany
     @JsonbTransient
     List<Transaction> transactions;
-
 
 }
