@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 /**
  * This and the message DTO exists so the message backlog does not have to include the
- * user info of the sender once per message when all that's needed is the user id
+ * user object of the sender once per message, when all that's needed is the user id
+ *
  */
 @Data
 @NoArgsConstructor

@@ -28,10 +28,10 @@ public class Message {
     User sender;
 
     @Temporal(javax.persistence.TemporalType.DATE)
-    Date created;
+    Long createdDate;
 
     @PrePersist
     protected void onCreate() {
-        this.created = new Date();
+        this.createdDate = new Date().getTime(); // Get epoch time
     }
 }
