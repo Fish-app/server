@@ -7,18 +7,21 @@ import lombok.NoArgsConstructor;
 import no.maoyi.app.listing.entity.Listing;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "conversations")
 public class Conversation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     Listing baseOrder;
 
@@ -32,4 +35,8 @@ public class Conversation {
     String description;
 
 
+    public Conversation(Listing listing) {
+        this.baseOrder = listing;
+
+    }
 }
