@@ -1,13 +1,9 @@
-package no.***REMOVED***.app.conversation.entity;
+package no.***REMOVED***.app.chat.entity;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.***REMOVED***.app.user.entity.User;
-
-import javax.persistence.*;
-import java.math.BigInteger;
 
 @Data
 @NoArgsConstructor

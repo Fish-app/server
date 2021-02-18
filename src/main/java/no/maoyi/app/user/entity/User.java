@@ -4,17 +4,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.auth.entity.AuthenticatedUser;
-import no.***REMOVED***.app.conversation.entity.Conversation;
+import no.***REMOVED***.app.chat.entity.Conversation;
 import no.***REMOVED***.app.listing.entity.Listing;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.util.Date;
 import java.util.List;
 
 /* 

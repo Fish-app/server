@@ -1,4 +1,4 @@
-package no.***REMOVED***.app.conversation.entity;
+package no.***REMOVED***.app.chat.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.listing.entity.Listing;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.List;
 
 @Data

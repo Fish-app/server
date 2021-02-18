@@ -1,4 +1,4 @@
-package no.***REMOVED***.app.conversation.entity;
+package no.***REMOVED***.app.chat.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.listing.entity.Listing;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,4 +1,4 @@
-package no.***REMOVED***.app.conversation.entity;
+package no.***REMOVED***.app.chat.entity;
 
 public class PayloadText implements MessagePayload {
 }
