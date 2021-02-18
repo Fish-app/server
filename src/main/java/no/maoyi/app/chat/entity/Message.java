@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import no.maoyi.app.resources.entity.Image;
 import no.maoyi.app.user.entity.User;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -27,6 +29,8 @@ public class Message {
     String content;
     //MessagePayload content;
 
+
+
     // 1-1 Owner
     @OneToOne
     @JoinColumn(name = "image_id", referencedColumnName = "id")
@@ -42,6 +46,13 @@ public class Message {
     protected void onCreate() {
         this.createdDate = new Date().getTime(); // Get epoch time
     }
+
+    //N-1 Owner
+    @ManyToOne
+    @JoinColumn(name = "conversation_id", referencedColumnName = "id")
+    @JsonbTransient
+    private Conversation conversation;
+
 
     public Message(String content, User sender) {
         this.content = content;
