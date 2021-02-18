@@ -1,13 +1,16 @@
 package no.***REMOVED***.app.listing.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import no.***REMOVED***.app.chat.entity.Conversation;
 import no.***REMOVED***.app.commodity.entity.Commodity;
 import no.***REMOVED***.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.util.List;
 
 @Data
 @Entity
@@ -46,5 +49,11 @@ public abstract class Listing {
         created = System.currentTimeMillis() / 1000L;
         isOpen = true;
     }
+
+    // N-1 REF
+    @Getter
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "baseOrder")
+    @JsonbTransient
+    private List<Conversation> conversations;
 
 }

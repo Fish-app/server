@@ -3,9 +3,11 @@ package no.***REMOVED***.app.chat.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.listing.entity.Listing;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -17,16 +19,16 @@ import java.util.List;
 @Table(name = "conversations")
 public class Conversation {
 
+    public enum State {
+        ACTIVE, COMPLETED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
-    Listing baseOrder;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Message> messages;
+    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    //List<Message> messages;
 
     @Column(columnDefinition = "TEXT")
     String title;
@@ -34,9 +36,17 @@ public class Conversation {
     @Column(columnDefinition = "TEXT")
     String description;
 
+    @Enumerated(EnumType.STRING)
+    State state = State.ACTIVE;
 
-    public Conversation(Listing listing) {
-        this.baseOrder = listing;
+    // N-1 Owner
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "base_order_id", referencedColumnName = "id")
+    Listing baseOrder;
 
-    }
+    // N-1 REF
+    @Getter
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "conversation")
+    //@JsonbTransient
+    List<Message> messages;
 }
