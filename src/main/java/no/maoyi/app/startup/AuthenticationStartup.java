@@ -1,6 +1,6 @@
 package no.***REMOVED***.app.startup;
 
-import no.***REMOVED***.app.user.entity.Group;
+import no.***REMOVED***.app.auth.entity.Group;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;

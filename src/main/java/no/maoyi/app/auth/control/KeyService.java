@@ -1,4 +1,4 @@
-package no.***REMOVED***.app.user.control;
+package no.***REMOVED***.app.auth.control;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -104,7 +104,7 @@ public class KeyService {
         return keyResult.toString();
     }
 
-    public String generateNewJwtToken(String mail, BigInteger userId, Set<String> groups) {
+    public String generateNewJwtToken(String mail, long userId, Set<String> groups) {
         try {
             Date now        = new Date();
             Date expiration = Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant());
@@ -112,12 +112,12 @@ public class KeyService {
                                 .setHeaderParam("typ", "JWT")               // type
                                 .setHeaderParam("alg", "RS256")             // algorithm
                                 .setHeaderParam("kid", "abc-1234567890")    // key id
-                                .setSubject(mail)
+                                .setSubject(String.valueOf(userId))
                                 .setId(UUID.randomUUID().toString())                    // id
                                 .claim("iss", issuer)
                                 .setIssuedAt(now)
                                 .setExpiration(expiration)
-                                .claim("upn", userId.toString()) // user principal name
+                                .claim("upn", mail) // user principal name
                                 .claim("groups", groups)
                                 //                       .claim("aud", "aud")
                                 //                      .claim("auth_time", now)

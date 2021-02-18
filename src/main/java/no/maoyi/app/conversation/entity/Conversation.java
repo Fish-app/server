@@ -18,7 +18,7 @@ public class Conversation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    BigInteger id;
+    long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     Listing baseOrder;

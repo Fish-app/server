@@ -1,6 +1,5 @@
 package no.***REMOVED***.app.util;
 
-import no.***REMOVED***.app.user.control.KeyService;
 import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;

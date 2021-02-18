@@ -19,7 +19,7 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    BigInteger id;
+    long id;
 
     @Column(columnDefinition = "TEXT")
     String content;
