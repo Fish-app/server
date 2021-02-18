@@ -3,7 +3,6 @@ package no.maoyi.app.commodity.control;
 
 import no.maoyi.app.commodity.entity.Commodity;
 import no.maoyi.app.resources.entity.Image;
-import no.maoyi.app.user.boundry.UserResource;
 import no.maoyi.app.util.ImageUtil;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -34,7 +33,8 @@ public class CommodityService {
     @ConfigProperty(name = "photo.storage.path", defaultValue = "photos")
     String photoSaveDir;
 
-    public Commodity addNewCommodity(String name, FormDataMultiPart photo) throws IOException {
+    public Commodity addNewCommodity(String name, FormDataMultiPart photo
+    ) throws IOException {
         Commodity   commodity = new Commodity();
         List<Image> images    = imageUtil.saveImages(photo, new File(photoSaveDir), "image");
 
