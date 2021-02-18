@@ -1,7 +1,6 @@
 package no.maoyi.app.user.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.auth.entity.AuthenticatedUser;
 import no.maoyi.app.conversation.entity.Conversation;
