@@ -1,11 +1,11 @@
 package no.***REMOVED***.app.listing.boundry;
 
 
+import no.***REMOVED***.app.auth.entity.Group;
 import no.***REMOVED***.app.listing.control.ListingService;
 import no.***REMOVED***.app.listing.entity.BuyRequest;
 import no.***REMOVED***.app.listing.entity.OfferListing;
 import no.***REMOVED***.app.user.control.UserService;
-import no.***REMOVED***.app.user.entity.Group;
 import no.***REMOVED***.app.user.entity.User;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -44,7 +44,7 @@ public class ListingResource {
     @RolesAllowed(value = {Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newOfferListing(
             @NotNull @FormDataParam("endDate") long endDate,
-            @NotNull @FormDataParam("commodity") BigInteger commodityId,
+            @NotNull @FormDataParam("commodity") long commodityId,
             @NotNull @FormDataParam("price") double price,
             @NotNull @FormDataParam("maxAmount") int maxAmount,
             @NotNull @FormDataParam("latitude") double latitude,
@@ -83,7 +83,7 @@ public class ListingResource {
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newBuyRequest(
             @NotNull @FormDataParam("endDate") long endDate,
-            @NotNull @FormDataParam("commodity") BigInteger commodityId,
+            @NotNull @FormDataParam("commodity") long commodityId,
             @NotNull @FormDataParam("price") double price,
             @NotNull @FormDataParam("amount") int amount,
             @FormDataParam("info") String info,

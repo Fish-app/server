@@ -32,7 +32,7 @@ public class ListingService {
      */
     public OfferListing newOfferListing(
             long endDate,
-            BigInteger commodityId,
+            long commodityId,
             double price,
             int maxAmount,
             double latitude,
@@ -69,7 +69,7 @@ public class ListingService {
      */
     public BuyRequest newBuyRequest(
             long endDate,
-            BigInteger commodityId,
+            long commodityId,
             double price,
             int amount,
             String info,

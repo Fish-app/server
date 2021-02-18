@@ -29,7 +29,7 @@ public class ConversationDTO {
                                               .collect(Collectors.toList());
     }
 
-    BigInteger id;
+    long id;
 
     Listing baseOrder;
 
