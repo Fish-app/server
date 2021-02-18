@@ -34,10 +34,16 @@ services:
       - "8181:8181"
       - "4848:4848"
     volumes:
-    - payara-images:/opt/payara/images
+      - type: volume
+        source: payara-images
+        target: /opt/payara/images
+    #      - type: bind
+    #        source: ./config/payara_config_files
+    #        target: /opt/payara/payara_config_files
     depends_on:
       - "database"
     environment:
+      #POSTBOOT_COMMANDS: /opt/payara/payara_config_files/preboot_commands.asadmin
       COMPOSE_DB_HOST: fishapp-database
       COMPOSE_DB_BASE: ${DB_NAME:?Err Server must have configured an database!}
       COMPOSE_DB_USER: ${DB_USER:?Err Server must have configured a database user.}

@@ -3,7 +3,7 @@ package no.maoyi.app.commodity.boundry;
 
 import no.maoyi.app.commodity.control.CommodityService;
 import no.maoyi.app.commodity.entity.Commodity;
-import no.maoyi.app.user.entity.Group;
+import no.maoyi.app.auth.entity.Group;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
