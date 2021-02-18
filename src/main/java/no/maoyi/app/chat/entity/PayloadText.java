@@ -1,4 +1,4 @@
-package no.maoyi.app.conversation.entity;
+package no.maoyi.app.chat.entity;
 
 public class PayloadText implements MessagePayload {
 }

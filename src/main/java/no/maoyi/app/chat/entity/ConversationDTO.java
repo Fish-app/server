@@ -1,4 +1,4 @@
-package no.maoyi.app.conversation.entity;
+package no.maoyi.app.chat.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.listing.entity.Listing;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
