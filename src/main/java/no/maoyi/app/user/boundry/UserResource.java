@@ -34,7 +34,7 @@ public class UserResource {
     @Path("current")
     public Response getCurrentUser() {
         ResponseBuilder resp;
-        User            user = userService.getLoggedInUser();
+        User user = userService.getLoggedInUser();
         if (user == null) {
             resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } else {

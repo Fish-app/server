@@ -1,7 +1,6 @@
 package no.***REMOVED***.app.user.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.auth.entity.AuthenticatedUser;
 import no.***REMOVED***.app.conversation.entity.Conversation;

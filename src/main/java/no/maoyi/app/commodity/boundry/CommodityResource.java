@@ -30,15 +30,14 @@ public class CommodityResource {
     @POST
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    //TODO: REMOVE USER FROM HERE
-    @RolesAllowed({Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+    @RolesAllowed({Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response addNewCommodity(
-            @FormDataParam("name") String name,
-            FormDataMultiPart photo
+            @FormDataParam("name") String name, FormDataMultiPart photo
     ) {
         Response response = null;
         try {
-            Commodity commodity = commodityService.addNewCommodity(name, photo);
+            Commodity commodity = commodityService.addNewCommodity(name, photo
+            );
             response = Response.ok(commodity).build();
         } catch (IOException e) {
             // todo: finn en streamlined metode for og sende tilbake status meldinger og få http kodene korrekt
