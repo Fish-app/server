@@ -1,8 +1,61 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-19T15:54:54.651Z
+__export_date: 2021-02-19T18:53:36.501Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
+  - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1613759718794
+    created: 1613759257836
+    url: "{{ _.baseURL }}/chat/start"
+    name: conversation-start
+    description: ""
+    method: POST
+    body:
+      mimeType: application/x-www-form-urlencoded
+      params:
+        - name: ""
+          value: ""
+          description: ""
+          id: pair_3b1c5f90752d49b895b41539bf19781b
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/x-www-form-urlencoded
+        id: pair_7173b0ff35cf4c038787ce586eecfa65
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613759257836
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_a0f215bfba3344af929826d49b69f335
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1613759222876
+    created: 1613759222876
+    name: chat
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1613759222876
+    _type: request_group
+  - _id: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    parentId: null
+    modified: 1611781677649
+    created: 1611756889251
+    name: App-API
+    description: ""
+    scope: null
+    _type: workspace
   - _id: req_62ead9b59cd041d1ae5775317ea040a2
     parentId: fld_8f8a012370e44b2986940d66fb0bc34d
     modified: 1613566013534
@@ -34,14 +87,6 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1613564450158
     _type: request_group
-  - _id: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    parentId: null
-    modified: 1611781677649
-    created: 1611756889251
-    name: App-API
-    description: ""
-    scope: null
-    _type: workspace
   - _id: req_bd1566f0d17f48b0ae5128df61bff656
     parentId: fld_8f8a012370e44b2986940d66fb0bc34d
     modified: 1613750047942
@@ -502,7 +547,7 @@ resources:
     _type: environment
   - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1613746292895
+    modified: 1613759022211
     created: 1611756889289
     name: Default Jar
     cookies:
@@ -514,7 +559,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.749Z
         lastAccessed: 2021-02-08T14:21:10.749Z
-        id: "09730960982631154"
+        id: "22105257980534332"
       - key: Currency
         value: USD
         domain: domain.com
@@ -523,7 +568,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.753Z
         lastAccessed: 2021-02-08T14:21:10.753Z
-        id: "3399027208607177"
+        id: "15005908382873034"
       - key: Currency_Symbol
         value: "%24"
         domain: domain.com
@@ -532,7 +577,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.755Z
         lastAccessed: 2021-02-08T14:21:10.755Z
-        id: "460705068941867"
+        id: "7602011991551159"
       - key: eigi-geolocated-country-code
         value: no
         expires: 2022-02-08T14:21:10.000Z
@@ -542,7 +587,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.756Z
         lastAccessed: 2021-02-08T14:21:10.756Z
-        id: "3858100474889936"
+        id: "4669199676694509"
       - key: host
         value: U2FsdGVkX1%2BZDOwISAAs5BNwzCPYeqksKlIhbG4g7NNTYo9u8egUyZWxyKyPRrn9BFkqH5HuPgQ1eO3sa%2BZUGZmsm5JZTLesDcr%2Bnp%2F9O2c%3D
         domain: domain.com
@@ -550,7 +595,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-19T14:51:32.889Z
-        id: "9509675535919484"
+        id: "9115072918580913"
       - key: session_id
         value: 4ec600152db7bb3e5c806f685866d2397
         domain: domain.com
@@ -559,17 +604,17 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "8052676628187523"
+        id: "2459193021718813"
       - key: customerpixel
-        value: "%7B%22visits%22%3A2%2C%22last_visit%22%3A%222021-02-08%2014%3A21%3A10%2\
-          2%2C%22current_visit%22%3A%222021-02-19%2014%3A51%3A32%22%2C%22first_\
+        value: "%7B%22visits%22%3A3%2C%22current_visit%22%3A%222021-02-19%2018%3A23%3A4\
+          1%22%2C%22last_visit%22%3A%222021-02-19%2014%3A51%3A32%22%2C%22first_\
           visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22login%22%3A0%7D"
         domain: domain.com
         path: /
         hostOnly: false
         creation: 2021-02-08T14:21:10.758Z
-        lastAccessed: 2021-02-19T14:51:32.891Z
-        id: "482831630299853"
+        lastAccessed: 2021-02-19T18:23:42.210Z
+        id: "40326532002669957"
     _type: cookie_jar
   - _id: spc_360be69129b747259668373eeced49e6
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
