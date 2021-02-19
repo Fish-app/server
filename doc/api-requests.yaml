@@ -1,11 +1,207 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-18T09:49:03.367Z
+__export_date: 2021-02-19T15:54:54.651Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
+  - _id: req_62ead9b59cd041d1ae5775317ea040a2
+    parentId: fld_8f8a012370e44b2986940d66fb0bc34d
+    modified: 1613566013534
+    created: 1613566013534
+    url: ""
+    name: get-all-commodity
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1613566013534
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_8f8a012370e44b2986940d66fb0bc34d
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1613564450158
+    created: 1613564450158
+    name: commodity
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1613564450158
+    _type: request_group
+  - _id: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    parentId: null
+    modified: 1611781677649
+    created: 1611756889251
+    name: App-API
+    description: ""
+    scope: null
+    _type: workspace
+  - _id: req_bd1566f0d17f48b0ae5128df61bff656
+    parentId: fld_8f8a012370e44b2986940d66fb0bc34d
+    modified: 1613750047942
+    created: 1613564457560
+    url: "{{ _.baseURL }}/commodity/new"
+    name: create-commodity
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: name
+          value: Laks
+          description: ""
+          id: pair_47f00f733beb41a6bc6d03b66788cab0
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_29c850bcf8d04453982d40438e367aef
+      - name: Authorization
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_a4445d2325ae4adb948bff5ecdcbc577
+    authentication:
+      type: bearer
+      token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImFiYy0xMjM0NTY3ODkwIn0.eyJzdWIiOiIxIiwianRpIjoiMDVmNzk3YmQtNGRjNy00MzY1LTg3ZWEtNWIzOThiMzYxMWFjIiwiaXNzIjoibWFveWkiLCJpYXQiOjE2MTM1NjQwNjcsImV4cCI6MTYxMzY1MDQ2NywidXBuIjoiMSIsImdyb3VwcyI6WyJ1c2VyIl0sImF1ZCI6ImF1ZCIsImF1dGhfdGltZSI6MTYxMzU2NDA2NzU3MH0.knCdgZ9a_DqnBuI_c6Xf-jqt-tj8wDj_nNEevuhiXlDUCbHxNtiXSohUYaKNsEe_8YVENOffd4pEEPzBozW_Xd_d2rfVe3yJgL6_EMF4WbTbS1jr9CDNxVvF_qJjC8er9-2kYzI3RQcm_B2lbHFMhBZ6lvMXkdw7KzG6-4mxUhK0rSiRO1Q-mHcbH4KJpfOGwaZRIN_DYYNgPVVVWsciQW_6MUio6gwaRthSbpGZLSE2x7r_wqzkWUbfxcg4OGaQjPfn_Fo4x5klloMzJrGM89V56QFFh0GIgMrcfzOC88_wz1XVq00u8lUG2IJQ0y1U5p4RfMzcMSscYZlxKXr66w
+    metaSortKey: -1613564457560
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_51d1896e5df047b1814e6fc7419c440b
+    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    modified: 1613750042773
+    created: 1613572800765
+    url: "{{ _.baseURL }}/listing/newBuyRequest"
+    name: create_buy_request
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: endDate
+          value: "12345678987654321"
+          description: ""
+          id: pair_65a2561f072d4dee9a640c9d73361323
+        - name: commodity
+          value: "1"
+          description: ""
+          id: pair_202f42b2fa224e6eb6044456bbaea833
+        - name: price
+          value: "88"
+          description: ""
+          id: pair_e61f202f7f744fc29dff056b43a4aba1
+        - name: amount
+          value: "20"
+          description: ""
+          id: pair_3db261bb17974328a8bee7a0b4f9d703
+        - name: info
+          value: blablablabla
+          description: ""
+          id: pair_6549537d2ed845698e2e3e04ce62a63e
+        - name: maxDistance
+          value: "10"
+          description: ""
+          id: pair_4de5b0af52e2473e98f49017fa22ac74
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_d051961362c54db2a3d330ffaf23533c
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1e1b7a639b294887a05287805659434c
+    authentication: {}
+    metaSortKey: -1613572800765
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1613564210580
+    created: 1613564210580
+    name: Listing
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1613564210580
+    _type: request_group
+  - _id: req_899db9df5e0748229641d75c02153276
+    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    modified: 1613750069169
+    created: 1613564225883
+    url: "{{ _.baseURL }}/listing/newOfferListing"
+    name: create-offer-listing
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: endDate
+          value: "12345678987654321"
+          description: ""
+          id: pair_07b8fd30d44f4bc0a8dacb926d11bd17
+        - name: commodity
+          value: "1"
+          description: ""
+          id: pair_c4ee366e2df64b0cb80881e6d5b70650
+        - name: price
+          value: "50.00"
+          description: ""
+          id: pair_230a7cf950494b27a207c72bde39adf7
+        - name: maxAmount
+          value: "6"
+          description: ""
+          id: pair_550de26afba34a42bc54b66ce9e8a2ef
+        - name: latitude
+          value: "66.96"
+          description: ""
+          id: pair_7089acc5a19f4202a407e857344e2895
+        - name: longitude
+          value: "73.02"
+          description: ""
+          id: pair_4516f555e8ae4c25911260d37b58fb6a
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+        id: pair_ab61d8a67b29421bad19c33b5653022a
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_3e23634e7bdc4e5a9c32baa7abd81518
+    authentication: {}
+    metaSortKey: -1613564225883
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_ddb8c568a3344e5bb2eed2d0dc3fd79f
     parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1612796107311
+    modified: 1613746830292
     created: 1611840925356
     url: "{{ _.baseURL }}/seller/create"
     name: create-seller
@@ -23,17 +219,17 @@ resources:
         value: test
         description: ""
         id: pair_d2f5a8219e874a06b328ce424eaabef6
-        disabled: true
+        disabled: false
       - name: email
         value: testesen@example.com
         description: ""
         id: pair_4bcc05044eb94b1fa85b221b3daeb3ef
-        disabled: true
+        disabled: false
       - name: password
         value: test123
         description: ""
         id: pair_c5e85dd592d744f188adbcd0a8036579
-        disabled: true
+        disabled: false
       - name: regNumber
         value: test12345678
         description: ""
@@ -58,14 +254,6 @@ resources:
     environmentPropertyOrder: null
     metaSortKey: -1612793929559
     _type: request_group
-  - _id: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    parentId: null
-    modified: 1611781677649
-    created: 1611756889251
-    name: App-API
-    description: ""
-    scope: null
-    _type: workspace
   - _id: req_4fb46cb3fd6c43a2a346787ee4d8e960
     parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
     modified: 1612796137685
@@ -97,28 +285,24 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_c03126a970a2473cb927235fb435eabe
-    parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    modified: 1613564067466
-    created: 1611780826271
-    url: "{{ _.baseURL }}/buyer/current"
-    name: currentuser
-    description: ""
+  - _id: req_e60bffa3973942da85ba359b5a5af70e
+    parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
+    modified: 1613748694772
+    created: 1613040497755
+    url: "{{ _.baseURL }}/seller/current"
+    name: current-seller
+    description: seems to use the current user, so we need to login to get a token
     method: GET
     body: {}
     parameters: []
     headers:
       - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
-        id: pair_cbd0e651f9dd48d0896e53b06a478922
-      - name: ""
-        value: ""
-        description: ""
-        id: pair_42c601650036499eb672fbd3293e2f2e
+        id: pair_626a85aa58624a03a20b479d96e0c035
     authentication: {}
-    metaSortKey: -1611756927435
+    metaSortKey: -1611756927135
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -127,22 +311,12 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1612793924007
-    created: 1612793924007
-    name: user
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1612793924007
-    _type: request_group
   - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
     parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    modified: 1613559702615
+    modified: 1613748479034
     created: 1611758246180
     url: "{{ _.baseURL }}/buyer/create"
-    name: create-user
+    name: create-buyer
     description: ""
     method: POST
     body: {}
@@ -170,9 +344,113 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: fld_3d88f0bd96bb4eeabd2226e4561a7444
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1613748453898
+    created: 1612793924007
+    name: buyer
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1612793924007
+    _type: request_group
+  - _id: req_c03126a970a2473cb927235fb435eabe
+    parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
+    modified: 1613748744438
+    created: 1611780826271
+    url: "{{ _.baseURL }}/buyer/current"
+    name: current-buyer
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_cbd0e651f9dd48d0896e53b06a478922
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_42c601650036499eb672fbd3293e2f2e
+    authentication: {}
+    metaSortKey: -1611756927285
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1613748782175
+    created: 1611756927335
+    url: "{{ _.baseURL }}/authentication/login"
+    name: auth-login-buyer
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: email
+        value: oluf@example.com
+        id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
+      - name: password
+        value: Passord123
+        id: pair_6a97a4b373e8418c9bf9e78a43a250cf
+    authentication: {}
+    metaSortKey: -1611756927322.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5098519e12f6447683d056249f042c66
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1611758253902
+    created: 1611758253902
+    name: auth
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1611758253902
+    _type: request_group
+  - _id: req_a8138b132745479697ea49486bb87653
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1613746402866
+    created: 1613746371970
+    url: "{{ _.baseURL }}/authentication/login"
+    name: auth-login-seller
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: email
+        value: testesen@example.com
+        id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
+      - name: password
+        value: test123
+        id: pair_6a97a4b373e8418c9bf9e78a43a250cf
+    authentication: {}
+    metaSortKey: -1611756927285
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_8c31a970710d49779e06267fb97990fe
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1612796144645
+    modified: 1613748770590
     created: 1611842274161
     url: "{{ _.baseURL }}/authentication/changepassword"
     name: auth-change-password
@@ -202,44 +480,7 @@ resources:
         6ZsEoLpHbPmnJfQxeSqgkcwiH7MlHTMZ56pJHizILJKJ-SDy4oax2K5SDrLDW8JoskQpKay\
         popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
         EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
-    metaSortKey: -1611756927435
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: fld_5098519e12f6447683d056249f042c66
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1611758253902
-    created: 1611758253902
-    name: auth
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1611758253902
-    _type: request_group
-  - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
-    parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1613129484400
-    created: 1611756927335
-    url: "{{ _.baseURL }}/authentication/login"
-    name: auth-login
-    description: ""
-    method: POST
-    body: {}
-    parameters: []
-    headers:
-      - name: email
-        value: oluf@example.com
-        id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
-      - name: password
-        value: Passord123
-        id: pair_6a97a4b373e8418c9bf9e78a43a250cf
-    authentication: {}
-    metaSortKey: -1611756927335
+    metaSortKey: -1611756927235
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -261,7 +502,7 @@ resources:
     _type: environment
   - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1612794070760
+    modified: 1613746292895
     created: 1611756889289
     name: Default Jar
     cookies:
@@ -273,7 +514,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.749Z
         lastAccessed: 2021-02-08T14:21:10.749Z
-        id: "2501591700261012"
+        id: "09730960982631154"
       - key: Currency
         value: USD
         domain: domain.com
@@ -282,7 +523,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.753Z
         lastAccessed: 2021-02-08T14:21:10.753Z
-        id: "18128620397759665"
+        id: "3399027208607177"
       - key: Currency_Symbol
         value: "%24"
         domain: domain.com
@@ -291,7 +532,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.755Z
         lastAccessed: 2021-02-08T14:21:10.755Z
-        id: "40619671792613965"
+        id: "460705068941867"
       - key: eigi-geolocated-country-code
         value: no
         expires: 2022-02-08T14:21:10.000Z
@@ -301,16 +542,15 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.756Z
         lastAccessed: 2021-02-08T14:21:10.756Z
-        id: "299048426142825"
+        id: "3858100474889936"
       - key: host
-        value: U2FsdGVkX18UIbK2WzjJyO528ZPfQHRAWUl3LN%2BDUw4%2Byb7hw6HqU2NXJ1dXnDvfaB%2BTOmcWEDl4fJwCeyhoCNTGff%2FcY4P0ZGG%2BPsr8SCM%3D
+        value: U2FsdGVkX1%2BZDOwISAAs5BNwzCPYeqksKlIhbG4g7NNTYo9u8egUyZWxyKyPRrn9BFkqH5HuPgQ1eO3sa%2BZUGZmsm5JZTLesDcr%2Bnp%2F9O2c%3D
         domain: domain.com
         path: /
-        secure: true
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
-        lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "3746038026091536"
+        lastAccessed: 2021-02-19T14:51:32.889Z
+        id: "9509675535919484"
       - key: session_id
         value: 4ec600152db7bb3e5c806f685866d2397
         domain: domain.com
@@ -319,19 +559,17 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "03494430873693544"
+        id: "8052676628187523"
       - key: customerpixel
-        value: "%7B%22visits%22%3A1%2C%22current_visit%22%3A%222021-02-08%2014%3A21%3A1\
-          0%22%2C%22last_visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22first_\
+        value: "%7B%22visits%22%3A2%2C%22last_visit%22%3A%222021-02-08%2014%3A21%3A10%2\
+          2%2C%22current_visit%22%3A%222021-02-19%2014%3A51%3A32%22%2C%22first_\
           visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22login%22%3A0%7D"
-        expires: 2022-02-08T14:21:10.000Z
         domain: domain.com
         path: /
-        secure: true
         hostOnly: false
         creation: 2021-02-08T14:21:10.758Z
-        lastAccessed: 2021-02-08T14:21:10.758Z
-        id: "9314219622857829"
+        lastAccessed: 2021-02-19T14:51:32.891Z
+        id: "482831630299853"
     _type: cookie_jar
   - _id: spc_360be69129b747259668373eeced49e6
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
