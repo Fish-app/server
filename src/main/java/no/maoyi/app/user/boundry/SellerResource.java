@@ -1,5 +1,6 @@
 package no.maoyi.app.user.boundry;
 
+import no.maoyi.app.auth.control.AuthenticationService;
 import no.maoyi.app.user.control.SellerService;
 import no.maoyi.app.auth.entity.Group;
 import no.maoyi.app.user.entity.Seller;
@@ -20,6 +21,9 @@ import javax.ws.rs.core.Response;
 @Transactional
 @RolesAllowed(value = {Group.SELLER_GROUP_NAME})
 public class SellerResource {
+
+    @Inject
+    AuthenticationService authenticationService;
 
     @Inject
     SellerService sellerService;
@@ -53,15 +57,23 @@ public class SellerResource {
     @POST
     @Path("create")
     @PermitAll
-    public Response createSeller(@HeaderParam("name") String name, @HeaderParam("email") String email,
+    public Response createSeller(@HeaderParam("name") String name,
+                                 @HeaderParam("email") String email,
                                  @HeaderParam("password") String password,
                                  @HeaderParam("regNumber") String regNumber
     ) {
         Response.ResponseBuilder resp;
         try {
-            Seller seller = sellerService.createSeller(name, email, password, regNumber);
-            resp = Response.ok(seller);
-        } catch (PersistenceException e) {
+            email = email.toLowerCase();
+            boolean isPrincipalInUse = authenticationService.isPrincipalInUse(email);
+            if (!isPrincipalInUse) {
+                Seller seller = sellerService.createSeller(name, email, password, regNumber);
+                resp = Response.ok(seller);
+        } else {
+            resp = Response.ok(
+                    "User already exist").status(Response.Status.CONFLICT);
+        }
+    } catch (PersistenceException e) {
             resp = Response.ok("Unexpected error creating the seller").status(Response.Status.INTERNAL_SERVER_ERROR);
             e.printStackTrace();
         }
