@@ -3,6 +3,7 @@ package no.maoyi.app.chat.control;
 import no.maoyi.app.chat.entity.Conversation;
 import no.maoyi.app.chat.entity.Message;
 import no.maoyi.app.listing.entity.Listing;
+import no.maoyi.app.user.entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,12 +30,35 @@ public class ChatService {
         return em.find(Conversation.class, id);
     }
 
-    public Conversation attachConversation(Conversation conversation, long listingId) {
+    public Conversation findConversationByBuyerAndListing(long listingId, User buyer) {
+        // find the unique conversation between logged on buyer and seller of a specific listing
+        return null;
+    }
+
+    public Conversation addConversationToListing(Conversation conversation, long listingId) {
         Listing baseOrder =  em.find(Listing.class, listingId);
         if ( baseOrder == null | conversation == null) return null;
         conversation.setBaseOrder(baseOrder);
         return updateToDB(conversation);
 
+    }
+
+    public boolean sendMessageToConversation(User sender, String base64EncodedMessage, Long conversationId) {
+        // Find conversation
+        // Create message object with sender
+        // Add message to conversation, return true if OK
+
+        // Notify other participants than sender - possibly with push (future issue)?
+        return true;
+    }
+
+    public boolean sendMessageToListing(User sender, String base64EncodedMessage, Long listingId ) {
+        // Find listing, return false if not exsiswt
+        // Create a new conversation, and add it to the listing
+        // Add the message to the conversation (use sendMessageToConversation above)
+        // Write update to DB for the listing, and possibly conversation (how often shall we save / every message ?)
+
+        return true;
     }
 
     Message addMessage(Message message, Conversation conversation) {
