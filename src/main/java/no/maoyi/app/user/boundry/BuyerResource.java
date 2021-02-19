@@ -61,7 +61,8 @@ public class BuyerResource {
     @POST
     @Path("create")
     @PermitAll
-    public Response createBuyer(@HeaderParam("name") String name, @HeaderParam("email") @Email String email,
+    public Response createBuyer(@HeaderParam("name") String name,
+                                @HeaderParam("email") @Email String email,
                                 @HeaderParam("password") String password
     ) {
         Response.ResponseBuilder resp;
