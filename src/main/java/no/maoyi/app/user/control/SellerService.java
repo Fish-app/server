@@ -19,7 +19,6 @@ public class SellerService {
     @Inject
     UserService userService;
 
-    JsonWebToken webToken;
     @Inject
     PasswordHash hasher;
 
