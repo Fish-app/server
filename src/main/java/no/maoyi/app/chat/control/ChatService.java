@@ -25,6 +25,10 @@ public class ChatService {
         }
     }
 
+    public Conversation findConversationById (long id) {
+        return em.find(Conversation.class, id);
+    }
+
     public Conversation attachConversation(Conversation conversation, long listingId) {
         Listing baseOrder =  em.find(Listing.class, listingId);
         if ( baseOrder == null | conversation == null) return null;
