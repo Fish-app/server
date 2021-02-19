@@ -23,7 +23,7 @@ public class Seller extends User {
     String regNumber;
 
 
-    public Seller(String email, String name, String password, String regNumber) {
+    public Seller(String name, String email, String password, String regNumber) {
         super(email, name, password);
         this.regNumber = regNumber;
     }
