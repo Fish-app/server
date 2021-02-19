@@ -26,17 +26,19 @@ public class ChatResource {
     @RolesAllowed(value = {Group.USER_GROUP_NAME,Group.ADMIN_GROUP_NAME})
     @Path("start")
     public Response startConversation(
-            @NotNull @FormDataParam("listing") long listingId
+            @FormDataParam("listing") Long listingId
     ) {
         Response response = Response.serverError().build();
         Conversation conversation = null;
         conversation = service.newConversation();
         if (conversation != null) {
-            conversation = service.attachConversation(conversation,listingId);
+            if(listingId != null) conversation = service.attachConversation(conversation,listingId);
             if (conversation != null) {
                 response = Response.ok(conversation).build();
             }
         }
         return response;
     }
+
+    public("")
 }
