@@ -17,7 +17,7 @@ import java.util.List;
 public class Commodity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    BigInteger id;
+    Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     String name;

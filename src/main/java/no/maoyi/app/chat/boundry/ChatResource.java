@@ -3,6 +3,8 @@ package no.maoyi.app.chat.boundry;
 import no.maoyi.app.auth.entity.Group;
 import no.maoyi.app.chat.control.ChatService;
 import no.maoyi.app.chat.entity.Conversation;
+import no.maoyi.app.user.control.UserService;
+import no.maoyi.app.user.entity.User;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -13,7 +15,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.security.Principal;
 
 @Stateless
 @Path("chat")
@@ -21,6 +22,9 @@ public class ChatResource {
 
     @Inject
     ChatService service;
+
+    @Inject
+    UserService userService;
 
 
     @POST
@@ -51,23 +55,27 @@ public class ChatResource {
             @FormParam("body") String messageBody
             // TODO: Change body to a more fitting type
     ) {
-        Response response = Response.serverError().build();
+        Response response = Response.status(Response.Status.BAD_REQUEST).build();
 
         if ((conversationId == null) ^ (listingId == null)) {
             // do request
             // if conversationid is null, listing must not be null and vice versa
+            User senderUser = userService.getLoggedInUser();
             if ((conversationId != null)) {
                 // sender knows conversation id, and wants to send message directly
+                System.out.println("RESOURCE-CHAT: msg -> conversation");
                 service.sendMessageToConversation(senderUser, messageBody, conversationId);
             } else {
                 // sender knows listing id, and wants to send message to conversation,
                 // by being identified with userid and listing (1 user can start 1 conversation on 1 listing) (overkill?)
+                System.out.println("RESOURCE-CHAT: msg -> listing");
                 service.sendMessageToListing(senderUser, messageBody, listingId);
             }
         } else {
             // bad request (either both or none are specified)
             return response;
        }
+        return  response;
     }
 
 }
