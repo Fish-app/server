@@ -72,12 +72,16 @@ public class ChatService {
      * @return
      */
     public boolean sendMessageToConversation(User sender, String message, Long conversationId) {
+        System.out.println("SEND MESGCLLAED");
         Conversation conversation = findConversationById(conversationId);
+        System.out.println("CONVERSATATION OKAY");
         if (conversation == null || sender == null || message == null) return false;
+        System.out.println("nothing wass null");
         Message msg = new Message();
         msg.setSender(sender);
         msg.setContent(message);
-        if(addMessage(msg,conversation)) {
+        msg.setConversation(conversation);
+        if(addMessage(msg,conversationId)) {
             // OK: notify participants and return OK == true
             System.out.println("CONTROL-CHAT: " + " MSG ADDED OK");
             return true;
@@ -113,15 +117,16 @@ public class ChatService {
      * @param conversation the Conversation to add the message to
      * @return returns the saved Message if success, otherwise OK
      */
-    boolean addMessage(Message message, Conversation conversation) {
+    boolean addMessage(Message message, Long conversation) {
         // Find the conversation by id
         // If found, add a message to the List inside the conversation
-        Conversation foundConversation = getFromDB(conversation.getId());
+        Conversation foundConversation = getFromDB(conversation);
         if (foundConversation == null || message == null) return false;
-        List<Message> msgList = getMsgs(foundConversation);
+        List<Message> msgList = getMsgs(foundConversation.getId());
         msgList.add(message);
+        //TODO: This function may be removed for line: 83
+        //foundConversation.setMessages(msgList);
         try {
-            System.out.println("TRY PERSIST");
             em.persist(message);
             foundConversation = updateToDB(foundConversation);
             if(foundConversation == null) {
@@ -130,6 +135,7 @@ public class ChatService {
                 return true; // SUCCESS
             }
         } catch (PersistenceException pe) {
+            System.out.println("CONTROL-CHAT: Persistence failure");
            return false;
         }
     }
@@ -153,17 +159,17 @@ public class ChatService {
         }
     }
 
-    private Conversation getFromDB(long input) {
+    private Conversation getFromDB(long conversationId) {
         try {
-           return em.find(Conversation.class, input);
+           return em.find(Conversation.class, conversationId);
         } catch (PersistenceException pe) {
             return null;
         }
     }
 
 
-    private List<Message> getMsgs(Conversation conversation) {
-        Conversation result = em.find(Conversation.class, conversation);
+    private List<Message> getMsgs(long conversationId) {
+        Conversation result = em.find(Conversation.class, conversationId);
         if (result == null) return new ArrayList<>();
         List<Message> messageList = result.getMessages();
         if (messageList == null) {

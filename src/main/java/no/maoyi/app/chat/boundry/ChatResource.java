@@ -55,6 +55,7 @@ public class ChatResource {
             @FormParam("body") String messageBody
             // TODO: Change body to a more fitting type
     ) {
+        // 500 will be called on failure (Pajara or Jakarta will return 500 on exception)
         Response response = Response.status(Response.Status.BAD_REQUEST).build();
 
         if ((conversationId == null) ^ (listingId == null)) {
@@ -64,8 +65,14 @@ public class ChatResource {
             if ((conversationId != null)) {
                 // sender knows conversation id, and wants to send message directly
                 System.out.println("RESOURCE-CHAT: msg -> conversation");
-                service.sendMessageToConversation(senderUser, messageBody, conversationId);
+                if(service.sendMessageToConversation(senderUser, messageBody, conversationId)) {
+                    System.out.println("RESOURCE-CHAT: 200 OK");
+                    response = Response.ok().build();
+                } else {
+                    response = Response.notModified().build();
+                }
             } else {
+                // TODO: To be implemented if deemed nessecary
                 // sender knows listing id, and wants to send message to conversation,
                 // by being identified with userid and listing (1 user can start 1 conversation on 1 listing) (overkill?)
                 System.out.println("RESOURCE-CHAT: msg -> listing");
