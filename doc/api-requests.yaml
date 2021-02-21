@@ -1,14 +1,14 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-19T18:53:36.501Z
+__export_date: 2021-02-21T22:46:13.983Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1613759718794
+    modified: 1613945151805
     created: 1613759257836
     url: "{{ _.baseURL }}/chat/start"
-    name: conversation-start
+    name: buyer-conversation-start
     description: ""
     method: POST
     body:
@@ -56,6 +56,50 @@ resources:
     description: ""
     scope: null
     _type: workspace
+  - _id: req_5fa81cb820784975ad5283bccc017b7b
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1613947562293
+    created: 1613945171084
+    url: "{{ _.baseURL }}/chat/message"
+    name: buyer-conversation-message
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/x-www-form-urlencoded
+      params:
+        - name: conversation
+          value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
+            'b64::JC5pZA==::46b', 'never', 60 %}"
+          description: ""
+          id: pair_3b1c5f90752d49b895b41539bf19781b
+        - name: body
+          value: '"KRRvvvRR"'
+          description: ""
+          id: pair_055d476f831346e6817b38d8de2c4b96
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/x-www-form-urlencoded
+        id: pair_7173b0ff35cf4c038787ce586eecfa65
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613666029300.5
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_62ead9b59cd041d1ae5775317ea040a2
     parentId: fld_8f8a012370e44b2986940d66fb0bc34d
     modified: 1613566013534
@@ -191,7 +235,7 @@ resources:
     _type: request_group
   - _id: req_899db9df5e0748229641d75c02153276
     parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    modified: 1613750069169
+    modified: 1613940616111
     created: 1613564225883
     url: "{{ _.baseURL }}/listing/newOfferListing"
     name: create-offer-listing
@@ -230,7 +274,7 @@ resources:
         value: multipart/form-data
         id: pair_ab61d8a67b29421bad19c33b5653022a
       - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
         id: pair_3e23634e7bdc4e5a9c32baa7abd81518
