@@ -1,10 +1,7 @@
 package no.***REMOVED***.app.chat.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import no.***REMOVED***.app.resources.entity.Image;
 import no.***REMOVED***.app.user.entity.User;
 
@@ -52,6 +49,8 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "conversation_id", referencedColumnName = "id")
     @JsonbTransient
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Conversation conversation;
 
 
