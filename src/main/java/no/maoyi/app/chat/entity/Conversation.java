@@ -25,6 +25,9 @@ public class Conversation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+    @Version
+    long version;
+
     //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     //List<Message> messages;
 
