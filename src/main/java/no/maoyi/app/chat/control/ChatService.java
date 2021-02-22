@@ -28,15 +28,13 @@ public class ChatService {
 
     public Conversation newConversation() {
         Conversation input = new Conversation();
-        if (addToDB(input)) {
-            return input;
-        } else {
+        try {
+            em.persist(input);
+            em.flush();
+            return em.find(Conversation.class, input.getId());
+        } catch (PersistenceException pe) {
             return null;
         }
-    }
-
-    public Conversation findConversationById (long id) {
-        return em.find(Conversation.class, id);
     }
 
 
@@ -44,10 +42,15 @@ public class ChatService {
         // Find a listing (or offerlisting) to then start a conversation with the seller of the listing
         Listing baseOrder =  em.find(Listing.class, listingId);
         if ( baseOrder == null || conversation == null) return null;
-        conversation.setBaseOrder(baseOrder);
-        return updateToDB(conversation);
+        try {
+            conversation.setBaseOrder(baseOrder);
+            return em.merge(conversation);
+        } catch (PersistenceException pe) {
+            return null;
+        }
 
     }
+
 
     /**
      * Adds a text message to a conversation; first the message is prepared before being added
@@ -61,19 +64,22 @@ public class ChatService {
      */
     public ConversationDTO sendMessageToConversation(User sender, String message, Long conversationId) {
         System.out.println("SEND MESGCLLAED");
-        Conversation conversation = findConversationById(conversationId);
+        Conversation input = em.find(Conversation.class, conversationId);
         System.out.println("CONVERSATATION OKAY");
-        if (conversation == null || sender == null || message == null) return null;
+        if (input == null || sender == null || message == null) return null;
         System.out.println("nothing wass null");
         Message msg = new Message();
         msg.setSender(sender);
         msg.setContent(message);
-        msg.setConversation(conversation);
+        msg.setConversation(input);
         // Add the message to the DB and add the user to the conversation list
-        if(addMessage(msg,conversationId) && addUser(sender, conversationId)) {
+        if(addMessage(msg,conversationId) && addUserToConversation(sender, conversationId)) {
             // OK: notify participants and return OK == true
             System.out.println("CONTROL-CHAT: " + " MSG ADDED OK");
-            return new ConversationDTO(findConversationById(conversationId));
+
+            // Get a updated conversation object to return
+            Conversation output = em.find(Conversation.class, conversationId);
+            return new ConversationDTO(output);
         } else {
             System.out.println("CONTROL-CHAT: " + " MSG ADDED FAILURE");
             // FAIL: send ERROR to client and return fail
@@ -82,6 +88,7 @@ public class ChatService {
         // Notify other participants than sender (use user_has_conversations-sender to send push)
         // TODO: Use push to send notification to participants(future issue) - requires platform dependant compoent
     }
+
 
     public boolean sendMessageToListing(User sender, String message, Long listingId ) {
         Listing listing = ls.findListingById(listingId);
@@ -93,12 +100,60 @@ public class ChatService {
         return true;
     }
 
+    private Message getLastMessageInConversation(Conversation conversation) {
+        List<Message> msgList = getMessagesInRangeInConversation(conversation, 0, 0);
+        // Filter message list to only contain last message,
+        // FIXME: possible check if named queries or more effective method can be used
+        return null;
+    }
+
     //////// JPA SERVICE FUNCTIONS ////////
 
-    boolean addUser(User user, Long conversationId) {
+    private List<Message> getMessagesInRangeInConversation(
+            Conversation conversation,
+            long rangeStart,
+            long rangeEnd
+    ) {
+        // Check that user is already participant (security),
+        // If true, try to find conversation, start build message list
+
+        // If both range param is null, return all messages in conversation
+        // If range end is null, return messages from range start to latest mesg
+        // If range start is null, return messages from start to range end.
+        return null;
+    }
+
+
+    /**
+     * Helper function to examine if user already is a participant for the
+     * conversation.
+     * @param conversation
+     * @param userToCheck
+     * @return true if the user is a participant of the conversation, otherwise false
+     */
+    private boolean isUserInConversation(Conversation conversation, User userToCheck) {
+        em.refresh(conversation);
+        em.refresh(userToCheck);
+        List<User> exsistingParticipants = conversation.getParticipants();
+        if (exsistingParticipants != null) {
+            for (User userInConversation : exsistingParticipants
+                 ) {
+                if (userInConversation.getId() == userToCheck.getId()) {
+                    System.out.println(userInConversation.getId());
+                    System.out.println("==");
+                    System.out.println(userToCheck.getId());
+
+                    return true; // STOP LOOP WHEN WE FOUND USER
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean addUserToConversation(User user, Long conversationId) {
         // Find conversation by id
         // Add user to the conversation if not already added
-        Conversation conversation = findConversationById(conversationId);
+        Conversation conversation = em.find(Conversation.class, conversationId);
         if(user!= null && conversation != null) {
             if(isUserInConversation(conversation, user)) {
                 System.out.println("CONTROL-CHAT: User is member of conversation");
@@ -123,41 +178,15 @@ public class ChatService {
     }
 
     /**
-     * Helper function to examine if user already is a participant for the
-     * conversation.
-     * @param conversation
-     * @param userToCheck
-     * @return true if the user is a participant of the conversation, otherwise false
-     */
-    boolean isUserInConversation(Conversation conversation, User userToCheck) {
-        em.refresh(conversation);
-        em.refresh(userToCheck);
-        List<User> exsistingParticipants = conversation.getParticipants();
-        if (exsistingParticipants != null) {
-            for (User userInConversation : exsistingParticipants
-                 ) {
-                if (userInConversation.getId() == userToCheck.getId()) {
-                    System.out.println(userInConversation.getId());
-                    System.out.println("==");
-                    System.out.println(userToCheck.getId());
-
-                    return true; // STOP LOOP WHEN WE FOUND USER
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      *  Adds a message to the conversation, and saves the two to the persistence layer
      * @param message the Message to save
-     * @param conversation the Conversation to add the message to
+     * @param conversationId the Conversation to add the message to
      * @return returns the saved Message if success, otherwise OK
      */
-    boolean addMessage(Message message, Long conversation) {
+    private boolean addMessage(Message message, Long conversationId) {
         // Find the conversation by id
         // If found, add a message to the List inside the conversation
-        Conversation foundConversation = getFromDB(conversation);
+        Conversation foundConversation = em.find(Conversation.class, conversationId);
         if (foundConversation == null || message == null) return false;
         List<Message> msgList = getMsgs(foundConversation.getId());
         msgList.add(message);
@@ -165,8 +194,9 @@ public class ChatService {
         //foundConversation.setMessages(msgList);
         try {
             em.persist(message);
-            foundConversation = updateToDB(foundConversation);
-            if(foundConversation == null) {
+            em.flush();
+            Conversation persistResult = em.merge(foundConversation);
+            if(persistResult == null) {
                 return false; // FAILED
             } else {
                 return true; // SUCCESS
@@ -174,33 +204,6 @@ public class ChatService {
         } catch (PersistenceException pe) {
             System.out.println("CONTROL-CHAT: Persistence failure");
            return false;
-        }
-    }
-
-
-
-    private boolean addToDB(Conversation input) {
-        try {
-            em.persist(input);
-            return true;
-        } catch (PersistenceException pe) {
-            return false;
-        }
-    }
-
-    private Conversation updateToDB(Conversation input) {
-        try {
-            return em.merge(input);
-        } catch (PersistenceException pe) {
-            return null;
-        }
-    }
-
-    private Conversation getFromDB(long conversationId) {
-        try {
-           return em.find(Conversation.class, conversationId);
-        } catch (PersistenceException pe) {
-            return null;
         }
     }
 

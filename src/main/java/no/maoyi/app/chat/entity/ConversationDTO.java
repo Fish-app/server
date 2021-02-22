@@ -24,6 +24,7 @@ public class ConversationDTO {
     public ConversationDTO(Conversation conversation) {
         this.id        = conversation.getId();
         this.baseOrder = conversation.getBaseOrder();
+        this.version = conversation.getVersion();
         this.messageCount = conversation.messages.size();
         this.messages  = conversation.messages.stream()
                                               .parallel()
@@ -33,9 +34,11 @@ public class ConversationDTO {
 
     long id;
 
+    long version;
+
     Listing baseOrder;
 
-    @JsonbTransient
+    //@JsonbTransient //TODO: RE-ENABLE THIS WHEN TESTINGS OK
     List<MessageDTO> messages;
 
     int messageCount;

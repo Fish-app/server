@@ -13,12 +13,15 @@ public class MessageDTO {
     public static MessageDTO buildFromMessage(Message message) {
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.id       = message.getId();
-        messageDTO.content  = message.content;
+        messageDTO.content  = message.getContent();
+        messageDTO.createdDate = message.getCreatedDate();
         messageDTO.senderId = message.sender.getId();
         return messageDTO;
     }
 
     long id;
+
+    long createdDate;
 
     String content;
 
