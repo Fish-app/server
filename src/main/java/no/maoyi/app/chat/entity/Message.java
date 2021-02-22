@@ -3,6 +3,7 @@ package no.maoyi.app.chat.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.resources.entity.Image;
 import no.maoyi.app.user.entity.User;

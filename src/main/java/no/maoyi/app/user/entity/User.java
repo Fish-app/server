@@ -40,6 +40,8 @@ public class User extends AuthenticatedUser implements Serializable {
 
     // -- User data -- //
 
+    // The conversations this user has participated in
+    // Intended to be used for fetching the current users conversations
     // M-N OWNER
     @ManyToMany
     @JoinTable(

@@ -51,7 +51,9 @@ public class ChatService {
 
     /**
      * Adds a text message to a conversation; first the message is prepared before being added
-     * to the conversation object. The participants is supposed to be notified by this function
+     * to the conversation object. Sender is added to conversation if they have not participated before.
+     *
+     * The participants is supposed to be notified by this function (TODO)
      * @param sender a User; the sender of the message
      * @param message the message text to be sent
      * @param conversationId the ID for the conversation to be targeted
@@ -77,12 +79,7 @@ public class ChatService {
             // FAIL: send ERROR to client and return fail
             return null;
         }
-
-        // Find conversation
-        // Create message object with sender
-        // Add message to conversation, return true if OK
-
-        // Notify other participants than sender
+        // Notify other participants than sender (use user_has_conversations-sender to send push)
         // TODO: Use push to send notification to participants(future issue) - requires platform dependant compoent
     }
 
@@ -105,10 +102,11 @@ public class ChatService {
         if(user!= null && conversation != null) {
             if(isUserInConversation(conversation, user)) {
                 System.out.println("CONTROL-CHAT: User is member of conversation");
-                return true; // all good, user already in conversation
+                return true; // nothing needs to be done, user already in conversation
             } else {
                 try {
-                    // need to add user
+                    // User ownes M-N join; therefore conversation is added to user
+                    // and user is persisted to update SQL table state
                     List<Conversation> userConversations = user.getUserConversations();
                     userConversations.add(conversation);
                     em.merge(user);
@@ -124,6 +122,13 @@ public class ChatService {
         return false;
     }
 
+    /**
+     * Helper function to examine if user already is a participant for the
+     * conversation.
+     * @param conversation
+     * @param userToCheck
+     * @return true if the user is a participant of the conversation, otherwise false
+     */
     boolean isUserInConversation(Conversation conversation, User userToCheck) {
         em.refresh(conversation);
         em.refresh(userToCheck);
