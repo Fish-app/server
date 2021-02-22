@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "participants")
 @Table(name = "conversations")
 public class Conversation {
 
@@ -49,6 +48,8 @@ public class Conversation {
     //@JsonbTransient
     List<Message> messages;
 
+    // The users in this conversation; used to determine what users
+    // that need to get notified when a new message is added
     //N-M REF
     @ManyToMany(mappedBy = "userConversations")
     @JsonbTransient

@@ -3,6 +3,7 @@ package no.***REMOVED***.app.chat.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.resources.entity.Image;
 import no.***REMOVED***.app.user.entity.User;
