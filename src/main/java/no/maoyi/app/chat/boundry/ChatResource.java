@@ -3,6 +3,7 @@ package no.***REMOVED***.app.chat.boundry;
 import no.***REMOVED***.app.auth.entity.Group;
 import no.***REMOVED***.app.chat.control.ChatService;
 import no.***REMOVED***.app.chat.entity.Conversation;
+import no.***REMOVED***.app.chat.entity.ConversationDTO;
 import no.***REMOVED***.app.user.control.UserService;
 import no.***REMOVED***.app.user.entity.User;
 
@@ -65,9 +66,10 @@ public class ChatResource {
             if ((conversationId != null)) {
                 // sender knows conversation id, and wants to send message directly
                 System.out.println("RESOURCE-CHAT: msg -> conversation");
-                if(service.sendMessageToConversation(senderUser, messageBody, conversationId)) {
+                ConversationDTO result = service.sendMessageToConversation(senderUser, messageBody, conversationId);
+                if(result != null) {
                     System.out.println("RESOURCE-CHAT: 200 OK");
-                    response = Response.ok().build();
+                    response = Response.ok(result).build();
                 } else {
                     response = Response.notModified().build();
                 }
