@@ -8,6 +8,7 @@ import no.maoyi.app.user.entity.User;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -48,7 +49,7 @@ public class Conversation {
     // N-1 REF
     @Getter
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "conversation")
-    //@JsonbTransient
+    //@JsonbTransient (transient on other side of join)
     List<Message> messages;
 
     // The users in this conversation; used to determine what users
@@ -57,4 +58,14 @@ public class Conversation {
     @ManyToMany(mappedBy = "userConversations")
     @JsonbTransient
     List<User> participants;
+
+    public List<Message> getMessages() {
+        if (messages == null) return new ArrayList<>();
+        return messages;
+    }
+
+    public List<User> getParticipants() {
+        if (participants == null) return new ArrayList<>();
+        return participants;
+    }
 }

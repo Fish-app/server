@@ -3,6 +3,7 @@ package no.maoyi.app.chat.control;
 import no.maoyi.app.chat.entity.Conversation;
 import no.maoyi.app.chat.entity.ConversationDTO;
 import no.maoyi.app.chat.entity.Message;
+import no.maoyi.app.chat.entity.MessageDTO;
 import no.maoyi.app.listing.control.ListingService;
 import no.maoyi.app.listing.entity.Listing;
 import no.maoyi.app.user.entity.User;
@@ -79,6 +80,9 @@ public class ChatService {
 
             // Get a updated conversation object to return
             Conversation output = em.find(Conversation.class, conversationId);
+            List<User> usersToNotify = output.getParticipants();
+            //NotfifyParticipants(usersToNotify);
+
             return new ConversationDTO(output);
         } else {
             System.out.println("CONTROL-CHAT: " + " MSG ADDED FAILURE");
@@ -100,8 +104,8 @@ public class ChatService {
         return true;
     }
 
-    private Message getLastMessageInConversation(Conversation conversation) {
-        List<Message> msgList = getMessagesInRangeInConversation(conversation, 0, 0);
+    private Message getLastMessageInConversation(Conversation conversation, User user) {
+        List<Message> msgList = getMessagesInRangeInConversation(conversation, user, 0L, 0L);
         // Filter message list to only contain last message,
         // FIXME: possible check if named queries or more effective method can be used
         return null;
@@ -111,9 +115,28 @@ public class ChatService {
 
     private List<Message> getMessagesInRangeInConversation(
             Conversation conversation,
-            long rangeStart,
-            long rangeEnd
+            User principal,
+            Long rangeStart,
+            Long rangeEnd
     ) {
+        if (isUserInConversation(conversation, principal)) {
+            ConversationDTO dtoHolder = new ConversationDTO(); // initialiaze later, just before sending response.
+            //TODO: Find out how to make a interval list in a effective way
+            //TODO: CONTINUE HERE !!!!
+            if (rangeEnd == null && rangeStart == null) {
+                // generate list of mesgs in range interval
+
+            } else {
+                if (rangeEnd != null && rangeStart == null) {
+                    // gen list of msgs from start to range end
+                } else {
+                    // gen list of msgs from end to range start
+                }
+            }
+
+        } else {
+            return null;
+        }
         // Check that user is already participant (security),
         // If true, try to find conversation, start build message list
 
@@ -188,10 +211,8 @@ public class ChatService {
         // If found, add a message to the List inside the conversation
         Conversation foundConversation = em.find(Conversation.class, conversationId);
         if (foundConversation == null || message == null) return false;
-        List<Message> msgList = getMsgs(foundConversation.getId());
+        List<Message> msgList = foundConversation.getMessages();
         msgList.add(message);
-        //TODO: This function may be removed for line: 83
-        //foundConversation.setMessages(msgList);
         try {
             em.persist(message);
             em.flush();
@@ -206,17 +227,4 @@ public class ChatService {
            return false;
         }
     }
-
-
-    private List<Message> getMsgs(long conversationId) {
-        Conversation result = em.find(Conversation.class, conversationId);
-        if (result == null) return new ArrayList<>();
-        List<Message> messageList = result.getMessages();
-        if (messageList == null) {
-            messageList = new ArrayList<>();
-        }
-        return messageList;
-    }
-
-
 }
