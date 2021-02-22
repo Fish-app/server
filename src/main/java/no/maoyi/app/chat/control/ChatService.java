@@ -81,7 +81,8 @@ public class ChatService {
         msg.setSender(sender);
         msg.setContent(message);
         msg.setConversation(conversation);
-        if(addMessage(msg,conversationId)) {
+        // Add the message to the DB and add the user to the conversation list
+        if(addMessage(msg,conversationId) && addUser(sender, conversationId)) {
             // OK: notify participants and return OK == true
             System.out.println("CONTROL-CHAT: " + " MSG ADDED OK");
             return true;
@@ -110,6 +111,51 @@ public class ChatService {
     }
 
     //////// JPA SERVICE FUNCTIONS ////////
+
+    boolean addUser(User user, Long conversationId) {
+        // Find conversation by id
+        // Add user to the conversation if not already added
+        Conversation conversation = findConversationById(conversationId);
+        if(user!= null && conversation != null) {
+            if(isUserInConversation(conversation, user)) {
+                System.out.println("CONTROL-CHAT: User is member of conversation");
+                return true; // all good, user already in conversation
+            } else {
+                try {
+                    // need to add user
+                    List<Conversation> userConversations = user.getUserConversations();
+                    userConversations.add(conversation);
+                    em.merge(user);
+                    em.flush();
+                    System.out.println("CONTROL-CHAT: User was added to conversation");
+                    return true;
+
+                } catch (PersistenceException pe) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    boolean isUserInConversation(Conversation conversation, User userToCheck) {
+        em.refresh(conversation);
+        em.refresh(userToCheck);
+        List<User> exsistingParticipants = conversation.getParticipants();
+        if (exsistingParticipants != null) {
+            for (User userInConversation : exsistingParticipants
+                 ) {
+                if (userInConversation.getId() == userToCheck.getId()) {
+                    System.out.println(userInConversation.getId());
+                    System.out.println("==");
+                    System.out.println(userToCheck.getId());
+
+                    return true; // STOP LOOP WHEN WE FOUND USER
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      *  Adds a message to the conversation, and saves the two to the persistence layer

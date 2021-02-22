@@ -21,7 +21,7 @@ A user has a An ID, email, first name, last name and password.
 @Entity
 @NoArgsConstructor
 @Table(name = "users")
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "userConversations")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends AuthenticatedUser implements Serializable {
 
@@ -40,7 +40,15 @@ public class User extends AuthenticatedUser implements Serializable {
 
     // -- User data -- //
 
-    @OneToMany
+    // M-N OWNER
+    @ManyToMany
+    @JoinTable(
+            name = "users_has_conversations",
+            joinColumns =
+                @JoinColumn(name = "user_id"),
+            inverseJoinColumns =
+                @JoinColumn(name = "conversation_id")
+    )
     @JsonbTransient
     List<Conversation> userConversations;
 
