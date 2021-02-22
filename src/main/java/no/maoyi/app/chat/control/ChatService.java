@@ -1,6 +1,7 @@
 package no.maoyi.app.chat.control;
 
 import no.maoyi.app.chat.entity.Conversation;
+import no.maoyi.app.chat.entity.ConversationDTO;
 import no.maoyi.app.chat.entity.Message;
 import no.maoyi.app.listing.control.ListingService;
 import no.maoyi.app.listing.entity.Listing;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Transactional
 public class ChatService {
+    //TODO: Cleanup and push warnings
 
     @PersistenceContext
     EntityManager em;
@@ -37,22 +39,6 @@ public class ChatService {
         return em.find(Conversation.class, id);
     }
 
-    // TODO: Utsatt til listing fungerer og kan brukest som testing
-    public Conversation findConversationByBuyerAndSeller(Long listingId, User buyer) {
-        Listing listing = ls.findListingById(listingId);
-        if (listing == null || buyer == null) return null;
-        // find the unique conversation between logged on buyer and seller of a specific listing
-        // find out how to find the seller of a listing:
-        // in offerlisting we are good, as seller == creator
-        // in buyrequest TODO: find out how/what the seller is
-        return null;
-    }
-
-    // TODO: Utsatt til listing fungerer
-    boolean doesConversationExsistBetweenBuyerAndSeller(Listing listing, User buyer) {
-       if (listing == null || buyer == null) return false;
-       return  false;
-    }
 
     public Conversation addConversationToListing(Conversation conversation, long listingId) {
         // Find a listing (or offerlisting) to then start a conversation with the seller of the listing
@@ -71,11 +57,11 @@ public class ChatService {
      * @param conversationId the ID for the conversation to be targeted
      * @return
      */
-    public boolean sendMessageToConversation(User sender, String message, Long conversationId) {
+    public ConversationDTO sendMessageToConversation(User sender, String message, Long conversationId) {
         System.out.println("SEND MESGCLLAED");
         Conversation conversation = findConversationById(conversationId);
         System.out.println("CONVERSATATION OKAY");
-        if (conversation == null || sender == null || message == null) return false;
+        if (conversation == null || sender == null || message == null) return null;
         System.out.println("nothing wass null");
         Message msg = new Message();
         msg.setSender(sender);
@@ -85,11 +71,11 @@ public class ChatService {
         if(addMessage(msg,conversationId) && addUser(sender, conversationId)) {
             // OK: notify participants and return OK == true
             System.out.println("CONTROL-CHAT: " + " MSG ADDED OK");
-            return true;
+            return new ConversationDTO(findConversationById(conversationId));
         } else {
             System.out.println("CONTROL-CHAT: " + " MSG ADDED FAILURE");
             // FAIL: send ERROR to client and return fail
-            return false;
+            return null;
         }
 
         // Find conversation

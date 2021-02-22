@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.maoyi.app.listing.entity.Listing;
 
+import javax.json.bind.annotation.JsonbTransient;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class ConversationDTO {
     public ConversationDTO(Conversation conversation) {
         this.id        = conversation.getId();
         this.baseOrder = conversation.getBaseOrder();
+        this.messageCount = conversation.messages.size();
         this.messages  = conversation.messages.stream()
                                               .parallel()
                                               .map(MessageDTO::buildFromMessage)
@@ -33,7 +35,9 @@ public class ConversationDTO {
 
     Listing baseOrder;
 
+    @JsonbTransient
     List<MessageDTO> messages;
 
+    int messageCount;
 
 }

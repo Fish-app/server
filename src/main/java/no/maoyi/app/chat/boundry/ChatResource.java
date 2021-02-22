@@ -3,6 +3,7 @@ package no.maoyi.app.chat.boundry;
 import no.maoyi.app.auth.entity.Group;
 import no.maoyi.app.chat.control.ChatService;
 import no.maoyi.app.chat.entity.Conversation;
+import no.maoyi.app.chat.entity.ConversationDTO;
 import no.maoyi.app.user.control.UserService;
 import no.maoyi.app.user.entity.User;
 
@@ -65,9 +66,10 @@ public class ChatResource {
             if ((conversationId != null)) {
                 // sender knows conversation id, and wants to send message directly
                 System.out.println("RESOURCE-CHAT: msg -> conversation");
-                if(service.sendMessageToConversation(senderUser, messageBody, conversationId)) {
+                ConversationDTO result = service.sendMessageToConversation(senderUser, messageBody, conversationId);
+                if(result != null) {
                     System.out.println("RESOURCE-CHAT: 200 OK");
-                    response = Response.ok().build();
+                    response = Response.ok(result).build();
                 } else {
                     response = Response.notModified().build();
                 }
