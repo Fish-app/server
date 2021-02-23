@@ -47,8 +47,6 @@ public class Conversation {
     Listing baseOrder;
 
     // N-1 REF
-    //@OneToMany(fetch = FetchType.EAGER, mappedBy = "conversation")
-    //@JsonbTransient (transient on other side of join)
     @OneToMany
     List<Message> messages;
 

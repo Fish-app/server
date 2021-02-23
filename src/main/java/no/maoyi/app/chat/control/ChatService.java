@@ -3,7 +3,6 @@ package no.***REMOVED***.app.chat.control;
 import no.***REMOVED***.app.chat.entity.Conversation;
 import no.***REMOVED***.app.chat.entity.ConversationDTO;
 import no.***REMOVED***.app.chat.entity.Message;
-import no.***REMOVED***.app.chat.entity.MessageDTO;
 import no.***REMOVED***.app.listing.control.ListingService;
 import no.***REMOVED***.app.listing.entity.Listing;
 import no.***REMOVED***.app.user.entity.User;
@@ -13,12 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
 public class ChatService {
-    //TODO: Cleanup and push warnings
 
     @PersistenceContext
     EntityManager em;
@@ -26,7 +23,21 @@ public class ChatService {
     @Inject
     ListingService ls;
 
+    /**
+     *  needs to be fixed
+     *  1. message list return (with filters)
+     *  2. when a buyer creates a conversation looking on a sellers offerlisting,
+     *     we need to add the seller to that conversation
+     *
+     *  future: handle pictures somehow
+     *  future: handle push notfications outside of app
+     */
 
+
+    /**
+     * Starts a new conversation, and saves it to the DB
+     * @return the conversation
+     */
     public Conversation newConversation() {
         Conversation input = new Conversation();
         try {
@@ -39,6 +50,13 @@ public class ChatService {
     }
 
 
+    /**
+     *  Adds a conversation to a listing, useful for when creating a order as a buyer. We can then find the seller
+     *  as the creator from the order listing.
+     * @param conversation conversation object to modify
+     * @param listingId id of listing to be added to the conversation object
+     * @return the modified conversation object
+     */
     public Conversation addConversationToListing(Conversation conversation, long listingId) {
         // Find a listing (or offerlisting) to then start a conversation with the seller of the listing
         Listing baseOrder =  em.find(Listing.class, listingId);
@@ -57,22 +75,17 @@ public class ChatService {
      * Adds a text message to a conversation; first the message is prepared before being added
      * to the conversation object. Sender is added to conversation if they have not participated before.
      *
-     * The participants is supposed to be notified by this function (TODO)
      * @param sender a User; the sender of the message
      * @param message the message text to be sent
      * @param conversationId the ID for the conversation to be targeted
-     * @return
+     * @return the DTO to be used in the REST response
      */
     public ConversationDTO sendMessageToConversation(User sender, String message, Long conversationId) {
-        System.out.println("SEND MESGCLLAED");
         Conversation input = em.find(Conversation.class, conversationId);
-        System.out.println("CONVERSATATION OKAY");
         if (input == null || sender == null || message == null) return null;
-        System.out.println("nothing wass null");
         Message msg = new Message();
         msg.setSender(sender);
         msg.setContent(message);
-        //msg.setConversation(input);
         // Add the message to the DB and add the user to the conversation list
         if(addMessage(msg,conversationId) && addUserToConversation(sender, conversationId)) {
             // OK: notify participants and return OK == true
@@ -80,8 +93,10 @@ public class ChatService {
 
             // Get a updated conversation object to return
             Conversation output = em.find(Conversation.class, conversationId);
+            // TODO: Use push to send notification to participants(future issue)
             List<User> usersToNotify = output.getParticipants();
             //NotfifyParticipants(usersToNotify);
+            // Notify other participants than sender (use user_has_conversations-sender to send push)
 
             return new ConversationDTO(output);
         } else {
@@ -89,11 +104,10 @@ public class ChatService {
             // FAIL: send ERROR to client and return fail
             return null;
         }
-        // Notify other participants than sender (use user_has_conversations-sender to send push)
-        // TODO: Use push to send notification to participants(future issue) - requires platform dependant compoent
     }
 
 
+    // FIXME REMOVE?: I think this is not needed, as users know the conversation ID and uses that one instead
     public boolean sendMessageToListing(User sender, String message, Long listingId ) {
         Listing listing = ls.findListingById(listingId);
         // Find listing, return false if not exsiswt
@@ -104,6 +118,7 @@ public class ChatService {
         return true;
     }
 
+    // FIXME:
     private Message getLastMessageInConversation(Conversation conversation, User user) {
         List<Message> msgList = getMessagesInRangeInConversation(conversation, user, 0L, 0L);
         // Filter message list to only contain last message,
@@ -111,8 +126,8 @@ public class ChatService {
         return null;
     }
 
-    //////// JPA SERVICE FUNCTIONS ////////
 
+    // FIXME:
     private List<Message> getMessagesInRangeInConversation(
             Conversation conversation,
             User principal,
@@ -149,9 +164,9 @@ public class ChatService {
 
     /**
      * Helper function to examine if user already is a participant for the
-     * conversation.
-     * @param conversation
-     * @param userToCheck
+     * conversation. Used for security reasons
+     * @param conversation conversation object to examine
+     * @param userToCheck the user to check is a participant
      * @return true if the user is a participant of the conversation, otherwise false
      */
     private boolean isUserInConversation(Conversation conversation, User userToCheck) {
@@ -162,10 +177,6 @@ public class ChatService {
             for (User userInConversation : exsistingParticipants
                  ) {
                 if (userInConversation.getId() == userToCheck.getId()) {
-                    System.out.println(userInConversation.getId());
-                    System.out.println("==");
-                    System.out.println(userToCheck.getId());
-
                     return true; // STOP LOOP WHEN WE FOUND USER
                 }
             }
@@ -217,13 +228,9 @@ public class ChatService {
             em.persist(message);
             em.flush();
             Conversation persistResult = em.merge(foundConversation);
-            if(persistResult == null) {
-                return false; // FAILED
-            } else {
-                return true; // SUCCESS
-            }
+            // SUCCESS
+            return persistResult != null; // TRUE -> OK if result was not null
         } catch (PersistenceException pe) {
-            System.out.println("CONTROL-CHAT: Persistence failure");
            return false;
         }
     }
