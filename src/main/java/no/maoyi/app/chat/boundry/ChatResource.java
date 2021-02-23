@@ -40,7 +40,7 @@ public class ChatResource {
         if (conversation != null) {
             if (listingId != null) conversation = service.addConversationToListing(conversation, listingId);
             if (conversation != null) {
-                response = Response.ok(conversation).build();
+                response = Response.ok(new ConversationDTO(conversation)).build();
             }
         }
         return response;
