@@ -1,13 +1,13 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-22T14:52:59.710Z
+__export_date: 2021-02-23T10:55:27.764Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1613945151805
+    modified: 1614077445272
     created: 1613759257836
-    url: "{{ _.baseURL }}/chat/start"
+    url: "{{ _.baseURL }}/chat/startconversation"
     name: buyer-conversation-start
     description: ""
     method: POST
@@ -58,9 +58,9 @@ resources:
     _type: workspace
   - _id: req_5fa81cb820784975ad5283bccc017b7b
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614005507685
+    modified: 1614077455268
     created: 1613945171084
-    url: "{{ _.baseURL }}/chat/message"
+    url: "{{ _.baseURL }}/chat/sendmessage"
     name: buyer-conversation-message
     description: |-
       ### What
@@ -100,11 +100,59 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_120528d30607470cbb19fbbe66daf83f
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1614077557344
+    created: 1614077415768
+    url: "{{ _.baseURL }}/chat/getmessages"
+    name: buyer-conversation-getmessages
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body:
+      mimeType: application/x-www-form-urlencoded
+      params: []
+    parameters:
+      - name: conversation
+        value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
+          'b64::JC5pZA==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_460e14c3b1fb4d349f1dc043699955c9
+      - name: to
+        value: ""
+        description: ""
+        id: pair_3f285b8413a04635bea6f7a3658c3633
+      - name: from
+        value: ""
+        description: ""
+        id: pair_d086f75175e14f3bab3a72958db96ba8
+    headers:
+      - name: Content-Type
+        value: application/x-www-form-urlencoded
+        id: pair_7173b0ff35cf4c038787ce586eecfa65
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613642722166.625
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_7569f963e4c14d4b8d9804f49704a1e9
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614005518821
+    modified: 1614077459872
     created: 1614002844060
-    url: "{{ _.baseURL }}/chat/message"
+    url: "{{ _.baseURL }}/chat/sendmessage"
     name: seller-conversation-message
     description: |-
       ### What
@@ -177,7 +225,7 @@ resources:
     _type: request_group
   - _id: req_bd1566f0d17f48b0ae5128df61bff656
     parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1613750047942
+    modified: 1614077702115
     created: 1613564457560
     url: "{{ _.baseURL }}/commodity/new"
     name: create-commodity
@@ -200,9 +248,7 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
         id: pair_a4445d2325ae4adb948bff5ecdcbc577
-    authentication:
-      type: bearer
-      token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImFiYy0xMjM0NTY3ODkwIn0.eyJzdWIiOiIxIiwianRpIjoiMDVmNzk3YmQtNGRjNy00MzY1LTg3ZWEtNWIzOThiMzYxMWFjIiwiaXNzIjoibWFveWkiLCJpYXQiOjE2MTM1NjQwNjcsImV4cCI6MTYxMzY1MDQ2NywidXBuIjoiMSIsImdyb3VwcyI6WyJ1c2VyIl0sImF1ZCI6ImF1ZCIsImF1dGhfdGltZSI6MTYxMzU2NDA2NzU3MH0.knCdgZ9a_DqnBuI_c6Xf-jqt-tj8wDj_nNEevuhiXlDUCbHxNtiXSohUYaKNsEe_8YVENOffd4pEEPzBozW_Xd_d2rfVe3yJgL6_EMF4WbTbS1jr9CDNxVvF_qJjC8er9-2kYzI3RQcm_B2lbHFMhBZ6lvMXkdw7KzG6-4mxUhK0rSiRO1Q-mHcbH4KJpfOGwaZRIN_DYYNgPVVVWsciQW_6MUio6gwaRthSbpGZLSE2x7r_wqzkWUbfxcg4OGaQjPfn_Fo4x5klloMzJrGM89V56QFFh0GIgMrcfzOC88_wz1XVq00u8lUG2IJQ0y1U5p4RfMzcMSscYZlxKXr66w
+    authentication: {}
     metaSortKey: -1613564457560
     isPrivate: false
     settingStoreCookies: true
@@ -389,7 +435,7 @@ resources:
     _type: request_group
   - _id: req_4fb46cb3fd6c43a2a346787ee4d8e960
     parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1612796137685
+    modified: 1614077679153
     created: 1611845697304
     url: "{{ _.baseURL }}/seller/getseller"
     name: get-seller
@@ -407,8 +453,7 @@ resources:
         value: testesen@example.com
         description: ""
         id: pair_16f18359360943cc98ae350322f96983
-    authentication:
-      type: bearer
+    authentication: {}
     metaSortKey: -1611756927185
     isPrivate: false
     settingStoreCookies: true
