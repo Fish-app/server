@@ -45,13 +45,13 @@ public class Message {
         this.createdDate = new Date().getTime(); // Get epoch time
     }
 
-    //N-1 Owner
-    @ManyToOne
-    @JoinColumn(name = "conversation_id", referencedColumnName = "id")
-    @JsonbTransient
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Conversation conversation;
+    ////N-1 Owner
+    //@ManyToOne
+    //@JoinColumn(name = "conversation_id", referencedColumnName = "id")
+    //@JsonbTransient
+    //@ToString.Exclude
+    //@EqualsAndHashCode.Exclude
+    //private Conversation conversation;
 
 
     public Message(String content, User sender) {
