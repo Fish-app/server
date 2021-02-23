@@ -1,11 +1,8 @@
 package no.***REMOVED***.app.resources.entity;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import no.***REMOVED***.app.chat.entity.Message;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -36,10 +33,5 @@ public class Image implements Serializable {
     @Min(0)
     private float size;
 
-    // 1-1 REF
-    @Getter
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "image")
-    @JsonbTransient
-    Message message;
 
 }
