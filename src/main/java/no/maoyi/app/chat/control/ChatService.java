@@ -72,7 +72,7 @@ public class ChatService {
         Message msg = new Message();
         msg.setSender(sender);
         msg.setContent(message);
-        msg.setConversation(input);
+        //msg.setConversation(input);
         // Add the message to the DB and add the user to the conversation list
         if(addMessage(msg,conversationId) && addUserToConversation(sender, conversationId)) {
             // OK: notify participants and return OK == true
