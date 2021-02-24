@@ -13,6 +13,8 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.logging.Level;
@@ -77,17 +79,23 @@ public class AuthResource {
     }
 
 
+    @PUT
     @Path("changepassword")
+    @Valid
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response changePassword(
-            @HeaderParam("pwd") String newPasswd,
-            @HeaderParam("oldpwd") String oldPasswd
+            @NotNull @HeaderParam("pwd") String newPasswd,
+            @NotNull @HeaderParam("oldpwd") String oldPasswd
     ) {
 
-        if (authService.changePassword(newPasswd, oldPasswd)) {
-            return Response.ok().build();
+        if (!(oldPasswd.isBlank() && newPasswd.isBlank())) {
+            if (authService.changePassword(newPasswd, oldPasswd)) {
+                return Response.ok().build();
+            } else {
+                return Response.ok().status(Response.Status.FORBIDDEN).build();
+            }
         } else {
-            return Response.ok().status(Response.Status.FORBIDDEN).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
