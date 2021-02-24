@@ -50,6 +50,8 @@ public class ChatService {
             Listing      listing      = entityManager.find(Listing.class, listingId);
             Conversation conversation = new Conversation(listing, userService.getLoggedInUser());
             entityManager.persist(conversation);
+            entityManager.flush();
+            entityManager.refresh(conversation);
             return conversation;
         } catch (PersistenceException pe) {
             return null;
@@ -66,10 +68,6 @@ public class ChatService {
         return entityManager.find(Conversation.class, convId);
     }
 
-    public void sendMessage(String messageBody, long conversationId) {
-        sendMessage(messageBody, getConversation(conversationId));
-    }
-
     /**
      * Registers a message body as sent from the current logged in user in a conversation.
      * whether or not the user is allowed is not cheked
@@ -77,12 +75,20 @@ public class ChatService {
      * @param messageBody  the string content of the message
      * @param conversation the conversation objet for the conversation
      */
-    public void sendMessage(String messageBody, Conversation conversation) {
+    public boolean sendMessage(String messageBody, Conversation conversation) {
         Message message = new Message(messageBody, userService.getLoggedInUser());
-        entityManager.persist(message);
+        try {
+            entityManager.persist(message);
+            entityManager.flush();
+            conversation.addMessage(message);
+            entityManager.persist(conversation);
+            entityManager.flush();
+            return true;
+        } catch (Exception e) {
+            System.out.println("CONTROL-CHAT: Persistence failure sendMsg");
+            return false;
+        }
 
-        conversation.addMessage(message);
-        entityManager.persist(conversation);
 
     }
 
