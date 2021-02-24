@@ -65,8 +65,9 @@ public class ChatResource {
         Conversation conversation = chatService.getConversation(conversationId);
 
         if (conversation.isUserInConversation(userService.getLoggedInUser())) {
-            if(chatService.sendMessage(messageBody, conversation)) {
-                response = Response.ok(conversation).build();
+            Conversation result = chatService.sendMessage(messageBody, conversation);
+            if(result != null) {
+                response = Response.ok(new ConversationDTO(result)).build();
             }
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();
