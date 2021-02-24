@@ -4,8 +4,10 @@ package no.***REMOVED***.app.chat.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.***REMOVED***.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,10 +28,8 @@ public class ConversationDTO {
     public ConversationDTO(Conversation conversation) {
         this.id = conversation.getId();
         this.messageCount = conversation.messages.size();
-        this.messages = conversation.messages.stream()
-                                             .parallel()
-                                             .map(MessageDTO::buildFromMessage)
-                                             .collect(Collectors.toList());
+        this.lastMessageId = conversation.getLastMessageId();
+        this.lastSenderId = conversation.get
     }
 
     long id;
@@ -37,10 +37,8 @@ public class ConversationDTO {
     long version;
 
 
-    // FIXME: better to use message list in a seperate endpoint ?
-    @JsonbTransient
-    List<MessageDTO> messages;
-
     int messageCount;
+
+    long lastMessageId;
 
 }

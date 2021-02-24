@@ -75,7 +75,7 @@ public class ChatService {
      * @param messageBody  the string content of the message
      * @param conversation the conversation objet for the conversation
      */
-    public boolean sendMessage(String messageBody, Conversation conversation) {
+    public Conversation sendMessage(String messageBody, Conversation conversation) {
         Message message = new Message(messageBody, userService.getLoggedInUser());
         try {
             entityManager.persist(message);
@@ -83,10 +83,10 @@ public class ChatService {
             conversation.addMessage(message);
             entityManager.persist(conversation);
             entityManager.flush();
-            return true;
+            return conversation;
         } catch (Exception e) {
             System.out.println("CONTROL-CHAT: Persistence failure sendMsg");
-            return false;
+            return null;
         }
 
 
