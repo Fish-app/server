@@ -46,7 +46,7 @@ public class ListingResource {
     @RolesAllowed(value = {Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newOfferListing(
             @NotNull @HeaderParam("endDate") long endDate,
-            @NotNull @HeaderParam("commodity") long commodityId,
+            @NotNull @HeaderParam("commodityId") long commodityId,
             @NotNull @HeaderParam("price") double price,
             @NotNull @HeaderParam("maxAmount") int maxAmount,
             @NotNull @HeaderParam("latitude") double latitude,
