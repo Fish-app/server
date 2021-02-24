@@ -29,6 +29,7 @@ public class ListingService {
      * @param latitude The latitude for the pickup point
      * @param longitude The longitude for the pickup point
      * @param user The creator of the offer listing
+     * @param additionalInfo Additional info for the offer listing
      *
      * @return the created offer listing object
      */
@@ -39,7 +40,8 @@ public class ListingService {
             int maxAmount,
             double latitude,
             double longitude,
-            User user
+            User user,
+            String additionalInfo
     ) {
         OfferListing newOffer = new OfferListing();
         newOffer.setEndDate(endDate);
@@ -51,6 +53,7 @@ public class ListingService {
         newOffer.setLongitude(longitude);
         newOffer.setCreator(user);
         newOffer.setListingType("offer_listing");
+        newOffer.setAdditionalInfo(additionalInfo);
 
         entityManager.persist(newOffer);
 
