@@ -1,5 +1,6 @@
 package no.***REMOVED***.app.chat.boundry;
 
+import lombok.NonNull;
 import no.***REMOVED***.app.auth.entity.Group;
 import no.***REMOVED***.app.chat.control.ChatService;
 import no.***REMOVED***.app.chat.entity.Conversation;
@@ -11,6 +12,8 @@ import no.***REMOVED***.app.user.control.UserService;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -34,9 +37,10 @@ public class ChatResource {
     @POST
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Path("startconversation")
+    @Path("start")
+    @Valid
     public Response startConversationRequest(
-            @NotNull @HeaderParam("listing") long listingId
+           @NotNull @HeaderParam("listing") long listingId
     ) {
         Response     response;
         Conversation conversation = null;
@@ -50,18 +54,20 @@ public class ChatResource {
     }
 
     @POST
-    @Path("new")
+    @Path("send")
+    @Valid
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response sendMessageRequest(
             @NotNull @HeaderParam("conversation") long conversationId,
             @NotNull @HeaderParam("body") String messageBody
     ) {
-        Response     response;
+        Response     response = Response.serverError().build();
         Conversation conversation = chatService.getConversation(conversationId);
 
         if (conversation.isUserInConversation(userService.getLoggedInUser())) {
-            chatService.sendMessage(messageBody, conversation);
-            response = Response.ok().build();
+            if(chatService.sendMessage(messageBody, conversation)) {
+                response = Response.ok(conversation).build();
+            }
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -70,7 +76,8 @@ public class ChatResource {
     }
 
     @GET
-    @Path("mabyUpdates")
+    @Valid
+    @Path("messages/get")
     public Response updatesQuery(
             @NotNull @HeaderParam("conversation") long conversationId,
             @NotNull @HeaderParam("last-id") long lastId
@@ -96,6 +103,9 @@ public class ChatResource {
     }
 
 
+    @GET
+    @Valid
+    @Path("messages/range")
     public Response getMessageRange(
             @NotNull @HeaderParam("conversation") long conversationId,
             @NotNull @HeaderParam("from") long fromId,
