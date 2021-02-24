@@ -1,14 +1,13 @@
 package no.***REMOVED***.app.chat.entity;
 
 
-import lombok.*;
-import no.***REMOVED***.app.resources.entity.Image;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.user.entity.User;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -22,17 +21,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    //TODO: Get Payload as seperate type/enum to seperate between message types (textmessage, imagemessage etc.)
     @Column(columnDefinition = "TEXT")
     String content;
-    //MessagePayload content;
 
-
-
-    // 1-1 Owner
-    @OneToOne
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
-    Image image;
 
     @ManyToOne
     User sender;
