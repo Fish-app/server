@@ -29,7 +29,7 @@ public class ConversationDTO {
         this.id = conversation.getId();
         this.messageCount = conversation.messages.size();
         this.lastMessageId = conversation.getLastMessageId();
-        this.lastSenderId = conversation.get
+        this.lastSenderId = conversation.getLastSenderId();
     }
 
     long id;
@@ -40,5 +40,7 @@ public class ConversationDTO {
     int messageCount;
 
     long lastMessageId;
+
+    long lastSenderId;
 
 }

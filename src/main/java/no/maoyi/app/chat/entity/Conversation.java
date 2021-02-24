@@ -31,6 +31,9 @@ public class Conversation {
     @Getter
     long lastMessageId;
 
+    @Getter
+    long lastSenderId;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonbTransient
     @Getter(AccessLevel.NONE)
@@ -73,7 +76,8 @@ public class Conversation {
     }
 
     public void addMessage(Message message) {
-        this.lastMessageId = message.id;
+        this.lastMessageId = message.getId();
+        this.lastSenderId = message.getSender().getId();
         this.messages.add(message);
     }
 
