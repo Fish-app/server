@@ -32,6 +32,8 @@ public class OfferListing extends Listing {
     @Column(nullable = false, name = "longitude")
     double longitude;
 
+    String additionalInfo;
+
     // TODO: sjekke om det her blir med som et felt eller om man treng og jør nå constructor shenanagans
     public int getAmountLeft() {
         if (transactions != null) {

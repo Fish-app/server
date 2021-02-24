@@ -13,12 +13,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommodityService {
 
-    private static final String getAllCommodities = "SELECT Commodity from Commodity";
+    private static final String getAllCommodities = "SELECT c from Commodity c";
 
     @PersistenceContext
     EntityManager entityManager;
