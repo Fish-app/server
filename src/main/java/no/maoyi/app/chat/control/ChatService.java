@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,15 +30,9 @@ public class ChatService {
     UserService userService;
 
     /**
-     *  needs to be fixed
-     *  1. message list return (with filters)
-     *  2. when a buyer creates a conversation looking on a sellers offerlisting,
-     *     we need to add the seller to that conversation
-     *
      *  future: handle pictures somehow
      *  future: handle push notfications outside of app
      */
-
 
     /**
      * creates a new conversation between the current user and the owner of the listing with the provided id
@@ -48,7 +43,8 @@ public class ChatService {
     public Conversation newListingConversation(long listingId) {
 
         try {
-            Listing      listing      = entityManager.find(Listing.class, listingId);
+            Listing listing = entityManager.find(Listing.class, listingId);
+            if (listing == null) return null; // Avoid nullptr below
             User listingOwner = listing.getCreator();
             User conversationStarter = userService.getLoggedInUser();
             Conversation conversation = new Conversation(listing, conversationStarter);
@@ -122,15 +118,14 @@ public class ChatService {
      * @param offset the offset possetive or negative
      * @return a list of messages
      */
-    public List<Message> getMessageRange(long convId, long fromId, long offset) {
+    public List<Message> getMessageRange(Long convId, Long fromId, Long offset) {
         Conversation  conversation = getConversation(convId);
         List<Message> messages     = conversation.getMessages();
-        // this shold be null cheked
+        if(messages == null) return new ArrayList<>();
         Message anchor       = entityManager.find(Message.class, fromId);
         int     elementIndex = messages.indexOf(anchor);
-        // this shold be null cheked
 
-
+        if (offset == null) offset = 0L; // default value if null
         if (offset > 0) {
             return messages.subList(elementIndex, (int) Math.min(messages.size(), offset));
         } else {

@@ -29,12 +29,11 @@ public class Conversation {
     @Getter
     long id;
 
-
+    // IDs for first and last msg;
+    @Getter
+    long firstMessageId;
     @Getter
     long lastMessageId;
-
-    @Getter
-    long lastSenderId;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonbTransient
@@ -42,19 +41,11 @@ public class Conversation {
     @Setter(AccessLevel.NONE)
     List<Message> messages;
 
-//    @Column(columnDefinition = "TEXT")
-//    String title;
-//
-//    @Column(columnDefinition = "TEXT")
-//    String description;
-
     @Enumerated(EnumType.STRING)
     State state = State.ACTIVE;
 
-    // N-1 Owner
     @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "base_order_id", referencedColumnName = "id")
-            Listing conversationListing;
+    Listing conversationListing;
 
 
 
@@ -65,6 +56,7 @@ public class Conversation {
         this.conversationListing = conversationListing;
         this.listingCreatorUserId = conversationListing.getCreator().getId();
         this.conversationStarterUserId = currentUser.getId();
+        this.messages = new ArrayList<>();
     }
 
     public boolean isUserInConversation(User user) {
@@ -73,8 +65,11 @@ public class Conversation {
 
     public void addMessage(Message message) {
         this.lastMessageId = message.getId();
-        this.lastSenderId = message.getSender().getId();
         this.messages.add(message);
+        if(this.messages.indexOf(message) == 0) {
+            // Save the first message id (used by client to determine limit, as msg ID's are global)
+            this.firstMessageId = message.getId();
+        }
     }
 
     public List<Message> getMessages() {

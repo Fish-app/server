@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-25T10:49:29.140Z
+__export_date: 2021-02-25T17:35:42.877Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
@@ -133,7 +133,7 @@ resources:
     _type: request
   - _id: req_120528d30607470cbb19fbbe66daf83f
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614249465717
+    modified: 1614274305158
     created: 1614077415768
     url: "{{ _.baseURL }}/chat/messages/get"
     name: buyer-get-messages
@@ -168,6 +168,57 @@ resources:
         disabled: false
     authentication: {}
     metaSortKey: -1613642722166.625
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_d1b6803582014945ac961c0b523b37b9
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1614274223108
+    created: 1614266056949
+    url: "{{ _.baseURL }}/chat/messages/get"
+    name: buyer-range-messages
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body:
+      mimeType: application/x-www-form-urlencoded
+      params: []
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/x-www-form-urlencoded
+        id: pair_7173b0ff35cf4c038787ce586eecfa65
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: conversation
+        value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
+          'b64::JC5pZA==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_a1725c9eb31d4c8484149c63ac747106
+        disabled: false
+      - name: from
+        value: "9"
+        description: ""
+        id: pair_35a70b0b83f74905a3aae25dd2892773
+        disabled: false
+      - name: offset
+        value: "1"
+        description: ""
+        id: pair_ffbce949b1c644d4b9ad94282c8a35e0
+        disabled: false
+    authentication: {}
+    metaSortKey: -1613625241816.2188
     isPrivate: false
     settingStoreCookies: false
     settingSendCookies: false
@@ -333,7 +384,7 @@ resources:
     _type: request
   - _id: req_2bb32d389faf4ade96b85c906bfc438c
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614249921225
+    modified: 1614274477854
     created: 1614249621111
     url: "{{ _.baseURL }}/chat/messages/get"
     name: seller-get-messages
@@ -362,10 +413,10 @@ resources:
         description: ""
         id: pair_a1725c9eb31d4c8484149c63ac747106
       - name: last-id
-        value: "7"
+        value: "2"
         description: ""
         id: pair_35a70b0b83f74905a3aae25dd2892773
-        disabled: true
+        disabled: false
     authentication: {}
     metaSortKey: -1613642722166.625
     isPrivate: false
