@@ -55,24 +55,18 @@ public class Conversation {
             Listing conversationListing;
 
 
-    // The users in this conversation; used to determine what users
-    // that need to get notified when a new message is added
-    //N-M REF
-    @ManyToMany(mappedBy = "userConversations")
-    @JsonbTransient
-    List<User> participants;
 
-    long listingUserId;
-    long initUserId;
+    long listingCreatorUserId;
+    long conversationStarterUserId;
 
     public Conversation(Listing conversationListing, User currentUser) {
         this.conversationListing = conversationListing;
-        this.listingUserId = conversationListing.getCreator().getId();
-        this.initUserId = currentUser.getId();
+        this.listingCreatorUserId = conversationListing.getCreator().getId();
+        this.conversationStarterUserId = currentUser.getId();
     }
 
     public boolean isUserInConversation(User user) {
-        return listingUserId == user.getId() || initUserId == user.getId();
+        return listingCreatorUserId == user.getId() || conversationStarterUserId == user.getId();
     }
 
     public void addMessage(Message message) {
@@ -88,10 +82,7 @@ public class Conversation {
         return messages;
     }
 
-    public List<User> getParticipants() {
-        if (participants == null) {
-            return new ArrayList<>();
-        }
-        return participants;
+    public Listing getConversationListing() {
+        return conversationListing;
     }
 }

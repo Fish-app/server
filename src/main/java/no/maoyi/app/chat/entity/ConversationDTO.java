@@ -4,6 +4,7 @@ package no.maoyi.app.chat.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.maoyi.app.listing.entity.Listing;
 import no.maoyi.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
@@ -30,6 +31,7 @@ public class ConversationDTO {
         this.messageCount = conversation.messages.size();
         this.lastMessageId = conversation.getLastMessageId();
         this.lastSenderId = conversation.getLastSenderId();
+        this.listing = conversation.getConversationListing();
     }
 
     long id;
@@ -42,5 +44,7 @@ public class ConversationDTO {
     long lastMessageId;
 
     long lastSenderId;
+
+    Listing listing;
 
 }

@@ -11,6 +11,7 @@ import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /* 
@@ -31,29 +32,14 @@ public class User extends AuthenticatedUser implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    //    @Email
-    //    @Column(nullable = false, unique = true)
-    //    private String email;
-
     @Transient
     private String email;
 
     // -- User data -- //
 
-    // The conversations this user has participated in
-    // Intended to be used for fetching the current users conversations
-    // M-N OWNER
-    @ManyToMany
-    @JoinTable(
-            name = "users_has_conversations",
-            joinColumns =
-                @JoinColumn(name = "user_id"),
-            inverseJoinColumns =
-                @JoinColumn(name = "conversation_id")
-    )
+    @OneToMany
     @JsonbTransient
     List<Conversation> userConversations;
-
 
     @OneToMany
     @JsonbTransient
@@ -79,5 +65,11 @@ public class User extends AuthenticatedUser implements Serializable {
         this.setEmail(email);
         this.setName(name);
         this.setPassword(password);
+    }
+
+
+    public List<Conversation> getUserConversations() {
+        if (this.userConversations == null) return new ArrayList<>();
+        return userConversations;
     }
 }
