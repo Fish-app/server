@@ -123,6 +123,8 @@ public class ChatResource {
         return response;
     }
 
+    /// Får ikkje denne til å fungere, den viser alle meldingar, og tar ikkje hensyn til range
+    /// Men den oppenfor (messages/get) fungerer med range.
 
     @GET
     @Valid
@@ -141,6 +143,7 @@ public class ChatResource {
                                                    .map(MessageDTO::buildFromMessage)
                                                    .collect(Collectors.toList());
             response = Response.ok(messageDTOS).build();
+            //FIXME: Returnerer samme resultat med messages (ufiltrert)
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();
         }

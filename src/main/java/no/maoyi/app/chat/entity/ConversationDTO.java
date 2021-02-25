@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
  * <p>
  * Returns metadata about a conversation; what order asscoiated, the current count of msgs
  * so that the client can send an GET message list seperatly with only the messages it want to know
- * FIXME: messages should be sent in a seperate DTO/ JSON list ??
  */
 @Data
 @NoArgsConstructor
@@ -28,23 +27,14 @@ public class ConversationDTO {
 
     public ConversationDTO(Conversation conversation) {
         this.id = conversation.getId();
-        this.messageCount = conversation.messages.size();
         this.lastMessageId = conversation.getLastMessageId();
-        this.lastSenderId = conversation.getLastSenderId();
+        this.firstMessageId = conversation.getFirstMessageId();
         this.listing = conversation.getConversationListing();
     }
 
     long id;
-
-    long version;
-
-
-    int messageCount;
-
     long lastMessageId;
-
-    long lastSenderId;
-
+    long firstMessageId;
     Listing listing;
 
 }

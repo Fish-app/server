@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "messages")
 public class Message {
-    // TODO: May add images to the messages
+    // TODO: add images to the messages in future
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
