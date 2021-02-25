@@ -5,6 +5,7 @@ import no.***REMOVED***.app.chat.entity.Message;
 import no.***REMOVED***.app.listing.control.ListingService;
 import no.***REMOVED***.app.listing.entity.Listing;
 import no.***REMOVED***.app.user.control.UserService;
+import no.***REMOVED***.app.user.entity.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -48,10 +49,15 @@ public class ChatService {
 
         try {
             Listing      listing      = entityManager.find(Listing.class, listingId);
-            Conversation conversation = new Conversation(listing, userService.getLoggedInUser());
+            User listingOwner = listing.getCreator();
+            User conversationStarter = userService.getLoggedInUser();
+            Conversation conversation = new Conversation(listing, conversationStarter);
             entityManager.persist(conversation);
             entityManager.flush();
             entityManager.refresh(conversation);
+
+            if(userService.addConversationToUser(conversation, listingOwner) == false) throw new PersistenceException();
+            if(userService.addConversationToUser(conversation, conversationStarter) == false) throw new PersistenceException();
             return conversation;
         } catch (PersistenceException pe) {
             return null;

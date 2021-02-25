@@ -1,5 +1,6 @@
 package no.***REMOVED***.app.chat.boundry;
 
+import lombok.Getter;
 import lombok.NonNull;
 import no.***REMOVED***.app.auth.entity.Group;
 import no.***REMOVED***.app.chat.control.ChatService;
@@ -8,6 +9,7 @@ import no.***REMOVED***.app.chat.entity.ConversationDTO;
 import no.***REMOVED***.app.chat.entity.Message;
 import no.***REMOVED***.app.chat.entity.MessageDTO;
 import no.***REMOVED***.app.user.control.UserService;
+import no.***REMOVED***.app.user.entity.User;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -32,6 +34,24 @@ public class ChatResource {
 
     @Inject
     UserService userService;
+
+
+    @GET
+    @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("myconversations")
+    @Valid
+    public Response getCurrentUserConversationsRequest(
+    ) {
+        Response response;
+        User currentUser = userService.getLoggedInUser();
+        if(currentUser != null) {
+            response = Response.ok(currentUser.getUserConversations()).build();
+        } else {
+            response = Response.serverError().build();
+        }
+        return response;
+    }
 
 
     @POST

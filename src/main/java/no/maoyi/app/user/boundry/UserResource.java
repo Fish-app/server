@@ -42,8 +42,4 @@ public class UserResource {
         }
         return resp.build();
     }
-
-
-
-
 }
