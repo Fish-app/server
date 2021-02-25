@@ -8,6 +8,8 @@ import lombok.Setter;
 import no.maoyi.app.listing.entity.Listing;
 import no.maoyi.app.user.entity.User;
 
+import javax.json.bind.annotation.JsonbAnnotation;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.ArrayList;
