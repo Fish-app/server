@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-02-25T17:35:42.877Z
+__export_date: 2021-02-26T10:37:27.564Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
@@ -133,7 +133,7 @@ resources:
     _type: request
   - _id: req_120528d30607470cbb19fbbe66daf83f
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614274305158
+    modified: 1614333284918
     created: 1614077415768
     url: "{{ _.baseURL }}/chat/messages/get"
     name: buyer-get-messages
@@ -162,10 +162,10 @@ resources:
         description: ""
         id: pair_a1725c9eb31d4c8484149c63ac747106
       - name: last-id
-        value: "7"
+        value: "3"
         description: ""
         id: pair_35a70b0b83f74905a3aae25dd2892773
-        disabled: false
+        disabled: true
     authentication: {}
     metaSortKey: -1613642722166.625
     isPrivate: false
@@ -178,9 +178,9 @@ resources:
     _type: request
   - _id: req_d1b6803582014945ac961c0b523b37b9
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614274223108
+    modified: 1614335802336
     created: 1614266056949
-    url: "{{ _.baseURL }}/chat/messages/get"
+    url: "{{ _.baseURL }}/chat/messages/range"
     name: buyer-range-messages
     description: |-
       ### What
@@ -208,7 +208,7 @@ resources:
         id: pair_a1725c9eb31d4c8484149c63ac747106
         disabled: false
       - name: from
-        value: "9"
+        value: "2"
         description: ""
         id: pair_35a70b0b83f74905a3aae25dd2892773
         disabled: false
@@ -384,7 +384,7 @@ resources:
     _type: request
   - _id: req_2bb32d389faf4ade96b85c906bfc438c
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614274477854
+    modified: 1614333400573
     created: 1614249621111
     url: "{{ _.baseURL }}/chat/messages/get"
     name: seller-get-messages
@@ -416,7 +416,7 @@ resources:
         value: "2"
         description: ""
         id: pair_35a70b0b83f74905a3aae25dd2892773
-        disabled: false
+        disabled: true
     authentication: {}
     metaSortKey: -1613642722166.625
     isPrivate: false

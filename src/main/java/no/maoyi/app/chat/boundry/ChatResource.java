@@ -128,14 +128,15 @@ public class ChatResource {
     @Valid
     @Path("messages/range")
     public Response getMessageRange(
-            @NotNull @HeaderParam("conversation") long conversationId,
-            @NotNull @HeaderParam("from") long fromId,
-            @NotNull @HeaderParam("offset") long offset
+            @NotNull @HeaderParam("conversation") Long conversationId,
+            @NotNull @HeaderParam("from") Long fromId,
+            @NotNull @HeaderParam("offset") Long offset
     ) {
         Response     response;
         Conversation conversation = chatService.getConversation(conversationId);
 
         if (conversation.isUserInConversation(userService.getLoggedInUser())) {
+            System.out.println("adasd");
             List<Message> messages = chatService.getMessageRange(conversationId, fromId, offset);
             List<MessageDTO> messageDTOS = messages.stream()
                                                    .map(MessageDTO::buildFromMessage)
