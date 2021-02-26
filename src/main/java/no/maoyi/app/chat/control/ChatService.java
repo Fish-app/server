@@ -52,8 +52,8 @@ public class ChatService {
             entityManager.flush();
             entityManager.refresh(conversation);
 
-            if(userService.addConversationToUser(conversation, listingOwner) == false) throw new PersistenceException();
-            if(userService.addConversationToUser(conversation, conversationStarter) == false) throw new PersistenceException();
+            userService.addConversationToUser(conversation, listingOwner);
+            userService.addConversationToUser(conversation, conversationStarter);
             return conversation;
         } catch (PersistenceException pe) {
             return null;

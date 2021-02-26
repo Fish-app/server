@@ -55,22 +55,14 @@ public class UserService {
      * @param conversation the conversation to add
      * @return the updated user object with the list of conversations
      */
-    public boolean addConversationToUser(Conversation conversation, User userToAdd) {
-        if(userToAdd != null & conversation != null) {
-            entityManager.find(User.class, userToAdd.getId());
-            if(!isUserInConversation(userToAdd, conversation)) {
-                // User does not have the conversation in the list, therefore we add it
-                List<Conversation> conversationList = userToAdd.getUserConversations();
-                conversationList.add(conversation);
-                entityManager.merge(userToAdd);
-                entityManager.flush();
-                entityManager.refresh(userToAdd);
-            } else {
-                // The user already has the conversation, do nothing and return the usqer
-            }
-            return true;
-        } else {
-            return false; // failure, something was null
+    public void addConversationToUser(Conversation conversation, User userToAdd) {
+        // Check if user has the conversation, if true do nothing
+        if(!isUserInConversation(userToAdd, conversation)) {
+            // User does not have the conversation in the list, therefore we add it
+            List<Conversation> conversationList = userToAdd.getUserConversations();
+            conversationList.add(conversation);
+            entityManager.merge(userToAdd);
+            entityManager.flush();
         }
     }
 
