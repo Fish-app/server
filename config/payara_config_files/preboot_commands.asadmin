@@ -1,1 +1,1 @@
-remove-expired-certificatesdeploy /opt/payara/deployments/***REMOVED***-1.0.war
+remove-expired-certificatesdeploy /opt/payara/deployments/fishapp-1.0.war

@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -f pom.xml clean package
 FROM payara/micro:5.2020.7-jdk11 AS prod
 ## Fixes clock in payara log
 ENV TZ Europe/Oslo
-COPY --from=build /app/target/***REMOVED***-1.0.war $DEPLOY_DIR/***REMOVED***-1.0.war
+COPY --from=build /app/target/fishapp-1.0.war $DEPLOY_DIR/fishapp-1.0.war
 # create image folder if missing and set ownership
 RUN mkdir /opt/payara/images
 RUN chown payara:payara /opt/payara/images
@@ -26,4 +26,4 @@ CMD ["--deploymentDir", "/opt/payara/deployments", "--contextroot", "ROOT"]
 ## Local build from IDE; only copy (no docker build) from exising .war file built by IDE
 FROM payara/micro AS run-only
 ENV TZ Europe/Oslo
-COPY ./target/***REMOVED***-1.0.war $DEPLOY_DIR/***REMOVED***-1.0.war
+COPY ./target/fishapp-1.0.war $DEPLOY_DIR/fishapp-1.0.war
