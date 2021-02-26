@@ -13,6 +13,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -36,6 +37,7 @@ public class ListingResource {
      * @param maxAmount The maximum total amount of the commodity
      * @param latitude The latitude for the pickup point
      * @param longitude The longitude for the pickup point
+     * @param additionalInfo Additional info about the listing
      *
      * @return return the offer listing if successful, error msg if not
      */
@@ -43,12 +45,13 @@ public class ListingResource {
     @Path("newOfferListing")
     @RolesAllowed(value = {Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newOfferListing(
-            @NotNull @FormDataParam("endDate") long endDate,
-            @NotNull @FormDataParam("commodity") long commodityId,
-            @NotNull @FormDataParam("price") double price,
-            @NotNull @FormDataParam("maxAmount") int maxAmount,
-            @NotNull @FormDataParam("latitude") double latitude,
-            @NotNull @FormDataParam("longitude") double longitude
+            @NotNull @HeaderParam("endDate") long endDate,
+            @NotNull @HeaderParam("commodityId") long commodityId,
+            @NotNull @HeaderParam("price") double price,
+            @NotNull @HeaderParam("maxAmount") int maxAmount,
+            @NotNull @HeaderParam("latitude") double latitude,
+            @NotNull @HeaderParam("longitude") double longitude,
+            @HeaderParam("additionalInfo") String additionalInfo
     ) {
         Response.ResponseBuilder resp;
         User user = userService.getLoggedInUser();
@@ -57,7 +60,7 @@ public class ListingResource {
         } else {
             try {
                 OfferListing offerListing = listingService.newOfferListing(endDate, commodityId, price, maxAmount,
-                        latitude, longitude, user);
+                        latitude, longitude, user, additionalInfo);
                 resp = Response.ok(offerListing);
             } catch (PersistenceException e) {
                 resp = Response.ok("Unexpected error creating the offer listing").status(Response.Status.INTERNAL_SERVER_ERROR);
@@ -82,12 +85,12 @@ public class ListingResource {
     @Path("newBuyRequest")
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newBuyRequest(
-            @NotNull @FormDataParam("endDate") long endDate,
-            @NotNull @FormDataParam("commodity") long commodityId,
-            @NotNull @FormDataParam("price") double price,
-            @NotNull @FormDataParam("amount") int amount,
-            @FormDataParam("info") String info,
-            @NotNull @FormDataParam("maxDistance") double maxDistance
+            @NotNull @HeaderParam("endDate") long endDate,
+            @NotNull @HeaderParam("commodity") long commodityId,
+            @NotNull @HeaderParam("price") double price,
+            @NotNull @HeaderParam("amount") int amount,
+            @HeaderParam("info") String info,
+            @NotNull @HeaderParam("maxDistance") double maxDistance
     ) {
         Response.ResponseBuilder resp;
         User user = userService.getLoggedInUser();
