@@ -1,7 +1,5 @@
 package no.***REMOVED***.app.chat.boundry;
 
-import lombok.Getter;
-import lombok.NonNull;
 import no.***REMOVED***.app.auth.entity.Group;
 import no.***REMOVED***.app.chat.control.ChatService;
 import no.***REMOVED***.app.chat.entity.Conversation;
@@ -15,7 +13,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -44,8 +41,8 @@ public class ChatResource {
     public Response getCurrentUserConversationsRequest(
     ) {
         Response response;
-        User currentUser = userService.getLoggedInUser();
-        if(currentUser != null) {
+        User     currentUser = userService.getLoggedInUser();
+        if (currentUser != null) {
             response = Response.ok(currentUser.getUserConversations()).build();
         } else {
             response = Response.serverError().build();
@@ -60,8 +57,9 @@ public class ChatResource {
     @Path("start")
     @Valid
     public Response startConversationRequest(
-           @NotNull @HeaderParam("listing") long listingId
+            @NotNull @HeaderParam("listing") long listingId
     ) {
+        // TODO: chek if user has a conv already on this comodity
         Response     response;
         Conversation conversation = null;
         conversation = chatService.newListingConversation(listingId);
@@ -81,12 +79,12 @@ public class ChatResource {
             @NotNull @HeaderParam("conversation") long conversationId,
             @NotNull @HeaderParam("body") String messageBody
     ) {
-        Response     response = Response.serverError().build();
+        Response     response     = Response.serverError().build();
         Conversation conversation = chatService.getConversation(conversationId);
 
         if (conversation.isUserInConversation(userService.getLoggedInUser())) {
             Conversation result = chatService.sendMessage(messageBody, conversation);
-            if(result != null) {
+            if (result != null) {
                 response = Response.ok(new ConversationDTO(result)).build();
             }
         } else {
