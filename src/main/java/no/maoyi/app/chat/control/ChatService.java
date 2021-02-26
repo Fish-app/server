@@ -121,15 +121,23 @@ public class ChatService {
     public List<Message> getMessageRange(Long convId, Long fromId, Long offset) {
         Conversation  conversation = getConversation(convId);
         List<Message> messages     = conversation.getMessages();
+        System.out.println("MESSAGEZS IS NULL");
         if(messages == null) return new ArrayList<>();
         Message anchor       = entityManager.find(Message.class, fromId);
+        //Message anchor = messages.stream().filter(message -> message.getId() == fromId).findFirst().get();
         int     elementIndex = messages.indexOf(anchor);
 
         if (offset == null) offset = 0L; // default value if null
-        if (offset > 0) {
-            return messages.subList(elementIndex, (int) Math.min(messages.size(), offset));
+
+        System.out.println("OFFSET " + offset.toString());
+        System.out.println("FROMID " + fromId.toString());
+        System.out.println("CONVID " + convId.toString());
+        System.out.println("ELEMENTINDEKS " + elementIndex);
+
+        if (offset >= 0L) {
+            return messages.subList(elementIndex, (int) Math.min(messages.size()-1, elementIndex + offset));
         } else {
-            return messages.subList((int) Math.min(elementIndex, Math.abs(offset)), elementIndex);
+            return messages.subList((int) Math.max(0, elementIndex-offset), elementIndex);
         }
     }
 }
