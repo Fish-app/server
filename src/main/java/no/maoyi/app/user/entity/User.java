@@ -4,17 +4,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.auth.entity.AuthenticatedUser;
-import no.***REMOVED***.app.conversation.entity.Conversation;
+import no.***REMOVED***.app.chat.entity.Conversation;
 import no.***REMOVED***.app.listing.entity.Listing;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.math.BigInteger;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /* 
@@ -25,7 +22,7 @@ A user has a An ID, email, first name, last name and password.
 @Entity
 @NoArgsConstructor
 @Table(name = "users")
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "userConversations")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends AuthenticatedUser implements Serializable {
 
@@ -35,10 +32,6 @@ public class User extends AuthenticatedUser implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    //    @Email
-    //    @Column(nullable = false, unique = true)
-    //    private String email;
-
     @Transient
     private String email;
 
@@ -47,7 +40,6 @@ public class User extends AuthenticatedUser implements Serializable {
     @OneToMany
     @JsonbTransient
     List<Conversation> userConversations;
-
 
     @OneToMany
     @JsonbTransient
@@ -73,5 +65,11 @@ public class User extends AuthenticatedUser implements Serializable {
         this.setEmail(email);
         this.setName(name);
         this.setPassword(password);
+    }
+
+
+    public List<Conversation> getUserConversations() {
+        if (this.userConversations == null) return new ArrayList<>();
+        return userConversations;
     }
 }

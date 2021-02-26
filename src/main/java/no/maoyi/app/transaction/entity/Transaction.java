@@ -16,7 +16,7 @@ import java.util.Date;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    BigInteger id;
+    Long id;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;

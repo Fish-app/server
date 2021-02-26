@@ -2,11 +2,13 @@ package no.***REMOVED***.app.listing.control;
 
 import no.***REMOVED***.app.commodity.entity.Commodity;
 import no.***REMOVED***.app.listing.entity.BuyRequest;
+import no.***REMOVED***.app.listing.entity.Listing;
 import no.***REMOVED***.app.listing.entity.OfferListing;
 import no.***REMOVED***.app.user.entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 
@@ -97,4 +99,23 @@ public class ListingService {
 
         return newBuy;
     }
+
+
+    /**
+     *  Returns a listing if found in the persistence backend
+     * @param listingId The ID of the listing
+     * @return null if not found or on failure, otherwise the found listing object
+     */
+    public Listing findListingById(long listingId) {
+       try {
+           return entityManager.find(Listing.class, listingId);
+       } catch (PersistenceException pe) {
+           System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
+           return null;
+       }
+    }
+
+
+
+
 }

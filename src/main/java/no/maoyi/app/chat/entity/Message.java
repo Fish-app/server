@@ -1,4 +1,4 @@
-package no.***REMOVED***.app.conversation.entity;
+package no.***REMOVED***.app.chat.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 import no.***REMOVED***.app.user.entity.User;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Date;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "messages")
 public class Message {
-    // TODO: May add images to the messages
+    // TODO: add images to the messages in future
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +24,21 @@ public class Message {
     @Column(columnDefinition = "TEXT")
     String content;
 
+
     @ManyToOne
     User sender;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    Date created;
+    @Column(name = "created_date")
+    Long createdDate;
 
     @PrePersist
     protected void onCreate() {
-        this.created = new Date();
+        this.createdDate = new Date().getTime(); // Get epoch time
+    }
+
+
+    public Message(String content, User sender) {
+        this.content = content;
+        this.sender = sender;
     }
 }

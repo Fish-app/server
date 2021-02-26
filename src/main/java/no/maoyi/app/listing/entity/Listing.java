@@ -7,7 +7,6 @@ import no.***REMOVED***.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import java.math.BigInteger;
 
 @Data
 @Entity
