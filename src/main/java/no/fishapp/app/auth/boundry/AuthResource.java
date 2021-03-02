@@ -4,10 +4,12 @@ package no.fishapp.app.auth.boundry;
 import no.fishapp.app.auth.control.AuthenticationService;
 import no.fishapp.app.auth.control.KeyService;
 import no.fishapp.app.auth.entity.AuthenticatedUser;
+import no.fishapp.app.auth.entity.DTO.UserLoginData;
 import no.fishapp.app.auth.entity.Group;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.persistence.Query;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Path("authentication")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
 
 
@@ -31,8 +35,7 @@ public class AuthResource {
      * Authenticates a user if providing a correct email/password combination.
      * Returns a JWT token on success else an error response.
      *
-     * @param email    the email of the user
-     * @param password the password of the user
+     * @param userLoginData the user login data
      *
      * @return JSON Response
      */
@@ -40,18 +43,23 @@ public class AuthResource {
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(
-            @HeaderParam("email") String email,
-            @HeaderParam("password") String password
+            UserLoginData userLoginData
     ) {
 
+
         Response.ResponseBuilder response;
+
         try {
-            email = email.toLowerCase();
+            String email = userLoginData.getUserName().toLowerCase();
+
             AuthenticatedUser user = authService.getUserFromPrincipal(email);
             if (user == null) {
                 response = Response.ok().status(Response.Status.UNAUTHORIZED);
             } else {
-                CredentialValidationResult result = authService.getValidationResult(user.getId(), password);
+                CredentialValidationResult result = authService.getValidationResult(user.getId(),
+                                                                                    userLoginData.getPassword()
+
+                );
                 if (authService.isAuthValid(result)) {
                     System.out.println("AUTH: Login OK:'" + email + "', UID:" + user.getId());
 
@@ -80,11 +88,11 @@ public class AuthResource {
     @Valid
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response changePassword(
-            @NotNull @HeaderParam("pwd") String newPasswd,
-            @NotNull @HeaderParam("oldpwd") String oldPasswd
+            @NotNull @QueryParam("pwd") String newPasswd,
+            @NotNull @QueryParam("oldpwd") String oldPasswd
     ) {
 
-        if (!(oldPasswd.isBlank() && newPasswd.isBlank())) {
+        if (! (oldPasswd.isBlank() && newPasswd.isBlank())) {
             if (authService.changePassword(newPasswd, oldPasswd)) {
                 return Response.ok().build();
             } else {

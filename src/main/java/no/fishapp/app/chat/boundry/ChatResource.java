@@ -8,12 +8,15 @@ import no.fishapp.app.user.control.UserService;
 import no.fishapp.app.chat.control.ChatService;
 import no.fishapp.app.chat.entity.MessageDTO;
 import no.fishapp.app.user.entity.User;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.websocket.server.PathParam;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -54,17 +57,17 @@ public class ChatResource {
     @POST
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Path("start")
+    @Path("new/{id}")
     @Valid
     public Response startConversationRequest(
-            @NotNull @HeaderParam("listing") long listingId
+            @NotNull @PathParam("id") long listingId
     ) {
         Response     response;
-        Conversation conversation   = null;
-        User         user           = userService.getLoggedInUser();
-        boolean      hasListingConv = user.getUserConversations()
-                                          .stream()
-                                          .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
+        Conversation conversation = null;
+        User         user         = userService.getLoggedInUser();
+        boolean hasListingConv = user.getUserConversations()
+                                     .stream()
+                                     .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
         if (hasListingConv) {
             conversation = chatService.newListingConversation(listingId);
             if (conversation != null) {
@@ -79,12 +82,12 @@ public class ChatResource {
     }
 
     @POST
-    @Path("send")
+    @Path("{id}/send")
     @Valid
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response sendMessageRequest(
-            @NotNull @HeaderParam("conversation") long conversationId,
-            @NotNull @HeaderParam("body") String messageBody
+            @NotNull @PathParam("id") long conversationId,
+            @NotNull @RequestBody String messageBody
     ) {
         Response     response     = Response.serverError().build();
         Conversation conversation = chatService.getConversation(conversationId);
@@ -103,10 +106,10 @@ public class ChatResource {
 
     @GET
     @Valid
-    @Path("messages/get")
+    @Path("{id}/latest")
     public Response updatesQuery(
-            @NotNull @HeaderParam("conversation") long conversationId,
-            @NotNull @HeaderParam("last-id") long lastId
+            @NotNull @PathParam("conversation") long conversationId,
+            @NotNull @QueryParam("last-id") long lastId
     ) {
         Response     response;
         Conversation conversation = chatService.getConversation(conversationId);
@@ -128,16 +131,13 @@ public class ChatResource {
         return response;
     }
 
-    /// Får ikkje denne til å fungere, den viser alle meldingar, og tar ikkje hensyn til range
-    /// Men den oppenfor (messages/get) fungerer med range.
-
     @GET
     @Valid
-    @Path("messages/range")
+    @Path("{id}}/range")
     public Response getMessageRange(
-            @NotNull @HeaderParam("conversation") Long conversationId,
-            @NotNull @HeaderParam("from") Long fromId,
-            @NotNull @HeaderParam("offset") Long offset
+            @NotNull @PathParam("conversation") Long conversationId,
+            @NotNull @QueryParam("from") Long fromId,
+            @NotNull @QueryParam("offset") Long offset
     ) {
         Response     response;
         Conversation conversation = chatService.getConversation(conversationId);
