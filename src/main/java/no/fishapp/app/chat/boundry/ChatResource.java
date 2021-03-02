@@ -87,7 +87,7 @@ public class ChatResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response sendMessageRequest(
             @NotNull @PathParam("id") long conversationId,
-            @NotNull @RequestBody String messageBody
+            @NotNull @HeaderParam("asdj") String messageBody
     ) {
         Response     response     = Response.serverError().build();
         Conversation conversation = chatService.getConversation(conversationId);

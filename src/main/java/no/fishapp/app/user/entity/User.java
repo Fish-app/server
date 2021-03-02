@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import no.fishapp.app.auth.entity.AuthenticatedUser;
 import no.fishapp.app.chat.entity.Conversation;
 import no.fishapp.app.listing.entity.Listing;
+import no.fishapp.app.rating.entity.Rating;
+import no.fishapp.app.transaction.entity.Transaction;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
@@ -45,6 +47,10 @@ public class User extends AuthenticatedUser implements Serializable {
     @JsonbTransient
     List<Listing> userCreatedOrders;
 
+    @OneToMany
+    @JsonbTransient
+    List<Transaction> userTransactions;
+
     ////////////////////////////////////////
     // todo: unshure if horrible design
 
@@ -69,7 +75,9 @@ public class User extends AuthenticatedUser implements Serializable {
 
 
     public List<Conversation> getUserConversations() {
-        if (this.userConversations == null) return new ArrayList<>();
+        if (this.userConversations == null) {
+            return new ArrayList<>();
+        }
         return userConversations;
     }
 }
