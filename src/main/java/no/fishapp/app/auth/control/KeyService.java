@@ -26,17 +26,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/**
+ * The type Key service.
+ */
 public class KeyService {
     private static final String KEYPAIR_FILENAME = "jwtkeys.ser";
     private static final File KEYPAIR_FILE = new File("jwtkeys.ser");
 
+    /**
+     * The Issuer.
+     */
     @Inject
     @ConfigProperty(name = "mp.jwt.verify.issuer", defaultValue = "issuer")
     String issuer;
 
-    KeyPair keyPair = null;
+    private KeyPair keyPair = null;
 
-    
+
     /**
      * get the key pair file, if no file is fond or an error reading a new is created
      */
@@ -52,6 +58,11 @@ public class KeyService {
         }
     }
 
+    /**
+     * read a keypair from file
+     *
+     * @return the keypair if success null if not
+     */
     private KeyPair readKeyPair() {
         KeyPair result = null;
 
@@ -63,6 +74,11 @@ public class KeyService {
         return result;
     }
 
+    /**
+     * Save the keypair to file
+     *
+     * @param keyPair the keypair to save
+     */
     private void writeKeyPair(KeyPair keyPair) {
         try {
             FileUtils.serializeObjetToFile(keyPair, KEYPAIR_FILENAME);
@@ -75,14 +91,29 @@ public class KeyService {
         return Keys.keyPairFor(SignatureAlgorithm.RS256);
     }
 
+    /**
+     * Gets rsa public key.
+     *
+     * @return the rsa public key
+     */
     public PublicKey getRSAPublic() {
         return keyPair.getPublic();
     }
 
+    /**
+     * Gets rsa private key.
+     *
+     * @return the rsa private key
+     */
     public PrivateKey getRSAPrivate() {
         return keyPair.getPrivate();
     }
 
+    /**
+     * Gets public key.
+     *
+     * @return the public key
+     */
     public String getPublicKey() {
         String key = Base64.getMimeEncoder(64, "\n".getBytes())
                            .encodeToString(keyPair.getPublic().getEncoded());
@@ -95,6 +126,15 @@ public class KeyService {
         return keyResult.toString();
     }
 
+    /**
+     * Generate new jwt token string.
+     *
+     * @param mail   the user principal mail
+     * @param userId the user id
+     * @param groups the groups the user is in
+     *
+     * @return the jwt string
+     */
     public String generateNewJwtToken(String mail, long userId, Set<String> groups) {
         try {
             Date now        = new Date();
@@ -108,10 +148,8 @@ public class KeyService {
                                 .claim("iss", issuer)
                                 .setIssuedAt(now)
                                 .setExpiration(expiration)
-                                .claim("upn", mail) // user principal name
+                                .claim("upn", mail)                               // user principal name
                                 .claim("groups", groups)
-                                //                       .claim("aud", "aud")
-                                //                      .claim("auth_time", now)
                                 .signWith(keyPair.getPrivate());
             return jb.compact();
         } catch (InvalidKeyException t) {
