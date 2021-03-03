@@ -4,6 +4,8 @@ import no.fishapp.app.auth.entity.Group;
 import no.fishapp.app.user.control.BuyerService;
 import no.fishapp.app.auth.control.AuthenticationService;
 import no.fishapp.app.user.entity.Buyer;
+import no.fishapp.app.user.entity.DTO.BuyerNewData;
+import no.fishapp.app.user.entity.DTO.UserNewData;
 import no.fishapp.app.user.entity.User;
 
 import javax.annotation.security.PermitAll;
@@ -51,26 +53,21 @@ public class BuyerResource {
     /**
      * Creates a new buyer in the system.
      *
-     * @param name     the first name of the buyer
-     * @param password desired password for the buyer
-     * @param email    email for the buyer
-     *
      * @return returns the buyer if successful error msg if not
      */
     @POST
     @Path("create")
     @PermitAll
-    public Response createBuyer(@HeaderParam("name") String name,
-                                @HeaderParam("email") @Email String email,
-                                @HeaderParam("password") String password
+    public Response createBuyer(
+            BuyerNewData buyerNewData
     ) {
         Response.ResponseBuilder resp;
         try {
-            email = email.toLowerCase();
+            String  email            = buyerNewData.getUserName().toLowerCase();
             boolean isPrincipalInUse = authenticationService.isPrincipalInUse(email);
 
             if (! isPrincipalInUse) {
-                User newUser = buyerService.createBuyer(name, email, password);
+                User newUser = buyerService.createBuyer(buyerNewData.getName(), email, buyerNewData.getPassword());
                 resp = Response.ok(newUser);
 
             } else {

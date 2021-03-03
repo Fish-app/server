@@ -3,6 +3,7 @@ package no.fishapp.app.user.boundry;
 import no.fishapp.app.auth.entity.Group;
 import no.fishapp.app.user.control.SellerService;
 import no.fishapp.app.auth.control.AuthenticationService;
+import no.fishapp.app.user.entity.DTO.SellerNewData;
 import no.fishapp.app.user.entity.Seller;
 
 import javax.annotation.security.PermitAll;
@@ -50,30 +51,27 @@ public class SellerResource {
     /**
      * Makes the current user a seller
      *
-     * @param regNumber TODO: find actual params
-     *
      * @return the seller if creation is ok error if not
      */
     @POST
     @Path("create")
     @PermitAll
-    public Response createSeller(@HeaderParam("name") String name,
-                                 @HeaderParam("email") String email,
-                                 @HeaderParam("password") String password,
-                                 @HeaderParam("regNumber") String regNumber
+    public Response createSeller(SellerNewData sellerNewData
     ) {
         Response.ResponseBuilder resp;
         try {
-            email = email.toLowerCase();
+            String  email            = sellerNewData.getUserName().toLowerCase();
             boolean isPrincipalInUse = authenticationService.isPrincipalInUse(email);
-            if (!isPrincipalInUse) {
-                Seller seller = sellerService.createSeller(name, email, password, regNumber);
+            if (! isPrincipalInUse) {
+                Seller seller = sellerService.createSeller(sellerNewData.getName(), email,
+                                                           sellerNewData.getPassword(), sellerNewData.getRegNumber()
+                );
                 resp = Response.ok(seller);
-        } else {
-            resp = Response.ok(
-                    "User already exist").status(Response.Status.CONFLICT);
-        }
-    } catch (PersistenceException e) {
+            } else {
+                resp = Response.ok(
+                        "User already exist").status(Response.Status.CONFLICT);
+            }
+        } catch (PersistenceException e) {
             resp = Response.ok("Unexpected error creating the seller").status(Response.Status.INTERNAL_SERVER_ERROR);
             e.printStackTrace();
         }

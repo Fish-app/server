@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Listing {
-
+    
     protected String listingType;
 
     @Id
@@ -43,7 +43,7 @@ public abstract class Listing {
     @PrePersist
     protected void onCreate() {
         created = System.currentTimeMillis() / 1000L;
-        isOpen = true;
+        isOpen  = true;
     }
 
 }
