@@ -59,14 +59,21 @@ public class ChatResource {
     public Response startConversationRequest(
             @NotNull @HeaderParam("listing") long listingId
     ) {
-        // TODO: chek if user has a conv already on this comodity
         Response     response;
-        Conversation conversation = null;
-        conversation = chatService.newListingConversation(listingId);
-        if (conversation != null) {
-            response = Response.ok(new ConversationDTO(conversation)).build();
+        Conversation conversation   = null;
+        User         user           = userService.getLoggedInUser();
+        boolean      hasListingConv = user.getUserConversations()
+                                          .stream()
+                                          .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
+        if (hasListingConv) {
+            conversation = chatService.newListingConversation(listingId);
+            if (conversation != null) {
+                response = Response.ok(new ConversationDTO(conversation)).build();
+            } else {
+                response = Response.serverError().build();
+            }
         } else {
-            response = Response.serverError().build();
+            response = Response.notModified().build();
         }
         return response;
     }
