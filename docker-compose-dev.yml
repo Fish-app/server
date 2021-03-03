@@ -51,6 +51,8 @@ services:
       # Only in use with full Payara Server FIXME: Unsure if working
       #PAYARA_MASTERPASS: ${PAYARA_MASTERPASS:? The Payara Server UI is missing a password.}
     labels:
+      - "traefik.http.middlewares.limit.buffering.maxResponseBodyBytes=2000000"
+      - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=2000000"
       - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.routers.api.rule=Host(`localhost`)"
       - "traefik.http.routers.api.middlewares=api-add-prefix@docker"
@@ -66,9 +68,13 @@ services:
       - "80:80"
       # The Web UI (enabled by --api.insecure=true)
       - "8088:8080" # 8088 on localhost
+
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.http.middlewares.limit.buffering.maxResponseBodyBytes=2000000"
+      - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=2000000"
 volumes:
   database-data:
   payara-images:
