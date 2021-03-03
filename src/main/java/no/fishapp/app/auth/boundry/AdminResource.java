@@ -1,5 +1,6 @@
 package no.fishapp.app.auth.boundry;
 
+import no.fishapp.app.auth.entity.DTO.AdminChangePasswordData;
 import no.fishapp.app.auth.entity.Group;
 import no.fishapp.app.auth.control.AdminService;
 
@@ -14,20 +15,22 @@ import javax.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Transactional
-@RolesAllowed(value = {Group.BUYER_GROUP_NAME})
+@RolesAllowed(value = {Group.ADMIN_GROUP_NAME})
 public class AdminResource {
 
     @Inject
     AdminService adminService;
 
     @PATCH
-    @Path("changepass")
+    @Path("changepassword")
     public Response changePassword(
-            @HeaderParam("userid") int userId,
-            @HeaderParam("newpass") String newpass
+            AdminChangePasswordData adminChangePasswordData
     ) {
         Response.ResponseBuilder resp;
-        boolean                  sucsess = adminService.changeUserPassword(userId, newpass);
+        boolean                  sucsess = adminService.changeUserPassword(
+                adminChangePasswordData.getUserId(),
+                adminChangePasswordData.getNewPassword()
+        );
         if (! sucsess) {
             resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } else {

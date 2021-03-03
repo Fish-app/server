@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-03-03T11:41:07.331Z
+__export_date: 2021-03-03T12:41:10.030Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
@@ -638,7 +638,7 @@ resources:
     _type: request_group
   - _id: req_a8138b132745479697ea49486bb87653
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1614770648183
+    modified: 1614774126011
     created: 1613746371970
     url: "{{ _.baseURL }}/authentication/login"
     name: auth-login-seller
@@ -677,13 +677,19 @@ resources:
     _type: request
   - _id: req_8c31a970710d49779e06267fb97990fe
     parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1614771612612
+    modified: 1614775256881
     created: 1611842274161
-    url: "{{ _.baseURL }}/admin/changepass"
-    name: auth-change-password
+    url: "{{ _.baseURL }}/authentication/changepassword"
+    name: buyer-change-password
     description: ""
-    method: PATCH
-    body: {}
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"oldPassword" : "Passord123",
+        	"newPassword" : "Passord123"
+        }
     parameters: []
     headers:
       - name: Authorization
@@ -691,10 +697,15 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
         id: pair_990a4b0fce7e4642929990f60112f85e
+        disabled: false
       - name: newpass
         value: test123
         description: ""
         id: pair_7be50471c6ef4610ba035265a715f776
+        disabled: true
+      - name: Content-Type
+        value: application/json
+        id: pair_4850f04bd5534155aa31c4e4b555882f
     authentication:
       type: bearer
       token: "
@@ -708,6 +719,58 @@ resources:
         popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
         EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
     metaSortKey: -1611756927235
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_81cc17f59562493ca4b200bc877e7086
+    parentId: fld_5098519e12f6447683d056249f042c66
+    modified: 1614775153964
+    created: 1614774988336
+    url: "{{ _.baseURL }}/admin/changepassword"
+    name: adm-change-password
+    description: Not tested, as admin role is not in use
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userId" : 1,
+        	"newPassword" : "Passord123"
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_990a4b0fce7e4642929990f60112f85e
+        disabled: false
+      - name: newpass
+        value: test123
+        description: ""
+        id: pair_7be50471c6ef4610ba035265a715f776
+        disabled: true
+      - name: Content-Type
+        value: application/json
+        id: pair_4850f04bd5534155aa31c4e4b555882f
+    authentication:
+      type: bearer
+      token: "
+        eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImFiYy0xMjM0NTY3ODkwIn0.eyJ\
+        zdWIiOiIxIiwianRpIjoiOGVmMDFmYTAtOTA5OS00ZDk2LWJmOTEtNjAzZjNlZmQ3ZjY4Ii\
+        wiaXNzIjoibWFveWkiLCJpYXQiOjE2MTE4NDI1ODUsImV4cCI6MTYxMTkyODk4NSwidXBuI\
+        joiMSIsImdyb3VwcyI6WyJ1c2VyIl0sImF1ZCI6ImF1ZCIsImF1dGhfdGltZSI6MTYxMTg0\
+        MjU4NTUyM30.Nhv6pJCZpx7VCvqIvyYnZ13iwD5BdrpHbOID_14CjxnEg5v8iMRxss1K3Lg\
+        fknTg9v9qGT_fCAy3cwYfuJMh7LdWbkfo6rW2CtQX5COWyU8xuAW9NJrbHPyhGmzRuL1pBD\
+        6ZsEoLpHbPmnJfQxeSqgkcwiH7MlHTMZ56pJHizILJKJ-SDy4oax2K5SDrLDW8JoskQpKay\
+        popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
+        EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
+    metaSortKey: -1611756927210
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
