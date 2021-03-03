@@ -4,6 +4,7 @@ package no.fishapp.app.auth.boundry;
 import no.fishapp.app.auth.control.AuthenticationService;
 import no.fishapp.app.auth.control.KeyService;
 import no.fishapp.app.auth.entity.AuthenticatedUser;
+import no.fishapp.app.auth.entity.DTO.UserChangPasswordData;
 import no.fishapp.app.auth.entity.DTO.UserLoginData;
 import no.fishapp.app.auth.entity.Group;
 
@@ -88,18 +89,12 @@ public class AuthResource {
     @Valid
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response changePassword(
-            @NotNull @QueryParam("pwd") String newPasswd,
-            @NotNull @QueryParam("oldpwd") String oldPasswd
+            UserChangPasswordData changPasswordData
     ) {
-
-        if (! (oldPasswd.isBlank() && newPasswd.isBlank())) {
-            if (authService.changePassword(newPasswd, oldPasswd)) {
-                return Response.ok().build();
-            } else {
-                return Response.ok().status(Response.Status.FORBIDDEN).build();
-            }
+        if (authService.changePassword(changPasswordData.getNewPassword(), changPasswordData.getOldPassword())) {
+            return Response.ok().build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.ok().status(Response.Status.FORBIDDEN).build();
         }
     }
 

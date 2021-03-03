@@ -18,10 +18,6 @@ public class Transaction {
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;
 
-    //    @ManyToOne
-    //    @JsonbTransient
-    //    Listing transactionListing;
-
     @Column(nullable = false)
     int amount;
 
