@@ -63,11 +63,12 @@ public class ChatResource {
             @NotNull @PathParam("id") long listingId
     ) {
         Response     response;
-        Conversation conversation = null;
-        User         user         = userService.getLoggedInUser();
-        boolean hasListingConv = user.getUserConversations()
-                                     .stream()
-                                     .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
+
+        Conversation conversation   = null;
+        User         user           = userService.getLoggedInUser();
+        boolean      hasListingConv = user.getUserConversations()
+                                          .stream()
+                                          .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
         if (hasListingConv) {
             conversation = chatService.newListingConversation(listingId);
             if (conversation != null) {
