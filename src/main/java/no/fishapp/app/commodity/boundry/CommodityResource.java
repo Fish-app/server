@@ -10,10 +10,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -28,7 +25,7 @@ public class CommodityResource {
     @POST
     @Path("new")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+    //@RolesAllowed({Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response addNewCommodity(
             @FormDataParam("name") String name, FormDataMultiPart photo
     ) {
@@ -47,9 +44,23 @@ public class CommodityResource {
 
     @GET
     @Path("all")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
-    public Response addNewCommodity() {
+    //@Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response getAllCommoditys() {
         return Response.ok(commodityService.getAllCommodities()).build();
+    }
+
+    @GET
+    //@Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("{id}")
+    public Response getSingleCommoditys(
+            @PathParam("id") long id
+    ) {
+        Commodity commodity = commodityService.getCommodity(id);
+        if (commodity == null) {
+            return Response.ok().status(Response.Status.BAD_REQUEST).build();
+        } else {
+            return Response.ok(commodity).build();
+
+        }
     }
 }

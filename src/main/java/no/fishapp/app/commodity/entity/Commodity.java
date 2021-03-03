@@ -8,12 +8,14 @@ import no.fishapp.app.resources.entity.Image;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
 public class Commodity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

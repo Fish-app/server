@@ -2,9 +2,7 @@ package no.fishapp.app.auth.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /*
 	Represents a user group in the application. A user group is

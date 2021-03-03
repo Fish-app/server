@@ -1,6 +1,7 @@
 package no.fishapp.app.listing.boundry;
 
 
+import no.fishapp.app.auth.control.KeyService;
 import no.fishapp.app.auth.entity.Group;
 import no.fishapp.app.listing.control.ListingService;
 import no.fishapp.app.listing.entity.BuyRequest;
@@ -12,10 +13,10 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Path("listing")
 public class ListingResource {
@@ -39,6 +40,7 @@ public class ListingResource {
             OfferListing offerListing = listingService.newOfferListing(newOfferListing);
             resp = Response.ok(offerListing);
         } catch (PersistenceException e) {
+            Logger.getLogger(ListingResource.class.getName()).log(Level.SEVERE, "presist exept", e);
             resp = Response.ok("Unexpected error creating the offer listing")
                            .status(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -63,10 +65,28 @@ public class ListingResource {
             BuyRequest buyRequest = listingService.newBuyRequest(newBuyRequest);
             resp = Response.ok(buyRequest);
         } catch (PersistenceException e) {
+            Logger.getLogger(ListingResource.class.getName()).log(Level.SEVERE, "presist exept", e);
             resp = Response.ok("Unexpected error creating the offer listing")
                            .status(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
         return resp.build();
+    }
+
+    @GET
+    @Path("{id}")
+    public Response getOfferListing(
+            @PathParam("id") long id
+    ) {
+        return Response.ok(listingService.findOfferListingById(id)).build();
+    }
+
+
+    @GET
+    @Path("comodity/{id}")
+    public Response getCommodityOfferListings(
+            @PathParam("id") long id
+    ) {
+        return Response.ok(listingService.getCommodityOfferListings(id)).build();
     }
 }

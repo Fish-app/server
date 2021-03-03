@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Data
-@Entity()
+@Entity
 @NoArgsConstructor
 @Table(name = "buyers")
 @EqualsAndHashCode(callSuper = true)

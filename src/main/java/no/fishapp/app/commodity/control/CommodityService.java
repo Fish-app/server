@@ -41,6 +41,7 @@ public class CommodityService {
         if (images.isEmpty()) {
             return null;
         } else {
+            entityManager.persist(images.get(0));
             commodity.setName(name);
             commodity.setCommodityImage(images.get(0));
             entityManager.persist(commodity);
@@ -51,6 +52,11 @@ public class CommodityService {
 
     public List<Commodity> getAllCommodities() {
         return entityManager.createQuery(getAllCommodities, Commodity.class).getResultList();
+
+    }
+
+    public Commodity getCommodity(long id) {
+        return entityManager.find(Commodity.class, id);
 
     }
 

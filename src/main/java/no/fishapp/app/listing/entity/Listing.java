@@ -13,8 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Listing {
-    
-    protected String listingType;
+
+    //protected String listingType;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,15 +29,20 @@ public abstract class Listing {
     @Column(nullable = false, name = "end_date")
     long endDate;
 
-    @ManyToOne
-    @JsonbTransient
-    Commodity commodity;
 
     @Column(nullable = false)
     double price;
 
     @Column(name = "is_open")
     Boolean isOpen;
+
+    /**
+     * The coordinates for the pickup point
+     */
+    @Column(nullable = false, name = "latitude")
+    double latitude;
+    @Column(nullable = false, name = "longitude")
+    double longitude;
 
 
     @PrePersist
