@@ -1,5 +1,6 @@
 package no.fishapp.app.listing.control;
 
+import no.fishapp.app.commodity.control.CommodityService;
 import no.fishapp.app.commodity.entity.Commodity;
 import no.fishapp.app.listing.entity.BuyRequest;
 import no.fishapp.app.listing.entity.Listing;
@@ -8,10 +9,9 @@ import no.fishapp.app.user.control.UserService;
 import no.fishapp.app.user.entity.User;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 public class ListingService {
@@ -22,6 +22,12 @@ public class ListingService {
     @Inject
     UserService userService;
 
+    @Inject
+    CommodityService commodityService;
+
+    //private static final String COMODITY_LISTINGS = "select ls from OfferListing ls";
+    private static final String COMODITY_LISTINGS = "select ls from OfferListing ls where ls.commodity.id = :cid";
+
 
     /**
      * Creates a new offer listing
@@ -29,10 +35,21 @@ public class ListingService {
      * @return the created offer listing object
      */
     public OfferListing newOfferListing(OfferListing listing) {
-        listing.setCreator(userService.getLoggedInUser());
-        entityManager.persist(listing);
-        entityManager.refresh(listing);
-        return listing;
+
+
+        Commodity com = commodityService.getCommodity(listing.getCommodity().getId());
+        if (com != null) {
+            // todo tror det her kan jøres automatisk
+            listing.setCommodity(com);
+            entityManager.persist(listing);
+            listing.setCreator(userService.getLoggedInUser());
+
+            return listing;
+        } else {
+            return null;
+        }
+
+
     }
 
     /**
@@ -47,7 +64,6 @@ public class ListingService {
         buyRequest.setCreator(userService.getLoggedInUser());
 
         entityManager.persist(buyRequest);
-        entityManager.refresh(buyRequest);
 
         return buyRequest;
     }
@@ -69,5 +85,26 @@ public class ListingService {
         }
     }
 
+    public List<OfferListing> getCommodityOfferListings(long id) {
+        var query = entityManager.createQuery(COMODITY_LISTINGS, OfferListing.class);
+        query.setParameter("cid", id);
+
+        try {
+            var numWith = query.getResultList();
+
+            return numWith;
+        } catch (NoResultException ignore) {
+        }
+        return null;
+    }
+
+    public OfferListing findOfferListingById(long listingId) {
+        try {
+            return entityManager.find(OfferListing.class, listingId);
+        } catch (PersistenceException pe) {
+            System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
+            return null;
+        }
+    }
 
 }
