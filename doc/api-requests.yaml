@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-03-03T16:58:23.044Z
+__export_date: 2021-03-04T16:38:19.314Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
@@ -579,6 +579,27 @@ resources:
         id: pair_3e23634e7bdc4e5a9c32baa7abd81518
     authentication: {}
     metaSortKey: -1612660576634
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_092a0716e08f4da3ad2ea00a5ae154d1
+    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    modified: 1614870465424
+    created: 1614870441728
+    url: "{{ _.baseURL }}/listing/buyrequest/1"
+    name: get-buy-request
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1614870441728
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
