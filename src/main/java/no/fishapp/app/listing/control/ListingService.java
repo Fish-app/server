@@ -60,12 +60,17 @@ public class ListingService {
     public BuyRequest newBuyRequest(
             BuyRequest buyRequest
     ) {
+        Commodity com = commodityService.getCommodity(buyRequest.getCommodity().getId());
 
-        buyRequest.setCreator(userService.getLoggedInUser());
+        if (com != null) {
+            buyRequest.setCommodity(com);
+            entityManager.persist(buyRequest);
+            buyRequest.setCreator(userService.getLoggedInUser());
+            return buyRequest;
+        } else {
+            return null;
+        }
 
-        entityManager.persist(buyRequest);
-
-        return buyRequest;
     }
 
 
@@ -101,6 +106,15 @@ public class ListingService {
     public OfferListing findOfferListingById(long listingId) {
         try {
             return entityManager.find(OfferListing.class, listingId);
+        } catch (PersistenceException pe) {
+            System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
+            return null;
+        }
+    }
+
+    public BuyRequest findBuyRequestById(long requestId) {
+        try {
+            return entityManager.find(BuyRequest.class, requestId);
         } catch (PersistenceException pe) {
             System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
             return null;

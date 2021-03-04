@@ -81,6 +81,14 @@ public class ListingResource {
         return Response.ok(listingService.findOfferListingById(id)).build();
     }
 
+    @GET
+    @Path("buyrequest/{id}")
+    public  Response getBuyRequest (
+            @PathParam("id") long id
+    ) {
+        return  Response.ok(listingService.findBuyRequestById(id)).build();
+    }
+
 
     @GET
     @Path("comodity/{id}")
