@@ -61,12 +61,20 @@ public class ChatResource {
     ) {
         Response     response;
         Conversation conversation   = null;
+        User         user           = userService.getLoggedInUser();
+        boolean      hasListingConv = user.getUserConversations()
+                                          .stream()
+                                          .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
+        if (!hasListingConv) {
             conversation = chatService.newListingConversation(listingId);
             if (conversation != null) {
                 response = Response.ok(new ConversationDTO(conversation)).build();
             } else {
                 response = Response.serverError().build();
             }
+        } else {
+            response = Response.notModified().build();
+        }
         return response;
     }
 
