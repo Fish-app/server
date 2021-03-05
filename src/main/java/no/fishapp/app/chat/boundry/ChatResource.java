@@ -1,12 +1,9 @@
 package no.fishapp.app.chat.boundry;
 
 import no.fishapp.app.auth.entity.Group;
-import no.fishapp.app.chat.entity.Conversation;
-import no.fishapp.app.chat.entity.ConversationDTO;
-import no.fishapp.app.chat.entity.Message;
+import no.fishapp.app.chat.entity.*;
 import no.fishapp.app.user.control.UserService;
 import no.fishapp.app.chat.control.ChatService;
-import no.fishapp.app.chat.entity.MessageDTO;
 import no.fishapp.app.user.entity.User;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -81,18 +78,24 @@ public class ChatResource {
     @POST
     @Path("{id}/send")
     @Valid
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response sendMessageRequest(
             @NotNull @PathParam("id") long conversationId,
-            @NotNull @HeaderParam("body") String messageBody
+            MessageBody newMessageBody
     ) {
         Response     response     = Response.serverError().build();
         Conversation conversation = chatService.getConversation(conversationId);
 
         if (conversation.isUserInConversation(userService.getLoggedInUser())) {
-            Conversation result = chatService.sendMessage(messageBody, conversation);
-            if (result != null) {
-                response = Response.ok(new ConversationDTO(result)).build();
+            if(newMessageBody.getMessageText() == null) {
+               response = Response.status(Response.Status.FORBIDDEN).build(); //invalid messsage body
+            } else {
+                if (!newMessageBody.getMessageText().isBlank() && !newMessageBody.getMessageText().isEmpty()) {
+                    Conversation result = chatService.sendMessage(newMessageBody.getMessageText(), conversation);
+                    if (result != null) {
+                        response = Response.ok(new ConversationDTO(result)).build();
+                    }
+                }
             }
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();

@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-03-05T14:06:43.140Z
+__export_date: 2021-03-05T14:54:27.164Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_1b7a3ed853324ce6b73b61572c86ebad
@@ -94,7 +94,7 @@ resources:
     _type: request_group
   - _id: req_5fa81cb820784975ad5283bccc017b7b
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614953149138
+    modified: 1614955814051
     created: 1613945171084
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_7728f2793c7f48d8bf401e04d5c58d4b', 'b64::JC5pZA==::46b', 'never', 60
@@ -106,7 +106,12 @@ resources:
       ### WHo
       user object - the buyer of a listing
     method: POST
-    body: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Hei! Hva selger dere ?"
+        }
     parameters: []
     headers:
       - name: Authorization
@@ -114,10 +119,9 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
         id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: body
-        value: '"Hei! Hva selger dere ?"'
-        description: ""
-        id: pair_c467af5ce174449fa2cec29fc5609b87
+      - name: Content-Type
+        value: application/json
+        id: pair_2f2bcb69947748ed9c1906eb7af2f274
     authentication: {}
     metaSortKey: -1613666029300.5
     isPrivate: false
@@ -130,7 +134,7 @@ resources:
     _type: request
   - _id: req_2f5dbbe111944aa799290036143e3c00
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614951606961
+    modified: 1614955854850
     created: 1614170160332
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_7728f2793c7f48d8bf401e04d5c58d4b', 'b64::JC5pZA==::46b', 'never', 60
@@ -142,7 +146,12 @@ resources:
       ### WHo
       user object - the buyer of a listing
     method: POST
-    body: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Det tror jeg skal la seg gjøre ja."
+        }
     parameters: []
     headers:
       - name: Authorization
@@ -155,10 +164,9 @@ resources:
           'b64::JC5pZA==::46b', 'never', 60 %}"
         description: ""
         id: pair_831eb4a28fbe47d7ae5a5d6f877572c6
-      - name: body
-        value: '"Det tror jeg skal la seg gjøre ja."'
-        description: ""
-        id: pair_193764871bfe4df980056289309ae55b
+      - name: Content-Type
+        value: application/json
+        id: pair_ce499cc084344c8eb5e07fe82a5646c8
     authentication: {}
     metaSortKey: -1613654375733.5625
     isPrivate: false
@@ -317,7 +325,7 @@ resources:
     _type: request_group
   - _id: req_9ff995a63d734115aa06b4af03ef2e81
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614952110708
+    modified: 1614955898673
     created: 1614249621110
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
@@ -329,7 +337,12 @@ resources:
       ### WHo
       user object - the buyer of a listing
     method: POST
-    body: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Hei! Jeg kan levere fisken du etterspurde"
+        }
     parameters: []
     headers:
       - name: Authorization
@@ -342,10 +355,9 @@ resources:
           'b64::JC5pZA==::46b', 'never', 60 %}"
         description: ""
         id: pair_831eb4a28fbe47d7ae5a5d6f877572c6
-      - name: body
-        value: '"Hei! Jeg kan levere fisken du etterspurde"'
-        description: ""
-        id: pair_193764871bfe4df980056289309ae55b
+      - name: Content-Type
+        value: application/json
+        id: pair_bd9bca1c82574758bd1986e55167caae
     authentication: {}
     metaSortKey: -1613666029300.5
     isPrivate: false
@@ -358,7 +370,7 @@ resources:
     _type: request
   - _id: req_7085d46309c446909cd7c910f55eb45a
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614952141395
+    modified: 1614955923881
     created: 1614249621113
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
@@ -370,7 +382,12 @@ resources:
       ### WHo
       user object - the buyer of a listing
     method: POST
-    body: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Så flott!"
+        }
     parameters: []
     headers:
       - name: Authorization
@@ -378,10 +395,9 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
         id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: body
-        value: '"Så flott!"'
-        description: ""
-        id: pair_193764871bfe4df980056289309ae55b
+      - name: Content-Type
+        value: application/json
+        id: pair_045451962cd541c7ba026fb84ac51ab1
     authentication: {}
     metaSortKey: -1613654375733.5625
     isPrivate: false
@@ -394,7 +410,7 @@ resources:
     _type: request
   - _id: req_2bb32d389faf4ade96b85c906bfc438c
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614953160220
+    modified: 1614954426425
     created: 1614249621111
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
@@ -412,6 +428,7 @@ resources:
         value: "1"
         description: ""
         id: pair_a015ddf5dcdf4557a5fca0e573b2300e
+        disabled: false
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
