@@ -16,7 +16,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.websocket.server.PathParam;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,29 +55,18 @@ public class ChatResource {
 
     @POST
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("new/{id}")
-    @Valid
     public Response startConversationRequest(
-            @NotNull @PathParam("id") long listingId
+           @NotNull @PathParam("id") long listingId
     ) {
         Response     response;
-
         Conversation conversation   = null;
-        User         user           = userService.getLoggedInUser();
-        boolean      hasListingConv = user.getUserConversations()
-                                          .stream()
-                                          .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
-        if (hasListingConv) {
             conversation = chatService.newListingConversation(listingId);
             if (conversation != null) {
                 response = Response.ok(new ConversationDTO(conversation)).build();
             } else {
                 response = Response.serverError().build();
             }
-        } else {
-            response = Response.notModified().build();
-        }
         return response;
     }
 
@@ -88,7 +76,7 @@ public class ChatResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response sendMessageRequest(
             @NotNull @PathParam("id") long conversationId,
-            @NotNull @HeaderParam("asdj") String messageBody
+            @NotNull @HeaderParam("body") String messageBody
     ) {
         Response     response     = Response.serverError().build();
         Conversation conversation = chatService.getConversation(conversationId);
@@ -109,7 +97,7 @@ public class ChatResource {
     @Valid
     @Path("{id}/latest")
     public Response updatesQuery(
-            @NotNull @PathParam("conversation") long conversationId,
+            @NotNull @PathParam("id") long conversationId,
             @NotNull @QueryParam("last-id") long lastId
     ) {
         Response     response;
@@ -134,9 +122,9 @@ public class ChatResource {
 
     @GET
     @Valid
-    @Path("{id}}/range")
+    @Path("{id}/range")
     public Response getMessageRange(
-            @NotNull @PathParam("conversation") Long conversationId,
+            @NotNull @PathParam("id") Long conversationId,
             @NotNull @QueryParam("from") Long fromId,
             @NotNull @QueryParam("offset") Long offset
     ) {
