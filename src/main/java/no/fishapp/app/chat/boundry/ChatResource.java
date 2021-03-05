@@ -42,7 +42,11 @@ public class ChatResource {
         Response response;
         User     currentUser = userService.getLoggedInUser();
         if (currentUser != null) {
-            response = Response.ok(currentUser.getUserConversations()).build();
+
+            List<ConversationDTO> conversationDTOS= currentUser.getUserConversations().stream()
+                    .map(ConversationDTO::buildFromConversation)
+                    .collect(Collectors.toList());
+            response = Response.ok(conversationDTOS).build();
         } else {
             response = Response.serverError().build();
         }
@@ -65,7 +69,7 @@ public class ChatResource {
         if (!hasListingConv) {
             conversation = chatService.newListingConversation(listingId);
             if (conversation != null) {
-                response = Response.ok(new ConversationDTO(conversation)).build();
+                response = Response.ok(ConversationDTO.buildFromConversation(conversation)).build();
             } else {
                 response = Response.serverError().build();
             }
@@ -93,7 +97,7 @@ public class ChatResource {
                 if (!newMessageBody.getMessageText().isBlank() && !newMessageBody.getMessageText().isEmpty()) {
                     Conversation result = chatService.sendMessage(newMessageBody.getMessageText(), conversation);
                     if (result != null) {
-                        response = Response.ok(new ConversationDTO(result)).build();
+                        response = Response.ok(ConversationDTO.buildFromConversation(result)).build();
                     }
                 }
             }
