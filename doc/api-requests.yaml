@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-03-05T19:07:23.366Z
+__export_date: 2021-03-06T14:19:03.487Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
@@ -956,9 +956,47 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_3c888d5f6b89448795215ec02bc62da7
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615031644746
+    created: 1615031281606
+    url: "{{ _.baseURL }}/chat/1/send"
+    name: buyer-send2-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText": "Hei! Hva selger dere ?"
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: Content-Type
+        value: application/json
+        id: pair_2f2bcb69947748ed9c1906eb7af2f274
+    authentication: {}
+    metaSortKey: -1613660202517.0312
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_2f5dbbe111944aa799290036143e3c00
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614955854850
+    modified: 1615031675436
     created: 1614170160332
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_7728f2793c7f48d8bf401e04d5c58d4b', 'b64::JC5pZA==::46b', 'never', 60
@@ -983,11 +1021,6 @@ resources:
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
         id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: conversation
-        value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_831eb4a28fbe47d7ae5a5d6f877572c6
       - name: Content-Type
         value: application/json
         id: pair_ce499cc084344c8eb5e07fe82a5646c8
@@ -1001,14 +1034,52 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_71def8a5e458460a84a125c545aea96d
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615031672428
+    created: 1615031636853
+    url: "{{ _.baseURL }}/chat/1/send"
+    name: seller-send3-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Det tror jeg skal la seg gjøre ja."
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: Content-Type
+        value: application/json
+        id: pair_ce499cc084344c8eb5e07fe82a5646c8
+    authentication: {}
+    metaSortKey: -1613648548950.0938
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_120528d30607470cbb19fbbe66daf83f
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614953144303
+    modified: 1615038676937
     created: 1614077415768
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_7728f2793c7f48d8bf401e04d5c58d4b', 'b64::JC5pZA==::46b', 'never', 60
-      %}/latest"
-    name: buyer-get-latest-messages
+      %}/updates"
+    name: buyer-get-updates-messages
     description: |-
       ### What
       Adds a message to a conversation. //WIP add conv by listing
@@ -1021,7 +1092,7 @@ resources:
         value: "1"
         description: ""
         id: pair_3f285b8413a04635bea6f7a3658c3633
-        disabled: false
+        disabled: true
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
@@ -1030,6 +1101,71 @@ resources:
         id: pair_1ca8152a96b741ecb9f062ce5ab78f05
     authentication: {}
     metaSortKey: -1613642722166.625
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4a486cd57e0b489c98c7d50832d4b5c0
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615038683983
+    created: 1615032705069
+    url: "{{ _.baseURL }}/chat/1/updates"
+    name: buyer-get-updates-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters:
+      - name: last-id
+        value: "40"
+        description: ""
+        id: pair_3f285b8413a04635bea6f7a3658c3633
+        disabled: false
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613633981991.4219
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_bd41c266b3f9473c8afd1652c60496e1
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615038706604
+    created: 1615038698907
+    url: "{{ _.baseURL }}/chat/1/latest"
+    name: buyer-get-latest-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613629611903.8203
     isPrivate: false
     settingStoreCookies: false
     settingSendCookies: false
@@ -1234,12 +1370,12 @@ resources:
     _type: request
   - _id: req_2bb32d389faf4ade96b85c906bfc438c
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614971204662
+    modified: 1615038690247
     created: 1614249621111
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
-      %}/latest"
-    name: seller-get-latest-messages
+      %}/updates"
+    name: seller-get-updates-messages
     description: |-
       ### What
       Adds a message to a conversation. //WIP add conv by listing
