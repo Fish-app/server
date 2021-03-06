@@ -148,7 +148,6 @@ public class ChatResource {
 
         if (conversation.isUserInConversation(userService.getLoggedInUser())) {
                 List<Message> messages = chatService.getMessagesTo(conversationId, conversation.getLastMessageId() -1);
-            System.out.println("message list long: " + messages.size());
                 List<MessageDTO> messageDTOS = messages.stream()
                         .map(MessageDTO::buildFromMessage)
                         .collect(Collectors.toList());
@@ -222,7 +221,6 @@ public class ChatResource {
         Conversation conversation = chatService.getConversation(conversationId);
 
         if (conversation.isUserInConversation(userService.getLoggedInUser())) {
-            System.out.println("adasd");
             List<Message> messages = chatService.getMessageRange(conversationId, fromId, offset);
             List<MessageDTO> messageDTOS = messages.stream()
                                                    .map(MessageDTO::buildFromMessage)
