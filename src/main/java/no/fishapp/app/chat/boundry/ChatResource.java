@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.nio.charset.Charset;
+import java.nio.charset.spi.CharsetProvider;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,12 +27,13 @@ import java.util.stream.Collectors;
 
 public class ChatResource {
 
+    public static final String UTF8_CHARSET= "; charset=utf-8";
+
     @Inject
     ChatService chatService;
 
     @Inject
     UserService userService;
-
 
     /**
      *  Returns a list of elements with Conversation to the current
@@ -69,7 +72,7 @@ public class ChatResource {
      */
     @POST
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON+UTF8_CHARSET)
     @Path("new/{id}")
     public Response startConversationRequest(
            @NotNull @PathParam("id") long listingId
@@ -103,7 +106,7 @@ public class ChatResource {
     @Path("{id}/send")
     @Valid
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON+UTF8_CHARSET})
     public Response sendMessageRequest(
             @NotNull @PathParam("id") long conversationId,
             MessageBody newMessageBody
@@ -138,7 +141,7 @@ public class ChatResource {
     @GET
     @Valid
     @Path("{id}/latest")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON+UTF8_CHARSET})
     public Response getLastMessage(
         @NotNull @PathParam("id") long conversationId
     ) {
@@ -175,7 +178,7 @@ public class ChatResource {
     @GET
     @Valid
     @Path("{id}/updates")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON+UTF8_CHARSET})
     public Response updatesQuery(
             @NotNull @PathParam("id") long conversationId,
             @NotNull @QueryParam("last-id") long lastId
@@ -211,7 +214,7 @@ public class ChatResource {
     @GET
     @Valid
     @Path("{id}/range")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON+UTF8_CHARSET)
     public Response getMessageRange(
             @NotNull @PathParam("id") Long conversationId,
             @NotNull @QueryParam("from") Long fromId,
