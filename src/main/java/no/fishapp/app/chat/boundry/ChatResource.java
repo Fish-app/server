@@ -66,9 +66,7 @@ public class ChatResource {
      *  Used to start a new conversation and associate it with a listing
      * @param listingId The listing ID associated with the conversation
      * @return A ConversationDTO holding metadata about the new conversation,
-     * If conversation already exsist, we return a 304 Error - and the client should
-     * use the existing conversation already in the app.
-     * //TODO: Check if  easly can get exsisting conversation in App, otherwise change this to return the exsiting conversation
+     * If conversation already exsist, we return the existing conversation.
      */
     @POST
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
@@ -91,6 +89,15 @@ public class ChatResource {
                 response = Response.serverError().build();
             }
         } else {
+            // Find the existing conversations and return the on with matching listing id.
+            List<ConversationDTO> conversationDTOS = user.getUserConversations().stream()
+                    .map(ConversationDTO::buildFromConversation)
+                    .collect(Collectors.toList());
+            for (ConversationDTO existingConversationDTO : conversationDTOS) {
+                if(existingConversationDTO.getListing().getId() == listingId) {
+                    return Response.ok(existingConversationDTO).build();
+                }
+            }
             response = Response.notModified().build();
         }
         return response;
