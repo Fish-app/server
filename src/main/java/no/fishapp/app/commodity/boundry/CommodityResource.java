@@ -10,6 +10,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -37,6 +38,9 @@ public class CommodityResource {
         } catch (IOException e) {
             // todo: finn en streamlined metode for og sende tilbake status meldinger og få http kodene korrekt
             response = Response.ok().status(Response.Status.BAD_REQUEST).build();
+        } catch (ConstraintViolationException e){
+            e.getConstraintViolations().forEach(constraintViolation -> System.out.println(constraintViolation.getConstraintDescriptor()));
+
         }
 
         return response;

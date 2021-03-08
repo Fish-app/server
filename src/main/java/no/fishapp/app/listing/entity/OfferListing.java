@@ -40,13 +40,13 @@ public class OfferListing extends Listing {
     @JsonbTransient
     List<Transaction> transactions;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
-    //@JsonbTransient
-    @JoinTable(
-            name = "offer_listing_commodity",
-            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
-    @NotNull
-    Commodity commodity;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(nullable = false)
+//    //@JsonbTransient
+//    @JoinTable(
+//            name = "offer_listing_commodity",
+//            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
+//    @NotNull
+//    Commodity commodity;
 }
