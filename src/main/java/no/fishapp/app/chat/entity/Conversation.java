@@ -1,16 +1,14 @@
 package no.fishapp.app.chat.entity;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import no.fishapp.app.listing.entity.Listing;
 import no.fishapp.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -45,11 +43,19 @@ public class Conversation {
     @ManyToOne(cascade = CascadeType.ALL)
     Listing conversationListing;
 
-
-
     long listingCreatorUserId;
+
     @Getter
     User conversationStarterUser;
+
+    @Getter
+    @Column(name = "created_date")
+    Long createdDate;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = new Date().getTime(); // Get epoch time
+    }
 
     public Conversation(Listing conversationListing, User currentUser) {
         this.conversationListing = conversationListing;

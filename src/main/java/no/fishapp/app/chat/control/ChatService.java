@@ -57,7 +57,7 @@ public class ChatService {
     }
 
     /**
-     * returns the conversatin with the provided id
+     * Returns the conversation with the provided id
      *
      * @param convId the conversations id
      * @return the conversation, null if not found
@@ -65,6 +65,16 @@ public class ChatService {
     public Conversation getConversation(long convId) {
         return entityManager.find(Conversation.class, convId);
     }
+
+    /**
+     *  Return the message with the provided ID. Used in app to get last message preview
+     * @param messageId the message id
+     * @return the conversation, null if not found
+     */
+    public Message getMessage(long messageId) {
+        return entityManager.find(Message.class, messageId);
+    }
+
 
     /**
      * Registers a message body as sent from the current logged in user in a conversation.
@@ -86,8 +96,6 @@ public class ChatService {
             System.out.println("CONTROL-CHAT: Persistence failure sendMsg");
             return null;
         }
-
-
     }
 
     /**
@@ -100,10 +108,10 @@ public class ChatService {
     public List<Message> getMessagesTo(long convId, long fromMessageId) {
         Conversation conversation = getConversation(convId);
         return conversation.getMessages()
-                           .stream()
-                           .filter(message -> message.getId() > fromMessageId)
-                           .collect(
-                                   Collectors.toCollection(ArrayList::new));
+                .stream()
+                .filter(message -> message.getId() > fromMessageId)
+                .collect(
+                        Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -115,13 +123,13 @@ public class ChatService {
      * @return a list of messages
      */
     public List<Message> getMessageRange(Long convId, Long fromId, Long offset) {
-        Conversation  conversation = getConversation(convId);
-        List<Message> messages     = conversation.getMessages();
+        Conversation conversation = getConversation(convId);
+        List<Message> messages = conversation.getMessages();
         System.out.println("MESSAGEZS IS NULL");
-        if(messages == null) return new ArrayList<>();
-        Message anchor       = entityManager.find(Message.class, fromId);
+        if (messages == null) return new ArrayList<>();
+        Message anchor = entityManager.find(Message.class, fromId);
         //Message anchor = messages.stream().filter(message -> message.getId() == fromId).findFirst().get();
-        int     elementIndex = messages.indexOf(anchor);
+        int elementIndex = messages.indexOf(anchor);
 
         if (offset == null) offset = 0L; // default value if null
 
@@ -131,9 +139,9 @@ public class ChatService {
         System.out.println("ELEMENTINDEKS " + elementIndex);
 
         if (offset >= 0L) {
-            return messages.subList(elementIndex, (int) Math.min(messages.size()-1, elementIndex + offset));
+            return messages.subList(elementIndex, (int) Math.min(messages.size() - 1, elementIndex + offset));
         } else {
-            return messages.subList((int) Math.max(0, elementIndex-offset), elementIndex);
+            return messages.subList((int) Math.max(0, elementIndex - offset), elementIndex);
         }
     }
 }

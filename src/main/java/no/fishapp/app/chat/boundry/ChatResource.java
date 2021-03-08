@@ -5,8 +5,6 @@ import no.fishapp.app.chat.entity.*;
 import no.fishapp.app.user.control.UserService;
 import no.fishapp.app.chat.control.ChatService;
 import no.fishapp.app.user.entity.User;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -16,8 +14,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.nio.charset.Charset;
-import java.nio.charset.spi.CharsetProvider;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,23 +34,33 @@ public class ChatResource {
     /**
      *  Returns a list of elements with Conversation to the current
      *  authenticated user. Used in app to display the current users conversation
+     * @param includeLastMsg if true, attach the last message
      * @return a json encoded list of ConversationDTOS
      */
     @GET
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.APPLICATION_JSON+UTF8_CHARSET)
     @Path("myconversations")
     @Valid
     public Response getCurrentUserConversationsRequest(
+            @QueryParam("include-lastmessage") Boolean includeLastMsg
     ) {
+        if (includeLastMsg == null) includeLastMsg = false;
         Response response;
         User     currentUser = userService.getLoggedInUser();
         if (currentUser != null) {
+            if(includeLastMsg) {
+                List<ConversationDTO> conversationDTOS= currentUser.getUserConversations().stream()
+                        .map(c -> ConversationDTO.buildFromConversationAddLastMessage(c, chatService))
+                        .collect(Collectors.toList());
+                response = Response.ok(conversationDTOS).build();
+            } else {
 
-            List<ConversationDTO> conversationDTOS= currentUser.getUserConversations().stream()
-                    .map(ConversationDTO::buildFromConversation)
-                    .collect(Collectors.toList());
-            response = Response.ok(conversationDTOS).build();
+                List<ConversationDTO> conversationDTOS= currentUser.getUserConversations().stream()
+                        .map(ConversationDTO::buildFromConversation)
+                        .collect(Collectors.toList());
+                response = Response.ok(conversationDTOS).build();
+            }
         } else {
             response = Response.serverError().build();
         }

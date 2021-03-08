@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-03-06T14:19:03.487Z
+__export_date: 2021-03-08T16:21:52.938Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
@@ -958,7 +958,7 @@ resources:
     _type: request
   - _id: req_3c888d5f6b89448795215ec02bc62da7
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1615031644746
+    modified: 1615046761306
     created: 1615031281606
     url: "{{ _.baseURL }}/chat/1/send"
     name: buyer-send2-static1
@@ -972,7 +972,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"messageText": "Hei! Hva selger dere ?"
+        	"messageText": "Hei! Hva selger dere?"
         }
     parameters: []
     headers:
@@ -1036,9 +1036,9 @@ resources:
     _type: request
   - _id: req_71def8a5e458460a84a125c545aea96d
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1615031672428
+    modified: 1615189720502
     created: 1615031636853
-    url: "{{ _.baseURL }}/chat/1/send"
+    url: "{{ _.baseURL }}/chat/2/send"
     name: seller-send3-static1
     description: |-
       ### What
@@ -1050,7 +1050,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"messageText" : "Det tror jeg skal la seg gjøre ja."
+        	"messageText" : "Det tror jeg skal la seg gjøre ja ØL!."
         }
     parameters: []
     headers:
@@ -1111,7 +1111,7 @@ resources:
     _type: request
   - _id: req_4a486cd57e0b489c98c7d50832d4b5c0
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1615038683983
+    modified: 1615202178647
     created: 1615032705069
     url: "{{ _.baseURL }}/chat/1/updates"
     name: buyer-get-updates-static1
@@ -1127,7 +1127,7 @@ resources:
         value: "40"
         description: ""
         id: pair_3f285b8413a04635bea6f7a3658c3633
-        disabled: false
+        disabled: true
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
@@ -1217,7 +1217,7 @@ resources:
     _type: request
   - _id: req_45bdadca83d241c2aa9010e34c724e75
     parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614953133470
+    modified: 1615220429273
     created: 1614249526067
     url: "{{ _.baseURL }}/chat/myconversations"
     name: buyer-my-conversations
@@ -1228,7 +1228,12 @@ resources:
       user object - the buyer of a listing
     method: GET
     body: {}
-    parameters: []
+    parameters:
+      - name: include-lastmessage
+        value: "true"
+        description: ""
+        id: pair_ad4a036ff3f845bb9b7fe08a395d1aac
+        disabled: false
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
@@ -1407,7 +1412,7 @@ resources:
     _type: request
   - _id: req_86f07aa68135425aa9938bc5e4082e6b
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614953157174
+    modified: 1615220452315
     created: 1614249621114
     url: "{{ _.baseURL }}/chat/myconversations"
     name: seller-my-conversations
@@ -1418,7 +1423,9 @@ resources:
       user object - the buyer of a listing
     method: GET
     body: {}
-    parameters: []
+    parameters:
+      - name: include-lastmessage
+        value: "true"
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
