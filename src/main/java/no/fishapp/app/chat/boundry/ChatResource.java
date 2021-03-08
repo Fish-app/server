@@ -126,7 +126,7 @@ public class ChatResource {
             if(newMessageBody.getMessageText() == null) {
                response = Response.status(Response.Status.FORBIDDEN).build(); //invalid messsage body
             } else {
-                if (!newMessageBody.getMessageText().isBlank() && !newMessageBody.getMessageText().isEmpty()) {
+                if (!newMessageBody.getMessageText().isBlank()) {
                     Conversation result = chatService.sendMessage(newMessageBody.getMessageText(), conversation);
                     if (result != null) {
                         response = Response.ok(ConversationDTO.buildFromConversation(result)).build();

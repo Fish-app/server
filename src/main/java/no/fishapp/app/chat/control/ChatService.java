@@ -23,9 +23,6 @@ public class ChatService {
     EntityManager entityManager;
 
     @Inject
-    ListingService listingService;
-
-    @Inject
     UserService userService;
 
     /**
