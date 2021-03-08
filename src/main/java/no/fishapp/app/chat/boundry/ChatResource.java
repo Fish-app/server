@@ -95,7 +95,8 @@ public class ChatResource {
                     .collect(Collectors.toList());
             for (ConversationDTO existingConversationDTO : conversationDTOS) {
                 if(existingConversationDTO.getListing().getId() == listingId) {
-                    return Response.ok(existingConversationDTO).build();
+                    Conversation reload = chatService.getConversation(existingConversationDTO.getId());
+                    return Response.ok(ConversationDTO.buildFromConversation(reload)).build();
                 }
             }
             response = Response.notModified().build();
