@@ -19,11 +19,13 @@ import no.fishapp.app.listing.entity.Listing;
 @AllArgsConstructor
 public class ConversationDTO {
 
-    public ConversationDTO(Conversation conversation) {
-        this.id = conversation.getId();
-        this.lastMessageId = conversation.getLastMessageId();
-        this.firstMessageId = conversation.getFirstMessageId();
-        this.listing = conversation.getConversationListing();
+    public static ConversationDTO buildFromConversation(Conversation conversation) {
+        ConversationDTO conversationDTO = new ConversationDTO();
+        conversationDTO.id = conversation.getId();
+        conversationDTO.lastMessageId = conversation.getLastMessageId();
+        conversationDTO.firstMessageId = conversation.getFirstMessageId();
+        conversationDTO.listing = conversation.getConversationListing();
+        return conversationDTO;
     }
 
     long id;
