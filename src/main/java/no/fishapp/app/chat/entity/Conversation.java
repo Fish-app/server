@@ -48,17 +48,19 @@ public class Conversation {
 
 
     long listingCreatorUserId;
-    long conversationStarterUserId;
+    @Getter
+    User conversationStarterUser;
 
     public Conversation(Listing conversationListing, User currentUser) {
         this.conversationListing = conversationListing;
         this.listingCreatorUserId = conversationListing.getCreator().getId();
-        this.conversationStarterUserId = currentUser.getId();
+        this.conversationStarterUser = currentUser;
         this.messages = new ArrayList<>();
     }
 
+
     public boolean isUserInConversation(User user) {
-        return listingCreatorUserId == user.getId() || conversationStarterUserId == user.getId();
+        return listingCreatorUserId == user.getId() || conversationStarterUser.getId() == user.getId();
     }
 
     public void addMessage(Message message) {

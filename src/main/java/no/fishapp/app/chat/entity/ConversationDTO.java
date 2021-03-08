@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.fishapp.app.listing.entity.Listing;
+import no.fishapp.app.user.entity.User;
 
 
 /**
@@ -25,12 +26,14 @@ public class ConversationDTO {
         conversationDTO.lastMessageId = conversation.getLastMessageId();
         conversationDTO.firstMessageId = conversation.getFirstMessageId();
         conversationDTO.listing = conversation.getConversationListing();
+        conversationDTO.starterUser = conversation.getConversationStarterUser();
         return conversationDTO;
     }
 
     long id;
     long lastMessageId;
     long firstMessageId;
+    User starterUser;
     Listing listing;
 
 }
