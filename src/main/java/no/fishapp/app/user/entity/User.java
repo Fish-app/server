@@ -47,9 +47,7 @@ public class User extends AuthenticatedUser implements Serializable {
     @JsonbTransient
     List<Listing> userCreatedOrders;
 
-    @OneToMany
-    @JsonbTransient
-    List<Transaction> userTransactions;
+
 
     ////////////////////////////////////////
     // todo: unshure if horrible design

@@ -1,5 +1,6 @@
 package no.fishapp.app.rating.control;
 
+import no.fishapp.app.auth.entity.Group;
 import no.fishapp.app.rating.entity.Rating;
 import no.fishapp.app.transaction.control.TransactionService;
 import no.fishapp.app.transaction.entity.Transaction;
@@ -24,7 +25,9 @@ public class RatingService {
     EntityManager entityManager;
 
 
-    private static final String RATING_EXISTS_QUERY = "select count (rt) from Rating  rt where  rt.issuer.id = :isu_id and  rt.userRated.id = :rtd_id and rt.ratedTransactions.id = :t_id";
+    private static final String RATING_EXISTS_QUERY = "select count (rt) from Rating rt where  rt.issuer.id = :isu_id and  rt.userRated.id = :rtd_id and rt.ratedTransactions.id = :t_id";
+
+    private static final String GET_TRANSACT_RATING_QUERY = "select rt from Rating rt where  rt.issuer.id = :isu_id and  rt.userRated.id = :rtd_id and rt.ratedTransactions.id = :t_id";
 
     private static final String USER_RATING = "select avg (rt.stars) from Rating rt where rt.userRated.id = :rtd_id";
 
@@ -34,13 +37,14 @@ public class RatingService {
         Transaction transaction = transactionService.getTransaction(transactionId);
         User        user        = userService.getLoggedInUser();
 
-        boolean isMaker = transaction.getMaker().getId() == user.getId();
-        boolean isTaker = transaction.getTaker().getId() == user.getId();
+        boolean isSeller = user.getGroups().stream().anyMatch(group -> group.getName().equals(Group.SELLER_GROUP_NAME));
+        boolean isInTransaction = (isSeller)? transaction.getSeller().getId() == user.getId(): transaction.getBuyer().getId() == user.getId();
 
-        if (isMaker || isTaker) {
-            User ratingReciver = isMaker ? transaction.getMaker() : transaction.getTaker();
 
-            if (! doRatingExists(transactionId, ratingReciver.getId(), transaction.getId())) {
+        if (isInTransaction) {
+            User ratingReciver = isSeller ? transaction.getBuyer() : transaction.getSeller();
+
+            if (! doRatingExists(transactionId,user.getId() , ratingReciver.getId())) {
                 rating.setIssuer(user);
                 rating.setUserRated(ratingReciver);
                 rating.setStars(ratingValue);
@@ -53,11 +57,43 @@ public class RatingService {
 
     }
 
-    boolean doRatingExists(long transId, long issuId, long ratedId) {
-        Query query = entityManager.createQuery(RATING_EXISTS_QUERY);
+    public Rating getTransactionRating(long transactionId){
+        Transaction transaction = transactionService.getTransaction(transactionId);
+        User        user        = userService.getLoggedInUser();
+
+        boolean isSeller = user.getGroups().stream().anyMatch(group -> group.getName().equals(Group.SELLER_GROUP_NAME));
+        boolean isInTransaction = (isSeller)? transaction.getSeller().getId() == user.getId(): transaction.getBuyer().getId() == user.getId();
+
+        if (isInTransaction) {
+            User ratingReciver = isSeller ? transaction.getBuyer() : transaction.getSeller();
+
+
+            return getRating(transactionId, user.getId(), ratingReciver.getId());
+
+        }
+        return null;
+    }
+
+    Rating getRating(long transId, long issuId, long ratedId) {
+        var query = entityManager.createQuery(GET_TRANSACT_RATING_QUERY, Rating.class);
+
         query.setParameter("isu_id", issuId);
         query.setParameter("rtd_id", ratedId);
         query.setParameter("t_id", transId);
+        try {
+            return query.getSingleResult();
+
+        } catch (NoResultException ignore) {
+        }
+        return null;
+    }
+
+
+    boolean doRatingExists(long transactionId, long issuId, long ratedId) {
+        Query query = entityManager.createQuery(RATING_EXISTS_QUERY);
+        query.setParameter("isu_id", issuId);
+        query.setParameter("rtd_id", ratedId);
+        query.setParameter("t_id", transactionId);
         try {
             long numWith = (long) query.getSingleResult();
             if (numWith == 0) {
