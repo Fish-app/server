@@ -26,10 +26,9 @@ public class Conversation {
     long id;
 
     // IDs for first and last msg;
+
     @Getter
-    long firstMessageId;
-    @Getter
-    long lastMessageId;
+    long lastMessageId = - 1;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonbTransient
@@ -58,10 +57,10 @@ public class Conversation {
     }
 
     public Conversation(Listing conversationListing, User currentUser) {
-        this.conversationListing = conversationListing;
-        this.listingCreatorUserId = conversationListing.getCreator().getId();
+        this.conversationListing     = conversationListing;
+        this.listingCreatorUserId    = conversationListing.getCreator().getId();
         this.conversationStarterUser = currentUser;
-        this.messages = new ArrayList<>();
+        this.messages                = new ArrayList<>();
     }
 
 
@@ -72,10 +71,6 @@ public class Conversation {
     public void addMessage(Message message) {
         this.lastMessageId = message.getId();
         this.messages.add(message);
-        if(this.messages.indexOf(message) == 0) {
-            // Save the first message id (used by client to determine limit, as msg ID's are global)
-            this.firstMessageId = message.getId();
-        }
     }
 
     public List<Message> getMessages() {

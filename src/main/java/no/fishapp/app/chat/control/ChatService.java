@@ -34,19 +34,20 @@ public class ChatService {
      * creates a new conversation between the current user and the owner of the listing with the provided id
      *
      * @param listingId the listing to hav conversation about
+     *
      * @return the conversation object if ok null if not
      */
     public Conversation newListingConversation(long listingId) {
 
         try {
             Listing listing = entityManager.find(Listing.class, listingId);
-            if (listing == null) return null; // Avoid nullptr below
-            User listingOwner = listing.getCreator();
-            User conversationStarter = userService.getLoggedInUser();
-            Conversation conversation = new Conversation(listing, conversationStarter);
+            if (listing == null) {
+                return null; // Avoid nullptr below
+            }
+            User         listingOwner        = listing.getCreator();
+            User         conversationStarter = userService.getLoggedInUser();
+            Conversation conversation        = new Conversation(listing, conversationStarter);
             entityManager.persist(conversation);
-            entityManager.flush();
-            entityManager.refresh(conversation);
 
             userService.addConversationToUser(conversation, listingOwner);
             userService.addConversationToUser(conversation, conversationStarter);
@@ -60,6 +61,7 @@ public class ChatService {
      * Returns the conversation with the provided id
      *
      * @param convId the conversations id
+     *
      * @return the conversation, null if not found
      */
     public Conversation getConversation(long convId) {
@@ -67,8 +69,10 @@ public class ChatService {
     }
 
     /**
-     *  Return the message with the provided ID. Used in app to get last message preview
+     * Return the message with the provided ID. Used in app to get last message preview
+     *
      * @param messageId the message id
+     *
      * @return the conversation, null if not found
      */
     public Message getMessage(long messageId) {
@@ -103,15 +107,16 @@ public class ChatService {
      *
      * @param convId        the id of the concversation wo chek
      * @param fromMessageId (exclusive) return messages newer than the message with this id
+     *
      * @return a list with the messages
      */
     public List<Message> getMessagesTo(long convId, long fromMessageId) {
         Conversation conversation = getConversation(convId);
         return conversation.getMessages()
-                .stream()
-                .filter(message -> message.getId() > fromMessageId)
-                .collect(
-                        Collectors.toCollection(ArrayList::new));
+                           .stream()
+                           .filter(message -> message.getId() > fromMessageId)
+                           .collect(
+                                   Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -120,18 +125,23 @@ public class ChatService {
      * @param convId the id of the conversation
      * @param fromId the id to collect offset from
      * @param offset the offset possetive or negative
+     *
      * @return a list of messages
      */
     public List<Message> getMessageRange(Long convId, Long fromId, Long offset) {
-        Conversation conversation = getConversation(convId);
-        List<Message> messages = conversation.getMessages();
+        Conversation  conversation = getConversation(convId);
+        List<Message> messages     = conversation.getMessages();
         System.out.println("MESSAGEZS IS NULL");
-        if (messages == null) return new ArrayList<>();
+        if (messages == null) {
+            return new ArrayList<>();
+        }
         Message anchor = entityManager.find(Message.class, fromId);
         //Message anchor = messages.stream().filter(message -> message.getId() == fromId).findFirst().get();
         int elementIndex = messages.indexOf(anchor);
 
-        if (offset == null) offset = 0L; // default value if null
+        if (offset == null) {
+            offset = 0L; // default value if null
+        }
 
         System.out.println("OFFSET " + offset.toString());
         System.out.println("FROMID " + fromId.toString());

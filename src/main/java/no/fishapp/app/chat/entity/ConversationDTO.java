@@ -25,43 +25,39 @@ import javax.transaction.Transactional;
 public class ConversationDTO {
 
     /**
-     *  Builds a conversation DTO
+     * Builds a conversation DTO
+     *
      * @param conversation the conversation to use for this DTO
+     *
      * @return a Conversation DTO
      */
     public static ConversationDTO buildFromConversation(Conversation conversation) {
         ConversationDTO conversationDTO = new ConversationDTO();
-        conversationDTO.id = conversation.getId();
+        conversationDTO.id            = conversation.getId();
         conversationDTO.lastMessageId = conversation.getLastMessageId();
-        conversationDTO.firstMessageId = conversation.getFirstMessageId();
-        conversationDTO.listing = conversation.getConversationListing();
-        conversationDTO.starterUser = conversation.getConversationStarterUser();
+        conversationDTO.listing       = conversation.getConversationListing();
+        conversationDTO.starterUser   = conversation.getConversationStarterUser();
         return conversationDTO;
     }
 
 
     /**
-     *  Builds a conversation DTO and attach the last message as a MessageDTO
+     * Builds a conversation DTO and attach the last message as a MessageDTO
+     *
      * @param conversation the conversation to use for this DTO
-     * @param chatService a chatservice instance used to retrive the last messsage
+     * @param message      the last message to include in the conversation.
+     *
      * @return a Conversation DTO
      */
-    public static ConversationDTO buildFromConversationAddLastMessage(Conversation conversation, ChatService chatService) {
-        ConversationDTO conversationDTO = new ConversationDTO();
-        conversationDTO.id = conversation.getId();
-        conversationDTO.lastMessageId = conversation.getLastMessageId();
-        conversationDTO.firstMessageId = conversation.getFirstMessageId();
-        conversationDTO.createdDate = conversation.getCreatedDate();
-        conversationDTO.starterUser = conversation.getConversationStarterUser();
-        conversationDTO.listing = conversation.getConversationListing();
-        Message lastMessage = chatService.getMessage(conversationDTO.lastMessageId);
-        if (lastMessage != null) conversationDTO.lastMessage = MessageDTO.buildFromMessage(lastMessage);
-        return conversationDTO;
+    public static ConversationDTO buildFromConversation(Conversation conversation, Message message) {
+        ConversationDTO convDto = buildFromConversation(conversation);
+        convDto.lastMessage = MessageDTO.buildFromMessage(message);
+        return convDto;
     }
+
 
     long id;
     long lastMessageId;
-    long firstMessageId;
     long createdDate;
     User starterUser;
     Listing listing;
