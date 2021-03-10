@@ -37,6 +37,7 @@ public class ConversationDTO {
         conversationDTO.lastMessageId = conversation.getLastMessageId();
         conversationDTO.listing       = conversation.getConversationListing();
         conversationDTO.starterUser   = conversation.getConversationStarterUser();
+        conversationDTO.createdDate = conversation.getCreatedDate();
         return conversationDTO;
     }
 
