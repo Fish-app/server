@@ -19,6 +19,10 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 public class BuyRequest extends Listing {
 
+    @Override
+    public String getType() {
+        return "B";
+    }
     //Amount you want to buy
     @Column(nullable = false, name = "amount")
     int amount;

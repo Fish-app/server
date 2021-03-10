@@ -26,6 +26,8 @@ public abstract class Listing {
     @ManyToOne
     User creator;
 
+    public abstract String getType();
+
     @Column(nullable = false, name = "end_date")
     long endDate;
 
@@ -43,6 +45,7 @@ public abstract class Listing {
     double latitude;
     @Column(nullable = false, name = "longitude")
     double longitude;
+
 
 
     @PrePersist
