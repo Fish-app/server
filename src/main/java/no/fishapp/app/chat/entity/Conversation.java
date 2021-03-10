@@ -45,6 +45,7 @@ public class Conversation {
     long listingCreatorUserId;
 
     @Getter
+    @ManyToOne
     User conversationStarterUser;
 
     @Getter

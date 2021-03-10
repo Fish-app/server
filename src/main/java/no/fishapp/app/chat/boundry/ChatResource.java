@@ -53,21 +53,28 @@ public class ChatResource {
         Response response;
         User     currentUser = userService.getLoggedInUser();
         if (currentUser != null) {
-            if (includeLastMsg) {
-                List<ConversationDTO> conversationDTOS = currentUser.getUserConversations().stream()
-                                                                    .map(c -> ConversationDTO.buildFromConversation(
-                                                                            c,
-                                                                            chatService.getMessage(c.getLastMessageId())
-                                                                    ))
-                                                                    .collect(Collectors.toList());
-                response = Response.ok(conversationDTOS).build();
-            } else {
+            var conversationStream = currentUser.getUserConversations().stream()
+                                                .map(ConversationDTO::buildFromConversation);
 
-                List<ConversationDTO> conversationDTOS = currentUser.getUserConversations().stream()
-                                                                    .map(ConversationDTO::buildFromConversation)
-                                                                    .collect(Collectors.toList());
-                response = Response.ok(conversationDTOS).build();
+
+            if (includeLastMsg) {
+
+                conversationStream = conversationStream.map(conversationDTO -> {
+                                                                if (conversationDTO.getLastMessageId() != - 1) {
+                                                                    conversationDTO.setLastMessage(
+                                                                            MessageDTO.buildFromMessage(
+                                                                                    chatService.getMessage(conversationDTO.getLastMessageId())));
+                                                                }
+                                                                return conversationDTO;
+                                                            }
+
+                );
+
+
             }
+            response = Response.ok(conversationStream.collect(Collectors.toList())).build();
+
+
         } else {
             response = Response.serverError().build();
         }
