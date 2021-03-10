@@ -34,7 +34,7 @@ public class RatingResource {
 
         try {
             Rating rating = ratingService.newRating(id, ratingValue);
-            resp = Response.ok();
+            resp = Response.ok(rating.getStars());
         } catch (PersistenceException e) {
             resp = Response.ok("Unexpected error creating the offer listing")
                            .status(Response.Status.INTERNAL_SERVER_ERROR);
@@ -56,6 +56,24 @@ public class RatingResource {
         try {
             double rating = ratingService.getUserRating(id);
             resp = Response.ok(rating);
+        } catch (PersistenceException e) {
+            resp = Response.ok("Unexpected error creating the offer listing")
+                           .status(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+        return resp.build();
+    }
+    @GET
+    @Path("transaction/{id}")
+    @RolesAllowed(value = {Group.USER_GROUP_NAME})
+    public Response getTransactionRating(
+            @PathParam("id") long id
+    ) {
+        Response.ResponseBuilder resp;
+
+        try {
+            Rating rating = ratingService.getTransactionRating(id);
+            int ratingVal = (rating == null)? -1: rating.getStars();
+            resp = Response.ok(ratingVal);
         } catch (PersistenceException e) {
             resp = Response.ok("Unexpected error creating the offer listing")
                            .status(Response.Status.INTERNAL_SERVER_ERROR);

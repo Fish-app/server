@@ -46,6 +46,10 @@ public abstract class Listing {
     @Column(nullable = false, name = "longitude")
     double longitude;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private Commodity commodity;
+
 
 
     @PrePersist

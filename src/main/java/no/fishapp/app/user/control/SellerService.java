@@ -1,11 +1,13 @@
 package no.fishapp.app.user.control;
 
 import no.fishapp.app.auth.entity.Group;
+import no.fishapp.app.user.entity.Buyer;
 import no.fishapp.app.user.entity.Seller;
 import no.fishapp.app.user.entity.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
 
@@ -44,5 +46,13 @@ public class SellerService {
     public Seller getLoggedInSeller() {
         User user = userService.getLoggedInUser();
         return entityManager.find(Seller.class, user.getId());
+    }
+
+    public Seller getSeller(long sellerId) throws NoResultException {
+        try {
+            return entityManager.find(Seller.class, sellerId);
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 }

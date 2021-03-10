@@ -33,20 +33,20 @@ public class BuyRequest extends Listing {
     //Maximum distance you want to travel
     double maxDistance;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
-    @JoinTable(
-            name = "buy_request_commodity",
-            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
-    private Commodity commodity;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(nullable = false)
+//    @JoinTable(
+//            name = "buy_request_commodity",
+//            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
+//    private Commodity commodity;
 
-    @JsonbTransient
-    public Commodity getCommodity() {
-        return commodity;
-    }
-
-    public void setCommodity(Commodity commodity) {
-        this.commodity = commodity;
-    }
+//    @JsonbTransient
+//    public Commodity getCommodity() {
+//        return commodity;
+//    }
+//
+//    public void setCommodity(Commodity commodity) {
+//        this.commodity = commodity;
+//    }
 }

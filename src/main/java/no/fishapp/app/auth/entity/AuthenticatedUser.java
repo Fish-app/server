@@ -32,6 +32,7 @@ public class AuthenticatedUser {
     @Column(nullable = false)
     private String password;
 
+    @JsonbTransient
     @Column(nullable = false, unique = true)
     private String principalName;
 
