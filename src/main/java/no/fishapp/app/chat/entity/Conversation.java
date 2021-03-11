@@ -1,16 +1,14 @@
 package no.fishapp.app.chat.entity;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import no.fishapp.app.listing.entity.Listing;
 import no.fishapp.app.user.entity.User;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,10 +26,9 @@ public class Conversation {
     long id;
 
     // IDs for first and last msg;
+
     @Getter
-    long firstMessageId;
-    @Getter
-    long lastMessageId;
+    long lastMessageId = - 1;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonbTransient
@@ -45,29 +42,36 @@ public class Conversation {
     @ManyToOne(cascade = CascadeType.ALL)
     Listing conversationListing;
 
-
-
     long listingCreatorUserId;
-    long conversationStarterUserId;
 
-    public Conversation(Listing conversationListing, User currentUser) {
-        this.conversationListing = conversationListing;
-        this.listingCreatorUserId = conversationListing.getCreator().getId();
-        this.conversationStarterUserId = currentUser.getId();
-        this.messages = new ArrayList<>();
+    @Getter
+    @ManyToOne
+    User conversationStarterUser;
+
+    @Getter
+    @Column(name = "created_date")
+    Long createdDate;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = new Date().getTime(); // Get epoch time
     }
 
+    public Conversation(Listing conversationListing, User currentUser) {
+        this.conversationListing     = conversationListing;
+        this.listingCreatorUserId    = conversationListing.getCreator().getId();
+        this.conversationStarterUser = currentUser;
+        this.messages                = new ArrayList<>();
+    }
+
+
     public boolean isUserInConversation(User user) {
-        return listingCreatorUserId == user.getId() || conversationStarterUserId == user.getId();
+        return listingCreatorUserId == user.getId() || conversationStarterUser.getId() == user.getId();
     }
 
     public void addMessage(Message message) {
         this.lastMessageId = message.getId();
         this.messages.add(message);
-        if(this.messages.indexOf(message) == 0) {
-            // Save the first message id (used by client to determine limit, as msg ID's are global)
-            this.firstMessageId = message.getId();
-        }
     }
 
     public List<Message> getMessages() {

@@ -26,6 +26,8 @@ public abstract class Listing {
     @ManyToOne
     User creator;
 
+    public abstract String getType();
+
     @Column(nullable = false, name = "end_date")
     long endDate;
 
@@ -47,6 +49,7 @@ public abstract class Listing {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Commodity commodity;
+
 
 
     @PrePersist

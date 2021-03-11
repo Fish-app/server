@@ -1,10 +1,15 @@
 package no.fishapp.app.chat.entity;
 
 
+import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.fishapp.app.chat.control.ChatService;
 import no.fishapp.app.listing.entity.Listing;
+import no.fishapp.app.user.entity.User;
+
+import javax.transaction.Transactional;
 
 
 /**
@@ -19,18 +24,44 @@ import no.fishapp.app.listing.entity.Listing;
 @AllArgsConstructor
 public class ConversationDTO {
 
+    /**
+     * Builds a conversation DTO
+     *
+     * @param conversation the conversation to use for this DTO
+     *
+     * @return a Conversation DTO
+     */
     public static ConversationDTO buildFromConversation(Conversation conversation) {
         ConversationDTO conversationDTO = new ConversationDTO();
-        conversationDTO.id = conversation.getId();
+        conversationDTO.id            = conversation.getId();
         conversationDTO.lastMessageId = conversation.getLastMessageId();
-        conversationDTO.firstMessageId = conversation.getFirstMessageId();
-        conversationDTO.listing = conversation.getConversationListing();
+        conversationDTO.listing       = conversation.getConversationListing();
+        conversationDTO.starterUser   = conversation.getConversationStarterUser();
+        conversationDTO.createdDate = conversation.getCreatedDate();
         return conversationDTO;
     }
 
+
+    /**
+     * Builds a conversation DTO and attach the last message as a MessageDTO
+     *
+     * @param conversation the conversation to use for this DTO
+     * @param message      the last message to include in the conversation.
+     *
+     * @return a Conversation DTO
+     */
+    public static ConversationDTO buildFromConversation(Conversation conversation, Message message) {
+        ConversationDTO convDto = buildFromConversation(conversation);
+        convDto.lastMessage = MessageDTO.buildFromMessage(message);
+        return convDto;
+    }
+
+
     long id;
     long lastMessageId;
-    long firstMessageId;
+    long createdDate;
+    User starterUser;
     Listing listing;
+    MessageDTO lastMessage;
 
 }

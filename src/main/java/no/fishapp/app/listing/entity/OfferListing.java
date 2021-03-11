@@ -19,6 +19,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class OfferListing extends Listing {
 
+    @Override
+    public String getType() {
+        return "O";
+    }
+
     /**
      * The max ammount the seller is capable of offering
      */

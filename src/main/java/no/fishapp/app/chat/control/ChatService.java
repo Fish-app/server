@@ -34,19 +34,20 @@ public class ChatService {
      * creates a new conversation between the current user and the owner of the listing with the provided id
      *
      * @param listingId the listing to hav conversation about
+     *
      * @return the conversation object if ok null if not
      */
     public Conversation newListingConversation(long listingId) {
 
         try {
             Listing listing = entityManager.find(Listing.class, listingId);
-            if (listing == null) return null; // Avoid nullptr below
-            User listingOwner = listing.getCreator();
-            User conversationStarter = userService.getLoggedInUser();
-            Conversation conversation = new Conversation(listing, conversationStarter);
+            if (listing == null) {
+                return null; // Avoid nullptr below
+            }
+            User         listingOwner        = listing.getCreator();
+            User         conversationStarter = userService.getLoggedInUser();
+            Conversation conversation        = new Conversation(listing, conversationStarter);
             entityManager.persist(conversation);
-            entityManager.flush();
-            entityManager.refresh(conversation);
 
             userService.addConversationToUser(conversation, listingOwner);
             userService.addConversationToUser(conversation, conversationStarter);
@@ -57,14 +58,27 @@ public class ChatService {
     }
 
     /**
-     * returns the conversatin with the provided id
+     * Returns the conversation with the provided id
      *
      * @param convId the conversations id
+     *
      * @return the conversation, null if not found
      */
     public Conversation getConversation(long convId) {
         return entityManager.find(Conversation.class, convId);
     }
+
+    /**
+     * Return the message with the provided ID. Used in app to get last message preview
+     *
+     * @param messageId the message id
+     *
+     * @return the conversation, null if not found
+     */
+    public Message getMessage(long messageId) {
+        return entityManager.find(Message.class, messageId);
+    }
+
 
     /**
      * Registers a message body as sent from the current logged in user in a conversation.
@@ -86,8 +100,6 @@ public class ChatService {
             System.out.println("CONTROL-CHAT: Persistence failure sendMsg");
             return null;
         }
-
-
     }
 
     /**
@@ -95,6 +107,7 @@ public class ChatService {
      *
      * @param convId        the id of the concversation wo chek
      * @param fromMessageId (exclusive) return messages newer than the message with this id
+     *
      * @return a list with the messages
      */
     public List<Message> getMessagesTo(long convId, long fromMessageId) {
@@ -112,18 +125,23 @@ public class ChatService {
      * @param convId the id of the conversation
      * @param fromId the id to collect offset from
      * @param offset the offset possetive or negative
+     *
      * @return a list of messages
      */
     public List<Message> getMessageRange(Long convId, Long fromId, Long offset) {
         Conversation  conversation = getConversation(convId);
         List<Message> messages     = conversation.getMessages();
         System.out.println("MESSAGEZS IS NULL");
-        if(messages == null) return new ArrayList<>();
-        Message anchor       = entityManager.find(Message.class, fromId);
+        if (messages == null) {
+            return new ArrayList<>();
+        }
+        Message anchor = entityManager.find(Message.class, fromId);
         //Message anchor = messages.stream().filter(message -> message.getId() == fromId).findFirst().get();
-        int     elementIndex = messages.indexOf(anchor);
+        int elementIndex = messages.indexOf(anchor);
 
-        if (offset == null) offset = 0L; // default value if null
+        if (offset == null) {
+            offset = 0L; // default value if null
+        }
 
         System.out.println("OFFSET " + offset.toString());
         System.out.println("FROMID " + fromId.toString());
@@ -131,9 +149,9 @@ public class ChatService {
         System.out.println("ELEMENTINDEKS " + elementIndex);
 
         if (offset >= 0L) {
-            return messages.subList(elementIndex, (int) Math.min(messages.size()-1, elementIndex + offset));
+            return messages.subList(elementIndex, (int) Math.min(messages.size() - 1, elementIndex + offset));
         } else {
-            return messages.subList((int) Math.max(0, elementIndex-offset), elementIndex);
+            return messages.subList((int) Math.max(0, elementIndex - offset), elementIndex);
         }
     }
 }

@@ -76,17 +76,27 @@ public class ListingResource {
     @GET
     @Path("{id}")
     public Response getOfferListing(
-            @PathParam("id") long id
+            @NotNull @PathParam("id") Long id
     ) {
-        return Response.ok(listingService.findOfferListingById(id)).build();
+        OfferListing result = listingService.findOfferListingById(id);
+        if(result == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            return Response.ok(result).build();
+        }
     }
 
     @GET
     @Path("buyrequest/{id}")
     public  Response getBuyRequest (
-            @PathParam("id") long id
+            @NotNull @PathParam("id") Long id
     ) {
-        return  Response.ok(listingService.findBuyRequestById(id)).build();
+        BuyRequest result = listingService.findBuyRequestById(id);
+        if(result == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            return Response.ok(result).build();
+        }
     }
 
 
