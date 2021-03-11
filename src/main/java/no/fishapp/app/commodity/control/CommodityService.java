@@ -2,6 +2,7 @@ package no.fishapp.app.commodity.control;
 
 
 import no.fishapp.app.commodity.entity.Commodity;
+import no.fishapp.app.listing.entity.OfferListing;
 import no.fishapp.app.resources.entity.Image;
 import no.fishapp.app.util.ImageUtil;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -10,6 +11,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.util.List;
 public class CommodityService {
 
     private static final String getAllCommodities = "SELECT c from Commodity c";
+
 
     @PersistenceContext
     EntityManager entityManager;
@@ -32,7 +35,8 @@ public class CommodityService {
     @ConfigProperty(name = "photo.storage.path", defaultValue = "photos")
     String photoSaveDir;
 
-    public Commodity addNewCommodity(String name, FormDataMultiPart photo
+    public Commodity addNewCommodity(
+            String name, FormDataMultiPart photo
     ) throws IOException {
         Commodity   commodity = new Commodity();
         List<Image> images    = imageUtil.saveImages(photo, new File(photoSaveDir), "image");
@@ -52,7 +56,6 @@ public class CommodityService {
 
     public List<Commodity> getAllCommodities() {
         return entityManager.createQuery(getAllCommodities, Commodity.class).getResultList();
-
     }
 
     public Commodity getCommodity(long id) {

@@ -16,13 +16,14 @@ import javax.persistence.*;
 @Data
 @Entity
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class BuyRequest extends Listing {
 
     @Override
-    public String getType() {
-        return "B";
+    public String getListingType() {
+        return "Request";
     }
+
     //Amount you want to buy
     @Column(nullable = false, name = "amount")
     int amount;
