@@ -26,7 +26,7 @@ public abstract class Listing {
     @ManyToOne
     User creator;
 
-    public abstract String getType();
+    public abstract String getListingType();
 
     @Column(nullable = false, name = "end_date")
     long endDate;
@@ -51,11 +51,10 @@ public abstract class Listing {
     private Commodity commodity;
 
 
-
     @PrePersist
     protected void onCreate() {
         created = System.currentTimeMillis() / 1000L;
-        isOpen  = true;
+        isOpen = true;
     }
 
 }

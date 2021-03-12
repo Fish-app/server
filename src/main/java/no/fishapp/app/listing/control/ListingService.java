@@ -29,6 +29,25 @@ public class ListingService {
     private static final String COMODITY_LISTINGS = "select ls from OfferListing ls where ls.commodity.id = :cid";
 
 
+    private static final String FIND_CHEAPEST = "select min(ls.price) from OfferListing ls where ls.commodity.id = :cid";
+
+    /**
+     * returns the listing for the provided commodity id with the lowest price
+     *
+     * @param id the id of the commodity
+     * @return the cheapest price or -1 if not found
+     */
+    public long getCheapestPriceListingFromCommodity(long id) {
+        var query = entityManager.createQuery(FIND_CHEAPEST);
+        query.setParameter("cid", id);
+
+        try {
+            return (long) query.getSingleResult();
+        } catch (NoResultException ignore) {
+            return -1L;
+        }
+    }
+
     /**
      * Creates a new offer listing
      *
@@ -41,8 +60,11 @@ public class ListingService {
         if (com != null) {
             // todo tror det her kan jøres automatisk
             listing.setCommodity(com);
-            entityManager.persist(listing);
             listing.setCreator(userService.getLoggedInUser());
+            com.getOfferListings().add(listing);
+            entityManager.persist(listing);
+            //entityManager.persist(com);
+
 
             return listing;
         } else {
@@ -78,7 +100,6 @@ public class ListingService {
      * Returns a listing if found in the persistence backend
      *
      * @param listingId The ID of the listing
-     *
      * @return null if not found or on failure, otherwise the found listing object
      */
     public Listing findListingById(long listingId) {

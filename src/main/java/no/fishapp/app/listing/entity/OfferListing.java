@@ -16,12 +16,12 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class OfferListing extends Listing {
 
     @Override
-    public String getType() {
-        return "O";
+    public String getListingType() {
+        return "Offer";
     }
 
     /**

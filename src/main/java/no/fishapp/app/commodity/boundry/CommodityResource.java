@@ -4,6 +4,7 @@ package no.fishapp.app.commodity.boundry;
 import no.fishapp.app.auth.entity.Group;
 import no.fishapp.app.commodity.control.CommodityService;
 import no.fishapp.app.commodity.entity.Commodity;
+import no.fishapp.app.commodity.entity.DTO.CommodityDTO;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -15,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Path("commodity")
 @Stateless
@@ -38,8 +40,9 @@ public class CommodityResource {
         } catch (IOException e) {
             // todo: finn en streamlined metode for og sende tilbake status meldinger og få http kodene korrekt
             response = Response.ok().status(Response.Status.BAD_REQUEST).build();
-        } catch (ConstraintViolationException e){
-            e.getConstraintViolations().forEach(constraintViolation -> System.out.println(constraintViolation.getConstraintDescriptor()));
+        } catch (ConstraintViolationException e) {
+            e.getConstraintViolations()
+             .forEach(constraintViolation -> System.out.println(constraintViolation.getConstraintDescriptor()));
 
         }
 
@@ -51,6 +54,16 @@ public class CommodityResource {
     //@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response getAllCommoditys() {
         return Response.ok(commodityService.getAllCommodities()).build();
+    }
+
+    @GET
+    @Path("all-display")
+    //@Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response getAllDisplayCommoditys() {
+        return Response.ok(commodityService.getAllCommodities()
+                                           .stream()
+                                           .map(CommodityDTO::new)
+                                           .collect(Collectors.toList())).build();
     }
 
     @GET
