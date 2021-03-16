@@ -18,13 +18,16 @@ if [ $answer = "NO" ]; then
 		rmdir $TRAEFIK_CERT_PATH
 	fi
 
-	if [ -f $TRAEFIK_CERT_PATH ] && [ -f $TRAEFIK_CONF_PATH ] && [ -f .env ]; then
-		echo "Config is OK"
-		configOk=true
+	if [ -f $TRAEFIK_CERT_PATH ]; then
+		echo "Cert OK"
 	else
 		echo "Certificate file missing, creating new"
 		touch ./config/traefik/cert.json
 		chmod 0600 ./config/traefik/cert.json
+	fi
+
+	if [ -f $TRAEFIK_CONF_PATH ] && [ -f .env ]; then
+		echo "Conf OK"
 		configOk=true
 	fi
 fi
