@@ -1,7 +1,7 @@
-#! /bin/sh
+#! /bin/bash
 # copy defaults if no env file is in place
 if [ ! -f .env ]; then
-    echo "You had no .env file, so I copied the example file."
+    echo "Generated '.env' from example file."
     cp .env-example .env
     echo "\nThe contents of the .env:"
     cat .env
