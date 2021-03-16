@@ -5,8 +5,7 @@ if [ ! -f .env ]; then
     cp .env-example .env
     echo "\nThe contents of the .env:"
     cat .env
-    echo "\nHang on...\n"
-    sleep 9
-    echo "From now on use the build and kill .sh scripts!"
-    sleep 1
+    echo "\nYou can now run './develop.sh'.\n"
+else
+	echo "SKIPPED: .env already exsists!"
 fi
