@@ -37,8 +37,6 @@ if  [ "$configOk" = true  ] && [ "$cancel" = false ]; then
 
 
 	docker-compose -f docker-compose.yml up -d 
-	#	echo "The was the api was rebuilt if any files changed, use CTRL-C to detach from the log console"
-	#docker-compose -f docker-compose.yml logs -f
 else
 	echo "You have falled off the chair. Be careful!"
 fi
