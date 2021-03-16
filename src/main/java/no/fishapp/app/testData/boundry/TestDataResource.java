@@ -43,7 +43,7 @@ public class TestDataResource {
         Response.ResponseBuilder resp;
 
         try {
-            List<Transaction> transactions = transactionService.getUserTransactions();
+            //List<Transaction> transactions = transactionService.getUserTransactions();
             resp = Response.ok("gucci");
         } catch (PersistenceException e) {
             resp = Response.ok("Unexpected error creating the offer listing")
