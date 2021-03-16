@@ -52,8 +52,8 @@ services:
     image: traefik:v2.2
     # Enables the web UI and tells Traefik to listen to docker
     ports:
-      # Front ports
-      # - "80:80"
+      # Front ports (must have 80 for ACME protocol)
+      - "80:80"
       - "443:443"
     #environment:
     volumes:
