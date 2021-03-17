@@ -26,6 +26,6 @@ server
 
 .env
 # traefik cert
-.cert.json
+config/traefik/cert.json
 
 .gradle/
