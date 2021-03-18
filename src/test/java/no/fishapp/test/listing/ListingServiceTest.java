@@ -1,6 +1,5 @@
 package no.fishapp.test.listing;
 
-import manifold.ext.rt.api.Jailbreak;
 import no.fishapp.app.commodity.control.CommodityService;
 import no.fishapp.app.commodity.entity.Commodity;
 import no.fishapp.app.listing.control.ListingService;
@@ -21,7 +20,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
 @ExtendWith(MockitoExtension.class)
-public class ListingServiceTest {
+class ListingServiceTest {
 
     @Mock
     EntityManager em;
@@ -35,8 +34,6 @@ public class ListingServiceTest {
     @InjectMocks
     ListingService ls;
 
-    private OfferListing listing;
-    private BuyRequest buyRequest;
     private Commodity commodity;
     private User user;
 
@@ -50,12 +47,12 @@ public class ListingServiceTest {
 
 
     /**
-     * Test that the new OfferListing gets the correct commodity and creator set
+     * Test that the new {@link OfferListing} gets the correct commodity and creator set
      * and that it is persisted.
      */
     @Test
     void newOfferListingTest() {
-        listing = new OfferListing();
+        OfferListing listing = new OfferListing();
         listing.setCommodity(commodity);
         when(cs.getCommodity(listing.getCommodity().getId())).thenReturn(commodity);
         when(us.getLoggedInUser()).thenReturn(user);
@@ -67,12 +64,12 @@ public class ListingServiceTest {
     }
 
     /**
-     * Test that the new BuyRequest gets the correct commodity and creator set
+     * Test that the new {@link BuyRequest} gets the correct commodity and creator set
      * and that it is persisted.
      */
     @Test
     void newBuyRequestTest() {
-        buyRequest = new BuyRequest();
+        BuyRequest buyRequest = new BuyRequest();
         buyRequest.setCommodity(commodity);
         when(cs.getCommodity(buyRequest.getCommodity().getId())).thenReturn(commodity);
         when(us.getLoggedInUser()).thenReturn(user);

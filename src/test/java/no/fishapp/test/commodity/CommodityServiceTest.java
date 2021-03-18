@@ -17,17 +17,18 @@ import javax.persistence.EntityManager;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CommodityServiceTest {
+class CommodityServiceTest {
 
-    @Mock EntityManager entityManager;
-    @Mock ImageUtil imageUtil;
+    @Mock
+    EntityManager entityManager;
+    @Mock
+    ImageUtil imageUtil;
 
     @Jailbreak @InjectMocks
     CommodityService commodityService;
@@ -40,7 +41,10 @@ public class CommodityServiceTest {
     @AfterEach
     void tearDown() {}
 
-
+    /**
+     * Tests that a new {@link Commodity} gets added with the provided name and image.
+     * @throws IOException This does not happen because of the mocks
+     */
     @Test
     void addNewCommodityTest() throws IOException {
         Image image = new Image();
@@ -54,5 +58,15 @@ public class CommodityServiceTest {
         assertEquals(name, com.getName());
         assertEquals(image, com.getCommodityImage());
         verify(entityManager, times(2)).persist(any());
+    }
+
+
+    /**
+     * Test that the {@link EntityManager} only once tries to get the {@link Commodity}
+     */
+    @Test
+    void getCommodityTest() {
+        commodityService.getCommodity(1L);
+        verify(entityManager, times(1)).find(any(), anyLong());
     }
 }
