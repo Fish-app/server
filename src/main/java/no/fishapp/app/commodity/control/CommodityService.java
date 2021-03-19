@@ -2,7 +2,6 @@ package no.fishapp.app.commodity.control;
 
 
 import no.fishapp.app.commodity.entity.Commodity;
-import no.fishapp.app.listing.entity.OfferListing;
 import no.fishapp.app.resources.entity.Image;
 import no.fishapp.app.util.ImageUtil;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -11,7 +10,6 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +58,6 @@ public class CommodityService {
 
     public Commodity getCommodity(long id) {
         return entityManager.find(Commodity.class, id);
-
     }
 
 
