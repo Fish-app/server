@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-03-16T09:28:11.608Z
+__export_date: 2021-03-21T16:21:20.082Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_8c31a970710d49779e06267fb97990fe
@@ -503,9 +503,9 @@ resources:
     _type: request
   - _id: req_a3122e724f634c4b864bea1e81eb0279
     parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    modified: 1614783910430
+    modified: 1615898003493
     created: 1614780198073
-    url: "{{ _.baseURL }}/listing/6"
+    url: "{{ _.baseURL }}/listing/1"
     name: get-offer-listing
     description: ""
     method: GET
@@ -597,7 +597,7 @@ resources:
     _type: request
   - _id: req_bd1566f0d17f48b0ae5128df61bff656
     parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1615204263010
+    modified: 1615887957940
     created: 1613564457560
     url: "{{ _.baseURL }}/commodity/new"
     name: create-commodity
@@ -616,7 +616,7 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Downloads/the-mandalorian-baby-yoda.jpeg
+          fileName: /home/trygve/Downloads/pexels-arthouse-studio-4628207.jpg
     parameters: []
     headers: []
     authentication: {}
@@ -662,7 +662,7 @@ resources:
     _type: request
   - _id: req_5c0ac1122eff4d7e9311f15ef5f1d5a0
     parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1615457320460
+    modified: 1615887978093
     created: 1614773916253
     url: "{{ _.baseURL }}/commodity/new"
     name: create-commodity-2
@@ -672,7 +672,7 @@ resources:
       mimeType: multipart/form-data
       params:
         - name: name
-          value: banan
+          value: Kreps
           description: ""
           id: pair_47f00f733beb41a6bc6d03b66788cab0
         - name: image
@@ -681,7 +681,7 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Downloads/pexels-caio-69372.jpg
+          fileName: /home/trygve/Downloads/pexels-energepiccom-3650124.jpg
     parameters: []
     headers: []
     authentication: {}
@@ -696,7 +696,7 @@ resources:
     _type: request
   - _id: req_04adfd59b1354474b465278e752e3be7
     parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1615457330709
+    modified: 1615888006327
     created: 1614773921857
     url: "{{ _.baseURL }}/commodity/new"
     name: create-commodity-3
@@ -706,7 +706,7 @@ resources:
       mimeType: multipart/form-data
       params:
         - name: name
-          value: talerken
+          value: Krabbe
           description: ""
           id: pair_47f00f733beb41a6bc6d03b66788cab0
         - name: image
@@ -715,7 +715,7 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Downloads/pexels-pixabay-37401.jpg
+          fileName: /home/trygve/Downloads/pexels-david-abbram-3640451.jpg
     parameters: []
     headers: []
     authentication: {}
@@ -741,6 +741,40 @@ resources:
     headers: []
     authentication: {}
     metaSortKey: -1613565235547
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_e6c3b39850794631b28ae8c1e3e97b24
+    parentId: fld_8f8a012370e44b2986940d66fb0bc34d
+    modified: 1615888336313
+    created: 1615888011674
+    url: "{{ _.baseURL }}/commodity/new"
+    name: create-commodity-4
+    description: ""
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: name
+          value: Reke
+          description: ""
+          id: pair_47f00f733beb41a6bc6d03b66788cab0
+        - name: image
+          value: ""
+          description: ""
+          id: pair_9b4edbb8f3d54b77a932d3a48313268c
+          type: file
+          multiline: null
+          fileName: /home/trygve/Downloads/pexels-dana-tentis-725992.jpg
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1613564356201.3125
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -984,6 +1018,46 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_d8d6b3a07e4641f48fbc5fcbece19727
+    parentId: fld_2e7bf843a1424cbab8fcb277c36d752d
+    modified: 1616333956834
+    created: 1616333642778
+    url: http://localhost:9080/authentication/newuser
+    name: login
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userName": "tests@example.com",
+          "password" : "12345678"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_0374150d4f4d4cdcae55e6b37962b2ea
+    authentication: {}
+    metaSortKey: -1616333642779
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_2e7bf843a1424cbab8fcb277c36d752d
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1616333638953
+    created: 1616333638953
+    name: micro_s_testing
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1616333638953
+    _type: request_group
   - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
     parentId: fld_a0f215bfba3344af929826d49b69f335
     modified: 1614952059408
