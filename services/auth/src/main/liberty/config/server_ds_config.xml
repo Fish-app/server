@@ -1,0 +1,88 @@
+<server description="Authentication server ">
+
+    <featureManager>
+        <feature>jndi-1.0</feature>
+        <feature>jpa-2.2</feature>
+        <feature>jdbc-4.2</feature>
+
+    </featureManager>
+
+
+    <variable name="postgre.version" defaultValue="42.2.14"/>
+
+    <variable name="DB_URL" defaultValue="localhost"/>
+    <variable name="DB_PORT" defaultValue="25432"/>
+    <variable name="DB_NAME" defaultValue="fishap_auth"/>
+    <variable name="DB_USER_NAME" defaultValue="fishap_auth"/>
+    <variable name="DB_USER_PASSWORD" defaultValue="aeshjfgeiuf"/>
+
+
+    <!--    <dataSource id="postgresql" jndiName="jdbc/postgresql">-->
+    <!--        <jdbcDriver libraryRef="PostgresLib" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"/>-->
+    <!--        <properties.postgresql serverName="localhost" portNumber="5432" databaseName="SAMPLEDB"-->
+    <!--                               user="bob" password="secret"/>-->
+    <!--    </dataSource>-->
+
+    <!--    <library id="PostgresLib">-->
+    <!--        <file name="${server.config.dir}/postgresql-42.2.14.jar"/>-->
+    <!--    </library>-->
+
+
+    <!--    <dataSource id="postgresql" jndiName="jdbc/postgresql" type="javax.sql.DataSource">-->
+    <!--        <jdbcDriver libraryRef="postgresql-library" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"-->
+    <!--                    javax.sql.DataSource="org.postgresql.ds.PGDataSource"-->
+    <!--                    javax.sql.ConnectionPoolDataSource="org.postgresql.ds.PGConnectionPoolDataSource"/>-->
+    <!--        <properties.postgresql serverName="${db.url}"-->
+    <!--                               portNumber="${db.port}"-->
+    <!--                               databaseName="${db.name}"-->
+    <!--                               user="${db.user.name}"-->
+    <!--                               password="${db.user.password}"/>-->
+    <!--    </dataSource>-->
+
+    <dataSource id="postg-datas"
+                jndiName="jdbc/auth-db" type="javax.sql.DataSource">
+        <jdbcDriver libraryRef="postgresql-library"/>
+        <properties.postgresql serverName="${DB_URL}"
+                               portNumber="${DB_PORT}"
+                               databaseName="${DB_NAME}"
+                               user="${DB_USER_NAME}"
+                               password="${DB_USER_PASSWORD}"/>
+    </dataSource>
+
+    <library id="postgresql-library">
+        <file name="${shared.resource.dir}/postgresql.jar"/>
+    </library>
+
+
+    <!--        <dataSource id="DefaultDataSource"-->
+    <!--                    jndiName="jdbc/auth-db" jdbcDriverRef="JDBCdriver" transactional='false'-->
+    <!--                    type='javax.sql.ConnectionPoolDataSource'>-->
+    <!--            <jdbcDriver jdbcDriverRef="JDBCdriver"/>-->
+    <!--            <properties.postgres serverName="${db.url}"-->
+    <!--                                 portNumber="${db.port}"-->
+    <!--                                 databaseName="${db.name}"-->
+    <!--                                 user="${db.user.name}"-->
+    <!--                                 password="${db.user.password}"/>-->
+    <!--        </dataSource>-->
+
+
+    <!--    <jdbcDriver id="postgresql-driver"-->
+    <!--                javax.sql.DataSource="org.postgresql.ds.PGPoolingDataSource"-->
+
+    <!--                libraryRef="postgresql-library"/>-->
+
+
+    <!--    <jdbcDriver id="JDBCdriver" javax.sql.ConnectionPoolDataSource='org.postgresql.ds.PGConnectionPoolDataSource'>-->
+    <!--        <library name="PostgresJDBC">-->
+    <!--            <fileset dir="${shared.resource.dir}/jdbc"-->
+    <!--                     includes="postgresql-*.jar"/>-->
+    <!--        </library>-->
+    <!--    </jdbcDriver>-->
+
+
+    <!--    <library id="postgresql-library">-->
+    <!--        <fileset id="PostgreSQLFileset" dir="${shared.resource.dir}/jdbc"-->
+    <!--                 includes="postgresql-*.jar"/>-->
+    <!--    </library>-->
+
+</server>

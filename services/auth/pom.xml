@@ -1,0 +1,297 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>no.fishapp</groupId>
+    <artifactId>auth</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <manifold.version>2021.1.3</manifold.version>
+        <postgre.version>42.2.14</postgre.version>
+        <jakartaee.version>8.0.0</jakartaee.version>
+
+        <liberty.shared.resource.dir>${project.build.directory}/liberty/wlp/usr/shared/resources
+        </liberty.shared.resource.dir>
+
+    </properties>
+
+    <dependencies>
+
+
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>3.3</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>2.29.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>2.31</version>
+            <type>jar</type>
+        </dependency>
+        <!-- Bean Validation for endpoints (JAX-RS does not support @NotNull out of box )-->
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-bean-validation</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.2</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.jwt</groupId>
+            <artifactId>microprofile-jwt-auth-api</artifactId>
+            <version>1.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.config</groupId>
+            <artifactId>microprofile-config-api</artifactId>
+            <version>1.4</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.3</version>
+            </plugin>
+
+
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.3.4</version>
+                <configuration>
+                    <copyDependencies>
+                        <dependencyGroup>
+                            <stripVersion>true</stripVersion>
+                            <!--                            <location>${project.build.directory}/liberty/wlp/usr/shared/resources</location>-->
+                            <location>${project.build.directory}/resource_jars/</location>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>42.2.14</version>
+                            </dependency>
+                        </dependencyGroup>
+                    </copyDependencies>
+                </configuration>
+            </plugin>
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-dependency-plugin</artifactId>-->
+            <!--                <version>3.1.1</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>copy</id>-->
+            <!--                        <phase>package</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>copy</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--                <configuration>-->
+            <!--                    <artifactItems>-->
+            <!--                        <artifactItem>-->
+            <!--                            <groupId>org.postgresql</groupId>-->
+            <!--                            <artifactId>postgresql</artifactId>-->
+            <!--                            <version>42.2.9</version>-->
+            <!--                            <type>jar</type>-->
+            <!--                        </artifactItem>-->
+            <!--                    </artifactItems>-->
+            <!--                    <outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources</outputDirectory>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+            <!--                <version>3.8.1</version>-->
+            <!--                <configuration>-->
+            <!--                    <source>11</source>-->
+            <!--                    <target>11</target>-->
+            <!--                    <compilerArguments>-->
+            <!--                        <endorseddirs>${endorsed.dir}</endorseddirs>-->
+            <!--                    </compilerArguments>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-war-plugin</artifactId>-->
+            <!--                <version>2.3</version>-->
+            <!--                <configuration>-->
+            <!--                    <failOnMissingWebXml>false</failOnMissingWebXml>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-dependency-plugin</artifactId>-->
+            <!--                <version>3.1.2</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <phase>validate</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>copy</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <outputDirectory>${endorsed.dir}</outputDirectory>-->
+            <!--                            <silent>true</silent>-->
+            <!--                            <artifactItems>-->
+            <!--                                <artifactItem>-->
+            <!--                                    <groupId>jakarta.platform</groupId>-->
+            <!--                                    <artifactId>jakarta.jakartaee-api</artifactId>-->
+            <!--                                    <version>${jakartaee.version}</version>-->
+            <!--                                    <type>jar</type>-->
+            <!--                                </artifactItem>-->
+            <!--                            </artifactItems>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>copy</id>-->
+            <!--                        <phase>pre-integration-test</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>copy</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--                <configuration>-->
+            <!--                    <artifactItems>-->
+            <!--                        <artifactItem>-->
+            <!--                            <groupId>org.postgresql</groupId>-->
+            <!--                            <artifactId>postgresql</artifactId>-->
+            <!--                            <version>${postgre.version}</version>-->
+            <!--                            <type>jar</type>-->
+            <!--                            <overWrite>false</overWrite>-->
+            <!--                            <outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources/jdbc-->
+            <!--                            </outputDirectory>-->
+            <!--                            <destFileName>postgresql.jar</destFileName>-->
+            <!--                        </artifactItem>-->
+            <!--                    </artifactItems>-->
+            <!--                    <outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources/jdbc</outputDirectory>-->
+            <!--                    <overWriteReleases>false</overWriteReleases>-->
+            <!--                    <overWriteSnapshots>true</overWriteSnapshots>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+
+
+            <!--            &lt;!&ndash;            <plugin>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                <groupId>io.openliberty.tools</groupId>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                <artifactId>liberty-maven-plugin</artifactId>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                <version>3.3.4</version>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                <executions>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                    <execution>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                        <id>package-server</id>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                        <phase>package</phase>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                        <goals>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                            <goal>create</goal>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                            <goal>install-feature</goal>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                            <goal>deploy</goal>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                            <goal>package</goal>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                        </goals>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                        <configuration>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                            <outputDirectory>target/wlp-package</outputDirectory>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                        </configuration>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                    </execution>&ndash;&gt;-->
+            <!--            &lt;!&ndash;                </executions>&ndash;&gt;-->
+
+
+            <!--            <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <version>3.1.1</version>
+                            <executions>
+                                <execution>
+                                    <id>copy</id>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>copy</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>org.postgresql</groupId>
+                                        <artifactId>postgresql</artifactId>
+                                        <version>42.2.9</version>
+                                        <type>jar</type>
+                                    </artifactItem>
+                                </artifactItems>
+                                <outputDirectory>liberty/wlp/usr/shared/resources/jdbc</outputDirectory>
+                            </configuration>
+                        </plugin>-->
+
+            <!--            <plugin>-->
+            <!--                <groupId>io.openliberty.tools</groupId>-->
+            <!--                <artifactId>liberty-maven-plugin</artifactId>-->
+            <!--                <version>3.3.4</version>-->
+
+            <!--            </plugin>-->
+
+        </plugins>
+    </build>
+</project>

@@ -12,14 +12,14 @@ import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 
 @DataSourceDefinition(
         name = "java:global/jdbc/DemoDataSource",
-        className       = "org.postgresql.ds.PGSimpleDataSource",
-        serverName      = "${MPCONFIG=dataSource.serverName}",
-        portNumber      = 5432,
-        databaseName    = "${MPCONFIG=dataSource.databaseName}",
-        user            = "${MPCONFIG=dataSource.user}",
-        password        = "${MPCONFIG=dataSource.password}",
-        minPoolSize     = 10,
-        maxPoolSize     = 50
+        className = "org.postgresql.ds.PGSimpleDataSource",
+        serverName = "${MPCONFIG=dataSource.serverName}",
+        portNumber = 5432,
+        databaseName = "${MPCONFIG=dataSource.databaseName}",
+        user = "${MPCONFIG=dataSource.user}",
+        password = "${MPCONFIG=dataSource.password}",
+        minPoolSize = 10,
+        maxPoolSize = 50
 )
 // Adds credential validation queries to validation store.
 @DatabaseIdentityStoreDefinition(
@@ -31,7 +31,6 @@ import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 // Roles allowed for authentication
 @DeclareRoles({Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.BUYER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
 
-// Sets authentication to JWT, using recipe-heaven issuer
 @LoginConfig(authMethod = "MP-JWT", realmName = "fishapp")
 public class SecurityConfiguration {
 }

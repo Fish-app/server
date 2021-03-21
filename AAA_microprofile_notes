@@ -1,0 +1,7 @@
+https://stackoverflow.com/questions/60058187/how-to-add-postgres-driver-to-open-liberty
+
+
+https://stackoverflow.com/questions/58051063/how-to-copy-external-dependency-to-open-liberty-during-maven-build
+
+when stuff does not work try:
+if class not found error the issue is probably that you are missing a feature in the swever.xml
