@@ -121,6 +121,9 @@
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>3.3.4</version>
                 <configuration>
+                    <container>true</container>
+                    <dockerRunOpts>-e key=value</dockerRunOpts>
+                    <dockerfile>myDockerfile</dockerfile>
                     <copyDependencies>
                         <dependencyGroup>
                             <stripVersion>true</stripVersion>
