@@ -5,12 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.InvalidKeyException;
 import io.jsonwebtoken.security.Keys;
-import no.fishapp.util.FileUtils;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.io.*;
 import java.nio.file.Files;
@@ -31,75 +29,28 @@ import java.util.logging.Logger;
 /**
  * The type Key service.
  */
-@RequestScoped
+@ApplicationScoped
 public class KeyService {
-    private static final String KEYPAIR_FILENAME = "jwtkeys.ser";
-    private static final File KEYPAIR_FILE = new File("jwtkeys.ser");
+
+    @Inject
+    @ConfigProperty(name = "jwt.cert.file", defaultValue = "jwtkeys.ser")
+    private String keyPairSaveFile;
 
     /**
      * The Issuer.
      */
     @Inject
     @ConfigProperty(name = "mp.jwt.verify.issuer", defaultValue = "issuer")
-    String issuer;
+    private String issuer;
 
     private KeyPair keyPair = null;
-
-
-    /**
-     * get the key pair file, if no file is fond or an error reading a new is created
-     */
-    @PostConstruct
-    protected void setKeyPair() {
-        if (Files.exists(Paths.get(KEYPAIR_FILENAME))) {
-            keyPair = readKeyPair();
-        }
-
-        if (keyPair == null) {
-            keyPair = createKeyPair();
-            writeKeyPair(keyPair);
-        }
-    }
-
-    /**
-     * read a keypair from file
-     *
-     * @return the keypair if success null if not
-     */
-    private KeyPair readKeyPair() {
-        KeyPair result = null;
-
-        try {
-            result = FileUtils.deserializeObjetFromFile(KEYPAIR_FILE);
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, "Failed to read keyfile", ex);
-        }
-        return result;
-    }
-
-    /**
-     * Save the keypair to file
-     *
-     * @param keyPair the keypair to save
-     */
-    private void writeKeyPair(KeyPair keyPair) {
-        try {
-            FileUtils.serializeObjetToFile(keyPair, KEYPAIR_FILENAME);
-        } catch (IOException ex) {
-            Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private KeyPair createKeyPair() {
-        return Keys.keyPairFor(SignatureAlgorithm.RS256);
-    }
 
     /**
      * Gets rsa public key.
      *
      * @return the rsa public key
      */
-    public PublicKey getRSAPublic() {
+    private PublicKey getRSAPublic() {
         return keyPair.getPublic();
     }
 
@@ -108,7 +59,7 @@ public class KeyService {
      *
      * @return the rsa private key
      */
-    public PrivateKey getRSAPrivate() {
+    private PrivateKey getRSAPrivate() {
         return keyPair.getPrivate();
     }
 
@@ -120,13 +71,11 @@ public class KeyService {
     public String getPublicKey() {
         String key = Base64.getMimeEncoder(64, "\n".getBytes())
                            .encodeToString(keyPair.getPublic().getEncoded());
-        StringBuilder keyResult = new StringBuilder();
-        keyResult.append("-----BEGIN PUBLIC KEY-----\n");
-        keyResult.append(key);
-        keyResult.append("\n-----END PUBLIC KEY-----");
 
 
-        return keyResult.toString();
+        return "-----BEGIN PUBLIC KEY-----\n" +
+                key +
+                "\n-----END PUBLIC KEY-----";
     }
 
     /**
@@ -135,6 +84,7 @@ public class KeyService {
      * @param mail   the user principal mail
      * @param userId the user id
      * @param groups the groups the user is in
+     *
      * @return the jwt string
      */
     public String generateNewJwtToken(String mail, long userId, Set<String> groups) {
@@ -152,12 +102,93 @@ public class KeyService {
                                 .setExpiration(expiration)
                                 .claim("upn", mail)                               // user principal name
                                 .claim("groups", groups)
-                                .signWith(keyPair.getPrivate());
+                                .signWith(this.getRSAPrivate());
             return jb.compact();
-        } catch (InvalidKeyException t) {
-
+        } catch (InvalidKeyException ignore) {
         }
-        return "";
+        return null;
+    }
+
+    /**
+     * read a keypair from file
+     *
+     * @return the keypair if success null if not
+     */
+    private KeyPair readKeyPair() {
+        KeyPair result = null;
+
+        try {
+            result = deserializeKeyPair(new File(this.keyPairSaveFile));
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, "Failed to read keyfile", ex);
+        }
+        return result;
+    }
+
+    /**
+     * Save the keypair to file
+     *
+     * @param keyPair the keypair to save
+     */
+    private void writeKeyPair(KeyPair keyPair) {
+        try {
+            this.serializeKeyPairToFile(keyPair, keyPairSaveFile);
+        } catch (IOException ex) {
+            Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private KeyPair createKeyPair() {
+        return Keys.keyPairFor(SignatureAlgorithm.RS256);
+    }
+
+    /**
+     * Tries to deserialize the keypair saved at the provided file location
+     *
+     * @param file the file to deserialize from.
+     *
+     * @return the deserialized key pair
+     * @throws IOException if error reading the key pair
+     */
+    private KeyPair deserializeKeyPair(File file) throws IOException, ClassNotFoundException {
+        ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+        Object            readObject        = objectInputStream.readObject();
+
+        if (readObject instanceof KeyPair) {
+            return (KeyPair) readObject;
+        } else {
+            throw new IOException();
+        }
+    }
+
+    /**
+     * Serializes the provided keypair object
+     *
+     * @param object the keypair to serialize.
+     * @param file   the file to serialize to.
+     *
+     * @throws IOException error writing object
+     */
+    private void serializeKeyPairToFile(KeyPair object, String file) throws IOException {
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(
+                file)));
+        objectOutputStream.writeObject(object);
+        objectOutputStream.close();
+    }
+
+    /**
+     * get the key pair file, if no file is fond or an error reading a new is created
+     */
+    @PostConstruct
+    protected void setKeyPair() {
+        if (Files.exists(Paths.get(keyPairSaveFile))) {
+            keyPair = readKeyPair();
+        }
+
+        if (keyPair == null) {
+            keyPair = createKeyPair();
+            writeKeyPair(keyPair);
+        }
     }
 
 
