@@ -13,7 +13,7 @@
         <module>auth</module>
         <module>user</module>
         <module>store</module>
-        <module>checkout</module>
+        <module>media</module>
         <module>chat</module>
     </modules>
 </project>
