@@ -31,11 +31,11 @@ import javax.ws.rs.core.Application;
 // Roles allowed for authentication
 @DeclareRoles({Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.BUYER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
 @ApplicationPath("/")
-public class AuthApplication extends ResourceConfig {
+public class AuthApplication extends Application {
 
-//    AuthApplication() {
-//        register(MultiPartFeature.class);
-//        packages(true, "no.fishapp.auth");
-//    }
+    //    AuthApplication() {
+    //        register(MultiPartFeature.class);
+    //        packages(true, "no.fishapp.auth");
+    //    }
 
 }
