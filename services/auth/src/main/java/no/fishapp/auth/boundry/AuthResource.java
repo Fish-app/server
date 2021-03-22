@@ -1,21 +1,20 @@
 package no.fishapp.auth.boundry;
 
 
-import no.fishapp.auth.AuthApplication;
-import no.fishapp.auth.entity.DTO.UserChangPasswordData;
 import no.fishapp.auth.control.AuthenticationService;
 import no.fishapp.auth.control.KeyService;
 import no.fishapp.auth.entity.AuthenticatedUser;
+import no.fishapp.auth.entity.DTO.UserChangPasswordData;
 import no.fishapp.auth.entity.DTO.UsernamePasswordData;
-import no.fishapp.auth.entity.Group;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,7 +89,7 @@ public class AuthResource {
      * @return JSON Response
      */
     @POST
-    @Path("login")
+    @Path("newuser")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(
             @NotNull UsernamePasswordData usernamePasswordData
@@ -109,7 +108,7 @@ public class AuthResource {
 
 
     @PUT
-    @Path("newuser")
+    @Path("changepass")
     @Valid
     public Response changePassword(
             UserChangPasswordData changPasswordData
@@ -119,6 +118,22 @@ public class AuthResource {
         } else {
             return Response.ok().status(Response.Status.FORBIDDEN).build();
         }
+    }
+
+
+    @POST
+    @Path("newUser")
+    public AuthenticatedUser newUser(UsernamePasswordData usernamePasswordData) {
+        if (usernamePasswordData == null) {
+            System.out.println("isnull aaaaaaaaaaaaaaaaaaaaaaaa");
+            return null;
+        }
+        if (!authService.isPrincipalInUse(usernamePasswordData.getUserName())) {
+            return authService.createUser(usernamePasswordData);
+        }
+        return null;
+
+
     }
 
 }

@@ -1,8 +1,9 @@
 package no.fishapp.auth.control;
 
+import io.jsonwebtoken.Claims;
 import no.fishapp.auth.entity.AuthenticatedUser;
 import no.fishapp.auth.entity.DTO.UsernamePasswordData;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.eclipse.microprofile.jwt.Claim;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -12,6 +13,7 @@ import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
+
 
 @Transactional
 @RequestScoped
@@ -31,7 +33,8 @@ public class AuthenticationService {
     PasswordHash hasher;
 
     @Inject
-    JsonWebToken webToken;
+    @Claim(Claims.SUBJECT)
+    String jwtSubject;
 
     /**
      * Util method checks if the auth {@link CredentialValidationResult} result is valid
@@ -90,7 +93,7 @@ public class AuthenticationService {
      * @return the logged in user or null
      */
     public AuthenticatedUser getCurrentAuthUser() {
-        return getUserFromId(Long.parseLong(webToken.getSubject()));
+        return getUserFromId(Long.parseLong(jwtSubject));
     }
 
 
@@ -138,7 +141,7 @@ public class AuthenticationService {
      */
     public boolean changePassword(String newPass, String oldPass) {
         boolean suc                        = false;
-        var     credentialValidationResult = getValidationResult(Long.parseLong(webToken.getSubject()), oldPass);
+        var     credentialValidationResult = getValidationResult(Long.parseLong(jwtSubject), oldPass);
         if (isAuthValid(credentialValidationResult)) {
             AuthenticatedUser user = getCurrentAuthUser();
             user.setPassword(hasher.generate(newPass.toCharArray()));

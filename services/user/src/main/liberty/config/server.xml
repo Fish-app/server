@@ -1,51 +1,39 @@
-<server description="Sample Liberty server">
+<server description="Authentication server ">
 
     <featureManager>
-        <feature>jaxrs-2.1</feature>
-        <feature>jsonp-1.1</feature>
-        <feature>cdi-2.0</feature>
-        <feature>jpa-2.2</feature>
+        <!-- https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_feat.html -->
+        <feature>microProfile-3.2</feature>
+        <feature>appSecurity-3.0</feature>
+        <feature>jpaContainer-2.2</feature>
+
+
+        <feature>mpRestClient-1.4</feature>
+        <feature>concurrent-1.0</feature>
+
+        <!--        <feature>javaee-8.0</feature>-->
+        <!--        <feature>microProfile-3.3</feature>-->
+        <!--        <feature>jaxrs-2.1</feature>-->
+        <!--        <feature>jsonp-1.1</feature>-->
+        <!--        <feature>cdi-2.0</feature>-->
+        <!--        <feature>jpa-2.2</feature>-->
+        <!--        <feature>restConnector-2.0</feature>-->
+
+
     </featureManager>
 
-    <variable name="default.http.port" defaultValue="5050"/>
-    <variable name="default.https.port" defaultValue="5051"/>
+    <opentracingZipkin host="zipkin" port="9411"/>
+    <variable name="default.http.port" defaultValue="9080"/>
+    <variable name="default.https.port" defaultValue="9443"/>
 
-    <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
-                  id="defaultHttpEndpoint" host="*"/>
+    <httpEndpoint httpPort="${default.http.port}"
+                  httpsPort="${default.https.port}"
+                  id="defaultHttpEndpoint"
+                  host="*"/>
 
-    <application location="backendServices.war" type="war" context-root="/">
+    <application location="auth-1.0.war" type="war" context-root="/">
     </application>
 
 
-    <library id="derbyJDBCLib">
-        <file name="${shared.resource.dir}/derby-10.14.2.0.jar"/>
-    </library>
-
-
-    <dataSource id="eventjpadatasource"
-                jndiName="jdbc/eventjpadatasource">
-        <jdbcDriver libraryRef="derbyJDBCLib"/>
-        <properties.derby.embedded databaseName="EventDB" createDatabase="create"/>
-    </dataSource>
-
-    <dataSource id="DefaultDataSource"
-                jndiName="jdbc/postgresql">
-        <jdbcDriver jdbcDriverRef="postgresql-driver" libraryRef="postgresql-library"/>
-        <properties.postgres serverName="localhost"
-                             portNumber="5432"
-                             databaseName="postgres"
-                             user="postgres"
-                             password="postgres"/>
-    </dataSource>
-
-    <jdbcDriver id="postgresql-driver"
-                javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"
-                javax.sql.ConnectionPoolDataSource="org.postgresql.ds.PGConnectionPoolDataSource"
-                libraryRef="postgresql-library"/>
-
-    <library id="postgresql-library">
-        <fileset id="PostgreSQLFileset" dir="${shared.resource.dir}/jdbc"
-                 includes="postgresql-42.2.9.jar"/>
-    </library>
+    <include location="server_ds_config.xml"/>
 
 </server>
