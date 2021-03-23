@@ -24,7 +24,7 @@ public class Seller extends User {
     String regNumber;
 
 
-    public Seller(long id, String name, String email, String regNumber) {
+    public Seller(long id, String email, String name, String regNumber) {
         super(id, email, name);
         this.regNumber = regNumber;
     }

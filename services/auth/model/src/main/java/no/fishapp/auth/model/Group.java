@@ -3,6 +3,7 @@ package no.fishapp.auth.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 /*
 	Represents a user group in the application. A user group is
@@ -20,6 +21,7 @@ public class Group {
     public static final String ADMIN_GROUP_NAME = "admin";
     public static final String[] GROUPS = {USER_GROUP_NAME, BUYER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME};
 
+
     @Id
     String name;
 
@@ -28,6 +30,10 @@ public class Group {
 
     public Group(String name) {
         this.name = name;
+    }
+
+    public static boolean isValidGroupName(String name) {
+        return Arrays.asList(GROUPS).contains(name);
     }
 
 }

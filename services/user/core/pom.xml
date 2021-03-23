@@ -150,12 +150,7 @@
             <version>3.7.7</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>no.fishapp</groupId>
-            <artifactId>auth</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
+
         <dependency>
             <groupId>no.fishapp.user</groupId>
             <artifactId>model</artifactId>
@@ -189,7 +184,7 @@
                 <configuration>
                     <container>true</container>
                     <skipDefaultPorts>true</skipDefaultPorts>
-                    <dockerRunOpts>--network fishapp_network -l "traefik.http.routers.auth.rule=Path:/auth"
+                    <dockerRunOpts>--network fishapp_network -l "traefik.http.routers.auth.rule=Path:/user"
                     </dockerRunOpts>
                     <copyDependencies>
                         <dependencyGroup>

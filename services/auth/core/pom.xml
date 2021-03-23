@@ -129,7 +129,7 @@
                 <configuration>
                     <container>true</container>
                     <skipDefaultPorts>true</skipDefaultPorts>
-                    <dockerRunOpts>--network fishapp_network -l "traefik.http.routers.auth.rule=Path:/auth"
+                    <dockerRunOpts>--network fishapp_network
                     </dockerRunOpts>
                     <copyDependencies>
                         <dependencyGroup>

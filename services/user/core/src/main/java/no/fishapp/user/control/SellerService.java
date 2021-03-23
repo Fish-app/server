@@ -1,15 +1,21 @@
 package no.fishapp.user.control;
 
 
-import no.fishapp.auth.entity.Group;
+import no.fishapp.auth.model.AuthenticatedUser;
+import no.fishapp.chat.model.user.Buyer;
+import no.fishapp.chat.model.user.DTO.SellerNewData;
 import no.fishapp.chat.model.user.Seller;
 import no.fishapp.chat.model.user.User;
+import no.fishapp.user.client.AuthClient;
+import no.fishapp.user.exception.UsernameAlreadyInUseException;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
+import java.util.List;
 
 
 public class SellerService {
@@ -23,16 +29,28 @@ public class SellerService {
     @Inject
     PasswordHash hasher;
 
-    public Seller createSeller(String name, String email, String password, String regNumber) {
-        Seller newSeller = new Seller(name, email, regNumber);
+    @Inject
+    @RestClient
+    AuthClient authClient;
 
-        Group sellerGroup = entityManager.find(Group.class, Group.SELLER_GROUP_NAME);
-        Group userGroup   = entityManager.find(Group.class, Group.USER_GROUP_NAME);
-        newSeller.setPassword(hasher.generate(password.toCharArray()));
-        newSeller.getGroups().add(sellerGroup);
-        newSeller.getGroups().add(userGroup);
+    public Seller createSeller(SellerNewData sellerNewData) throws UsernameAlreadyInUseException {
+        var addAuth = authClient.addAuthUser(sellerNewData,
+                                             List.of(no.fishapp.auth.model.Group.USER_GROUP_NAME,
+                                                     no.fishapp.auth.model.Group.SELLER_GROUP_NAME
+                                             )
+        );
 
 
+        AuthenticatedUser authenticatedUser = addAuth.toCompletableFuture().join();
+
+        if (authenticatedUser == null) {
+            throw new UsernameAlreadyInUseException();
+        }
+        Seller newSeller = new Seller(authenticatedUser.getId(),
+                                      sellerNewData.getUserName(),
+                                      sellerNewData.getName(),
+                                      sellerNewData.getRegNumber()
+        );
         entityManager.persist(newSeller);
 
         return newSeller;

@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
+import no.fishapp.auth.model.Group;
 import org.eclipse.microprofile.jwt.Claim;
 
 import javax.enterprise.context.RequestScoped;
@@ -15,6 +16,7 @@ import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Transactional
@@ -125,11 +127,18 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticatedUser createUser(UsernamePasswordData usernamePasswordData) {
+    public AuthenticatedUser createUser(UsernamePasswordData usernamePasswordData, List<String> groups) {
         if (! isPrincipalInUse(usernamePasswordData.getUserName())) {
             AuthenticatedUser user = new AuthenticatedUser(usernamePasswordData.getPassword(),
                                                            usernamePasswordData.getUserName()
             );
+            groups.stream().filter(Group::isValidGroupName).forEach(groupName -> {
+                Group dbGroup = entityManager.find(Group.class, groupName);
+                if (dbGroup != null) {
+                    user.getGroups().add(dbGroup);
+                }
+            });
+
             entityManager.persist(user);
             return user;
         } else {

@@ -21,12 +21,13 @@
 FROM open-liberty:21.0.0.3-full-java11-openj9
 ARG VERSION=1.0
 ARG REVISION=SNAPSHOT
-LABEL   name="AUTH" \
-        traefik.http.routers.userr.rule=Path:/user \
-        version="$VERSION-$REVISION"
+
+LABEL name="AUTH"
+LABEL version="$VERSION-$REVISION"
+LABEL traefik.http.routers.auth-route.rule=Path(`/auth`)
 
 COPY --chown=1001:0 src/main/liberty/config /config/
-COPY --chown=1001:0 ../config/server.env /config/
+COPY --chown=1001:0 ./config/server.env /config/
 COPY --chown=1001:0 ./target/resource_jars/ /opt/ol/wlp/usr/shared/resources/
 COPY --chown=1001:0 ./target/user-1.0.war /config/apps
 

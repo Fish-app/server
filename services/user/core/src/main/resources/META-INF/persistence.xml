@@ -6,7 +6,7 @@
              version="2.1">
 
     <persistence-unit name="jpa-unit" transaction-type="JTA">
-        <jta-data-source>jdbc/auth-db</jta-data-source>
+        <jta-data-source>jdbc/user-db</jta-data-source>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
         </properties>

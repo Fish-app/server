@@ -6,6 +6,7 @@ import no.fishapp.auth.core.control.KeyService;
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.UserChangPasswordData;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
+import no.fishapp.auth.model.Group;
 
 
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -97,7 +99,7 @@ public class AuthResource {
     public Response createUser(
             @NotNull UsernamePasswordData usernamePasswordData
     ) {
-        AuthenticatedUser user = authService.createUser(usernamePasswordData);
+        AuthenticatedUser user = authService.createUser(usernamePasswordData, List.of());
 
         if (user == null) {
             // TODO: rett feilkode her?
@@ -126,13 +128,14 @@ public class AuthResource {
 
     @POST
     @Path("newUser")
-    public AuthenticatedUser newUser(UsernamePasswordData usernamePasswordData) {
+    public AuthenticatedUser newUser(UsernamePasswordData usernamePasswordData, List<String> groups) {
         if (usernamePasswordData == null) {
+            //todo:handle
             System.out.println("isnull aaaaaaaaaaaaaaaaaaaaaaaa");
             return null;
         }
         if (! authService.isPrincipalInUse(usernamePasswordData.getUserName())) {
-            return authService.createUser(usernamePasswordData);
+            return authService.createUser(usernamePasswordData, groups);
         }
         return null;
 

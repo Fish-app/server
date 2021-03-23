@@ -1,9 +1,9 @@
 package no.fishapp.user.control;
 
 
-import no.fishapp.auth.entity.AuthenticatedUser;
-import no.fishapp.auth.entity.DTO.UsernamePasswordData;
-import no.fishapp.auth.entity.Group;
+import no.fishapp.auth.model.AuthenticatedUser;
+import no.fishapp.auth.model.DTO.UsernamePasswordData;
+import no.fishapp.auth.model.Group;
 
 import no.fishapp.chat.model.user.Buyer;
 import no.fishapp.chat.model.user.DTO.BuyerNewData;
@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @ApplicationScoped
 public class BuyerService {
@@ -42,7 +43,7 @@ public class BuyerService {
 
     public Buyer createBuyer(BuyerNewData buyerNewData) throws UsernameAlreadyInUseException {
         // not super necesery with future here but when images is implemented they can be prematurly sored while the username is validating
-        var addAuth = authClient.addAuthUser(buyerNewData);
+        var addAuth = authClient.addAuthUser(buyerNewData, List.of(Group.USER_GROUP_NAME, Group.BUYER_GROUP_NAME));
 
         AuthenticatedUser authenticatedUser = addAuth.toCompletableFuture().join();
 

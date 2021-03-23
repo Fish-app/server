@@ -1,7 +1,8 @@
 package no.fishapp.user.boundry;
 
 
-import no.fishapp.auth.entity.Group;
+import no.fishapp.auth.model.Group;
+import no.fishapp.chat.model.user.User;
 import no.fishapp.user.control.UserService;
 
 import javax.annotation.security.RolesAllowed;

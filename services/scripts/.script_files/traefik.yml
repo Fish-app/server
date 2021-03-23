@@ -8,3 +8,29 @@ providers:
 # API and dashboard configuration
 api:
   insecure: true
+
+http:
+  routers:
+    api-service:
+      middlewares:
+        - "strip-path-prefix-regex"
+
+  middlewares:
+    strip-path-prefix-regex:
+      stripPrefixRegex:
+        regex:
+          - "/api/[a-z0-9]?/"
+
+
+
+
+
+
+entryPoints:
+  dev_api_entry:
+    address: "localhost:80"
+
+tracing:
+  serviceName: traefik
+  jaeger:
+    localAgentHostPort: 127.0.0.1:6831

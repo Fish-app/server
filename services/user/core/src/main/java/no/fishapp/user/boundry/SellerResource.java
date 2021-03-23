@@ -1,11 +1,11 @@
 package no.fishapp.user.boundry;
 
 
-import no.fishapp.auth.control.AuthenticationService;
-import no.fishapp.auth.entity.Group;
+import no.fishapp.auth.model.Group;
 import no.fishapp.chat.model.user.DTO.SellerNewData;
 import no.fishapp.chat.model.user.Seller;
 import no.fishapp.user.control.SellerService;
+import no.fishapp.user.exception.UsernameAlreadyInUseException;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -22,9 +22,6 @@ import javax.ws.rs.core.Response;
 @Transactional
 @RolesAllowed(value = {Group.SELLER_GROUP_NAME})
 public class SellerResource {
-
-    @Inject
-    AuthenticationService authenticationService;
 
     @Inject
     SellerService sellerService;
@@ -61,20 +58,14 @@ public class SellerResource {
     ) {
         Response.ResponseBuilder resp;
         try {
-            String  email            = sellerNewData.getUserName().toLowerCase();
-            boolean isPrincipalInUse = authenticationService.isPrincipalInUse(email);
-            if (! isPrincipalInUse) {
-                Seller seller = sellerService.createSeller(sellerNewData.getName(), email,
-                                                           sellerNewData.getPassword(), sellerNewData.getRegNumber()
-                );
-                resp = Response.ok(seller);
-            } else {
-                resp = Response.ok(
-                        "User already exist").status(Response.Status.CONFLICT);
-            }
+            var newSeller = sellerService.createSeller(sellerNewData);
+            resp = Response.ok(newSeller);
+
         } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the seller").status(Response.Status.INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
+            resp = Response.ok("Unexpected error creating the user").status(500);
+        } catch (UsernameAlreadyInUseException e) {
+            resp = Response.ok(
+                    "User already exist").status(Response.Status.CONFLICT);
         }
         return resp.build();
     }
