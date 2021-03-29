@@ -23,8 +23,8 @@ api:
 #
 
 #
-#log:
-#  level: DEBUG
+log:
+  level: DEBUG
 
 
 #entryPoints:

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-docker build ./../media/core -t fishapp-media:latest
+docker build ./../user/core -t fishapp-user:latest
 
 
 docker run  \
   --network=fishapp_network \
   --rm \
     --add-host host.docker.internal:host-gateway \
-  --name  fishapp_media \
-  fishapp-media:latest
+  --name  fishapp_user \
+  fishapp-user:latest
