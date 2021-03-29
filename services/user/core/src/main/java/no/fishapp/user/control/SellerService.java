@@ -2,12 +2,11 @@ package no.fishapp.user.control;
 
 
 import no.fishapp.auth.model.AuthenticatedUser;
-import no.fishapp.chat.model.user.Buyer;
-import no.fishapp.chat.model.user.DTO.SellerNewData;
-import no.fishapp.chat.model.user.Seller;
-import no.fishapp.chat.model.user.User;
 import no.fishapp.user.client.AuthClient;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
+import no.fishapp.user.model.user.DTO.SellerNewData;
+import no.fishapp.user.model.user.Seller;
+import no.fishapp.user.model.user.User;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;

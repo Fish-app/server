@@ -2,19 +2,17 @@ package no.fishapp.store.model.commodity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.listing.entity.BuyRequest;
-import no.fishapp.app.listing.entity.OfferListing;
-import no.fishapp.app.resources.entity.Image;
+import no.fishapp.store.model.listing.Listing;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
-public class Commodity {
+public class Commodity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +21,14 @@ public class Commodity {
     @Column(nullable = false, columnDefinition = "TEXT")
     String name;
 
-    @OneToOne
-    Image commodityImage;
-
-
-    @OneToMany
-    @JsonbTransient
-    List<OfferListing> offerListings;
+    //    todo: fikse det her til og kun importer image og bruk objktet ikke bare id'en
+//    @OneToOne
+//    Image commodityImage;
+    long imageId;
 
     @OneToMany
     @JsonbTransient
-    List<BuyRequest> orderListings;
+    List<Listing> listings;
 
 
 }

@@ -16,7 +16,7 @@
 
 
     <dataSource id="postg-datas"
-                jndiName="jdbc/auth-db" type="javax.sql.DataSource">
+                jndiName="jdbc/media-db" type="javax.sql.DataSource">
         <jdbcDriver libraryRef="postgresql-library"/>
         <properties.postgresql serverName="${DB_URL}"
                                portNumber="${DB_PORT}"

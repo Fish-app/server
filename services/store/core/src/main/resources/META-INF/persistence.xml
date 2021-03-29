@@ -6,7 +6,15 @@
              version="2.1">
 
     <persistence-unit name="jpa-unit" transaction-type="JTA">
-        <jta-data-source>jdbc/auth-db</jta-data-source>
+        <jta-data-source>jdbc/store-db</jta-data-source>
+        <class>no.fishapp.store.model.commodity.Commodity</class>
+        <class>no.fishapp.store.model.listing.Listing</class>
+        <class>no.fishapp.store.model.listing.BuyRequest</class>
+        <class>no.fishapp.store.model.listing.OfferListing</class>
+        <class>no.fishapp.store.model.rating.Rating</class>
+        <class>no.fishapp.store.model.transaction.Transaction</class>
+        <class>no.fishapp.media.model.Image</class>
+
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
         </properties>

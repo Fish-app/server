@@ -5,8 +5,11 @@
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
-    <persistence-unit name="jpa-unit" transaction-type="JTA">
+    <persistence-unit name="user-pu" transaction-type="JTA">
         <jta-data-source>jdbc/user-db</jta-data-source>
+        <class>no.fishapp.user.model.user.Buyer</class>
+        <class>no.fishapp.user.model.user.Seller</class>
+        <class>no.fishapp.user.model.user.User</class>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
         </properties>

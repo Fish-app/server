@@ -4,9 +4,7 @@ package no.fishapp.store.model.rating;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.listing.entity.Listing;
-import no.fishapp.app.transaction.transaction.Transaction;
-import no.fishapp.app.user.entity.User;
+import no.fishapp.store.model.transaction.Transaction;
 
 import javax.persistence.*;
 
@@ -21,11 +19,9 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    @ManyToOne
-    User issuer;
+    long issuerId;
 
-    @ManyToOne
-    User userRated;
+    long userRatedId;
 
     @ManyToOne
     Transaction ratedTransactions;

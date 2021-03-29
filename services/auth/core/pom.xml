@@ -4,6 +4,8 @@
 
     <groupId>no.fishapp.auth</groupId>
     <artifactId>core</artifactId>
+    <name>auth core</name>
+
     <version>1.0</version>
     <packaging>war</packaging>
 
@@ -123,6 +125,36 @@
 
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>42.2.14</version>
+                            <type>jar</type>
+                            <overWrite>false</overWrite>
+                            <destFileName>postgresql.jar</destFileName>
+                        </artifactItem>
+                    </artifactItems>
+                    <outputDirectory>${project.build.directory}/resource_jars/</outputDirectory>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>3.3.4</version>
@@ -131,17 +163,6 @@
                     <skipDefaultPorts>true</skipDefaultPorts>
                     <dockerRunOpts>--network fishapp_network
                     </dockerRunOpts>
-                    <copyDependencies>
-                        <dependencyGroup>
-                            <stripVersion>true</stripVersion>
-                            <location>${project.build.directory}/resource_jars/</location>
-                            <dependency>
-                                <groupId>org.postgresql</groupId>
-                                <artifactId>postgresql</artifactId>
-                                <version>42.2.14</version>
-                            </dependency>
-                        </dependencyGroup>
-                    </copyDependencies>
                 </configuration>
             </plugin>
 

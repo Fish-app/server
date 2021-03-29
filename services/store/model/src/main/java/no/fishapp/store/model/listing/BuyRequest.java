@@ -4,9 +4,8 @@ package no.fishapp.store.model.listing;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.commodity.entity.Commodity;
+import no.fishapp.store.model.commodity.Commodity;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 
 /**
@@ -34,13 +33,13 @@ public class BuyRequest extends Listing {
     //Maximum distance you want to travel
     double maxDistance;
 
-    //    @ManyToOne(cascade = CascadeType.ALL)
-    //    @JoinColumn(nullable = false)
-    //    @JoinTable(
-    //            name = "buy_request_commodity",
-    //            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
-    //            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
-    //    private Commodity commodity;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    @JoinTable(
+            name = "buy_request_commodity",
+            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
+    private Commodity commodity;
 
     //    @JsonbTransient
     //    public Commodity getCommodity() {

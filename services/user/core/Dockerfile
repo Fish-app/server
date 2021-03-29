@@ -22,13 +22,19 @@ FROM open-liberty:21.0.0.3-full-java11-openj9
 ARG VERSION=1.0
 ARG REVISION=SNAPSHOT
 
-LABEL name="AUTH"
+LABEL name="USER"
 LABEL version="$VERSION-$REVISION"
-LABEL traefik.http.routers.auth-route.rule=Path(`/auth`)
+
+LABEL traefik.docker.network=fishapp_network
+LABEL traefik.http.middlewares.ASAFEFEFstripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
+
+LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/user/`)"
+LABEL traefik.http.routers.auth.middlewares=ASAFEFEFstripprefixregex
+
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
-COPY --chown=1001:0 ./target/resource_jars/ /opt/ol/wlp/usr/shared/resources/
-COPY --chown=1001:0 ./target/user-1.0.war /config/apps
+COPY --chown=1001:0 ./target/resource_jars /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 ./target/core-1.0.war /config/apps
 
-EXPOSE 9085 9448
+EXPOSE 80 443

@@ -10,10 +10,11 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>utility</module>
         <module>auth</module>
         <module>user</module>
         <module>store</module>
         <module>media</module>
-        <module>chat</module>
+        <!--        <module>chat</module>-->
     </modules>
 </project>

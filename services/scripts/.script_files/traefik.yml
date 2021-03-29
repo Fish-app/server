@@ -9,28 +9,31 @@ providers:
 api:
   insecure: true
 
-http:
-  routers:
-    api-service:
-      middlewares:
-        - "strip-path-prefix-regex"
+#http:
+#  routers:
+#    api-service:
+#      middlewares:
+#        - "strip-path-prefix-regex"
+#
+#  middlewares:
+#    strip-path-prefix-regex:
+#      stripPrefixRegex:
+#        regex:
+#          - "/api/[a-z0-9]?/"
+#
 
-  middlewares:
-    strip-path-prefix-regex:
-      stripPrefixRegex:
-        regex:
-          - "/api/[a-z0-9]?/"
+#
+#log:
+#  level: DEBUG
 
 
+#entryPoints:
+#  dev_api_entry:
+#    address: "localhost:80"
 
-
-
-
-entryPoints:
-  dev_api_entry:
-    address: "localhost:80"
-
-tracing:
-  serviceName: traefik
-  jaeger:
-    localAgentHostPort: 127.0.0.1:6831
+#tracing:
+#  jaeger:
+#    samplingServerURL: http://jaeger.docker.localhost::5778/sampling
+#    localAgentHostPort: jaeger.docker.localhost:6831
+#    collector:
+#      endpoint: http://jaeger.docker.localhost:14268/api/traces?format=jaeger.thrift

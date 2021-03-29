@@ -2,10 +2,7 @@ package no.fishapp.store.model.transaction;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.commodity.entity.Commodity;
-import no.fishapp.app.listing.entity.Listing;
-import no.fishapp.app.user.entity.Buyer;
-import no.fishapp.app.user.entity.Seller;
+import no.fishapp.store.model.listing.Listing;
 
 import javax.persistence.*;
 
@@ -25,13 +22,11 @@ public class Transaction {
     @Column(nullable = false)
     double price;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    Seller seller;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    Buyer buyer;
+    long seller;
+
+
+    long buyerId;
 
     @ManyToOne
     Listing listing;

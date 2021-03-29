@@ -26,25 +26,16 @@ ARG REVISION=SNAPSHOT
 LABEL name="AUTH"
 LABEL version="$VERSION-$REVISION"
 
-LABEL traefik.enable=true
+LABEL traefik.docker.network=fishapp_network
+LABEL traefik.http.middlewares.ASAFEFEFstripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
 
-LABEL traefik.http.middlewares.ASAFEFEF-stripprefixregex.stripprefixregex.regex="/api/[a-z0-9]?/"
-LABEL traefik.http.routers.auth.rule="Path(`/api/auth/`)"
-LABEL traefik.http.routers.auth.middlewares=ASAFEFEF-stripprefixregex
-#LABEL traefik.port=80
-#LABEL traefik.http.routers.auth-route.rule="Host(`localhost`) && Path(`/auth`)"
-#LABEL traefik.http.services.netdata_srv.loadbalancer.server.port=80
-##LABEL traefik.http.middlewares.auth-route.redirectregex.regex=.*
-#
-#LABEL traefik.http.middlewares.test-redirectregex.redirectregex.regex=^http://api.localhost/(.*)
-#LABEL traefik.http.middlewares.test-redirectregex.redirectregex.replacement=http://localhost/$${1}
-#
-#LABEL traefik.http.middlewares.test-replacepathregex.replacepathregex.regex=^/auth(.*)
-#LABEL traefik.http.middlewares.test-replacepathregex.replacepathregex.replacement=/$$1
+LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/auth/`)"
+LABEL traefik.http.routers.auth.middlewares=ASAFEFEFstripprefixregex
+
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
 COPY --chown=1001:0 ./target/resource_jars /opt/ol/wlp/usr/shared/resources/
-COPY --chown=1001:0 ./target/auth-1.0.war /config/apps
+COPY --chown=1001:0 ./target/core-1.0.war /config/apps
 
-EXPOSE 9085 9448
+EXPOSE 80 443

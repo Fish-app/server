@@ -6,7 +6,8 @@
              version="2.1">
 
     <persistence-unit name="jpa-unit" transaction-type="JTA">
-        <jta-data-source>jdbc/auth-db</jta-data-source>
+        <jta-data-source>jdbc/media-db</jta-data-source>
+        <class>no.fishapp.media.model.Image</class>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
         </properties>

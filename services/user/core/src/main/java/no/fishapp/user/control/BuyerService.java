@@ -2,13 +2,11 @@ package no.fishapp.user.control;
 
 
 import no.fishapp.auth.model.AuthenticatedUser;
-import no.fishapp.auth.model.DTO.UsernamePasswordData;
 import no.fishapp.auth.model.Group;
-
-import no.fishapp.chat.model.user.Buyer;
-import no.fishapp.chat.model.user.DTO.BuyerNewData;
 import no.fishapp.user.client.AuthClient;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
+import no.fishapp.user.model.user.Buyer;
+import no.fishapp.user.model.user.DTO.BuyerNewData;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -61,7 +59,6 @@ public class BuyerService {
      * Returns a buyer from the provided buyer id
      *
      * @param buyerId the buyer id to find the buyer from
-     *
      * @return the buyer if found null if not
      * @throws NoResultException
      */

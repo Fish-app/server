@@ -4,8 +4,7 @@
 
     <groupId>no.fishapp.user</groupId>
     <artifactId>model</artifactId>
-    <name>fishapp user models</name>
-
+    <name>user model</name>
     <version>1.0</version>
 
     <properties>

@@ -1,4 +1,4 @@
-<server description="Authentication server ">
+<server description="Store server ">
 
     <featureManager>
         <!-- https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_feat.html -->
@@ -7,7 +7,6 @@
         <feature>jpaContainer-2.2</feature>
 
 
-        <feature>mpRestClient-1.4</feature>
         <feature>concurrent-1.0</feature>
 
         <!--        <feature>javaee-8.0</feature>-->
@@ -22,15 +21,15 @@
     </featureManager>
 
     <opentracingZipkin host="zipkin" port="9411"/>
-    <variable name="default.http.port" defaultValue="9080"/>
-    <variable name="default.https.port" defaultValue="9443"/>
+    <variable name="default.http.port" defaultValue="80"/>
+    <variable name="default.https.port" defaultValue="443"/>
 
     <httpEndpoint httpPort="${default.http.port}"
                   httpsPort="${default.https.port}"
                   id="defaultHttpEndpoint"
                   host="*"/>
 
-    <application location="auth-1.0.war" type="war" context-root="/">
+    <application location="core-1.0.war" type="war" context-root="/">
     </application>
 
 

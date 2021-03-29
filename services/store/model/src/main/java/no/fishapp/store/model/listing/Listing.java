@@ -2,10 +2,8 @@ package no.fishapp.store.model.listing;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.commodity.entity.Commodity;
-import no.fishapp.app.user.entity.User;
+import no.fishapp.store.model.commodity.Commodity;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 
 @Data
@@ -23,8 +21,9 @@ public abstract class Listing {
     @Column(nullable = false, name = "created")
     long created;
 
-    @ManyToOne
-    User creator;
+    //    @ManyToOne
+//    User creator;
+    long creatorId;
 
     public abstract String getListingType();
 
@@ -54,7 +53,7 @@ public abstract class Listing {
     @PrePersist
     protected void onCreate() {
         created = System.currentTimeMillis() / 1000L;
-        isOpen  = true;
+        isOpen = true;
     }
 
 }

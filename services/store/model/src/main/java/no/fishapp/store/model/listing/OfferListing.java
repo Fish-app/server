@@ -4,12 +4,11 @@ package no.fishapp.store.model.listing;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.commodity.entity.Commodity;
-import no.fishapp.app.transaction.transaction.Transaction;
+import no.fishapp.store.model.commodity.Commodity;
+import no.fishapp.store.model.transaction.Transaction;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -45,13 +44,13 @@ public class OfferListing extends Listing {
     @JsonbTransient
     List<Transaction> transactions;
 
-    //    @ManyToOne(cascade = CascadeType.ALL)
-    //    @JoinColumn(nullable = false)
-    //    //@JsonbTransient
-    //    @JoinTable(
-    //            name = "offer_listing_commodity",
-    //            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
-    //            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
-    //    @NotNull
-    //    Commodity commodity;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    //@JsonbTransient
+    @JoinTable(
+            name = "offer_listing_commodity",
+            joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
+    @NotNull
+    Commodity commodity;
 }

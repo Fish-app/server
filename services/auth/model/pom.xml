@@ -4,6 +4,7 @@
 
     <groupId>no.fishapp.auth</groupId>
     <artifactId>model</artifactId>
+    <name>auth model</name>
     <version>1.0</version>
 
     <properties>
