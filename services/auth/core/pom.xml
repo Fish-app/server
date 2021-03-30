@@ -161,7 +161,7 @@
                 <configuration>
                     <container>true</container>
                     <skipDefaultPorts>true</skipDefaultPorts>
-                    <dockerRunOpts>--network fishapp_network
+                    <dockerRunOpts>--network fishapp_network  --add-host host.docker.internal:host-gateway
                     </dockerRunOpts>
                 </configuration>
             </plugin>

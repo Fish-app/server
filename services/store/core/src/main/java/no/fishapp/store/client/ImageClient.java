@@ -20,5 +20,5 @@ public interface ImageClient extends AutoCloseable {
     @Path("new")
     @Produces(MediaType.APPLICATION_JSON)
     //@Consumes(MediaType.MULTIPART_FORM_DATA)
-    public CompletionStage<Image> addAuthUser(NewImageDto newImageDto, InputStream fileInputStream);
+    public CompletionStage<Image> addAuthUser(NewImageDto newImageDto);
 }

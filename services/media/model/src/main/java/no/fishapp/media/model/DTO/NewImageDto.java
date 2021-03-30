@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.io.InputStream;
 
 
 @Data
@@ -18,4 +19,6 @@ public class NewImageDto {
 
     @Min(0)
     private int size;
+
+    private InputStream ImageDataStream;
 }
