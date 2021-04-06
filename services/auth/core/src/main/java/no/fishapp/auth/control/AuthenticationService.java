@@ -7,6 +7,7 @@ import no.fishapp.auth.model.Group;
 import org.eclipse.microprofile.jwt.Claim;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.persistence.*;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
@@ -15,6 +16,7 @@ import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 
 @Transactional
@@ -40,7 +42,7 @@ public class AuthenticationService {
 
     @Inject
     @Claim(Claims.SUBJECT)
-    String jwtSubject;
+    Instance<Optional<String>> jwtSubject;
 
     /**
      * Util method checks if the auth {@link CredentialValidationResult} result is valid
@@ -124,7 +126,8 @@ public class AuthenticationService {
      * @return the logged in user or null
      */
     public AuthenticatedUser getCurrentAuthUser() {
-        return getUserFromId(Long.parseLong(jwtSubject));
+        var maybeSubject = jwtSubject.get();
+        return maybeSubject.map(s -> getUserFromId(Long.parseLong(s))).orElse(null);
     }
 
 
@@ -181,13 +184,17 @@ public class AuthenticationService {
      */
     public boolean changePassword(String newPass, String oldPass) {
         boolean suc                        = false;
-        var     credentialValidationResult = getValidationResult(Long.parseLong(jwtSubject), oldPass);
-        if (isAuthValid(credentialValidationResult)) {
-            AuthenticatedUser user = getCurrentAuthUser();
-            user.setPassword(hasher.generate(newPass.toCharArray()));
-            entityManager.merge(user);
-            suc = true;
+        var maybeSubject = jwtSubject.get();
+        if (maybeSubject.isPresent()){
+            var     credentialValidationResult = getValidationResult(Long.parseLong(maybeSubject.get()), oldPass);
+            if (isAuthValid(credentialValidationResult)) {
+                AuthenticatedUser user = getCurrentAuthUser();
+                user.setPassword(hasher.generate(newPass.toCharArray()));
+                entityManager.merge(user);
+                suc = true;
+            }
         }
+
         return suc;
 
     }

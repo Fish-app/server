@@ -2,7 +2,7 @@
 
     <featureManager>
         <!-- https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_feat.html -->
-        <feature>microProfile-3.2</feature>
+        <feature>microProfile-4.0</feature>
 
         <!-- Auth stuff        -->
         <feature>appSecurity-3.0</feature>
