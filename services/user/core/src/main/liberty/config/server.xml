@@ -2,29 +2,9 @@
 
     <featureManager>
         <!-- https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_feat.html -->
-<!--        <feature>microProfile-4.0</feature>-->
+        <feature>microProfile-4.0</feature>
 
-
-<!--        <feature>jpaContainer-2.2</feature>-->
-        <feature>mpJwt-1.2</feature>
-        <feature>jsonb-1.0</feature>
-        <feature>jaxrs-2.1</feature>
-        <feature>jaxrsClient-2.1</feature>
-        <feature>mpConfig-2.0</feature>
-        <feature>mpRestClient-2.0</feature>
-        <feature>cdi-2.0</feature>
-
-
-<!--        <feature>concurrent-1.0</feature>-->
-
-
-        <!--        <feature>javaee-8.0</feature>-->
-        <!--        <feature>microProfile-3.3</feature>-->
-        <!--        <feature>jaxrs-2.1</feature>-->
-        <!--        <feature>jsonp-1.1</feature>-->
-        <!--        <feature>cdi-2.0</feature>-->
-        <!--        <feature>jpa-2.2</feature>-->
-        <!--        <feature>restConnector-2.0</feature>-->
+        <feature>ejbLite-3.2</feature>
 
 
     </featureManager>
@@ -39,8 +19,11 @@
                   host="*"/>
 
     <application location="core-1.0.war" type="war" context-root="/">
-<!--        <classloader apiTypeVisibility="spec, ibm-api, api, stable, third-party"/>-->
     </application>
+
+<!--    TODO:use mp properties on the issuer-->
+    <jwtConsumer id="fishappJWTConsumer" issuer="fishapp">
+    </jwtConsumer>
 
 
     <include location="server_ds_config.xml"/>

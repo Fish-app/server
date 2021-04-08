@@ -10,7 +10,7 @@
 
     <variable name="DB_URL" defaultValue="localhost"/>
     <variable name="DB_PORT" defaultValue="25432"/>
-    <variable name="DB_NAME" defaultValue="fishap_auth"/>
+    <variable name="DB_NAME" defaultValue="user_db"/>
     <variable name="DB_USER_NAME" defaultValue="fishap_auth"/>
     <variable name="DB_USER_PASSWORD" defaultValue="aeshjfgeiuf"/>
 

@@ -1,6 +1,7 @@
 package no.fishapp.user.boundary;
 
 
+import lombok.extern.java.Log;
 import no.fishapp.auth.model.Group;
 import no.fishapp.user.control.BuyerService;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
@@ -15,17 +16,21 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Path("buyer")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Transactional
 @RolesAllowed(value = {Group.BUYER_GROUP_NAME})
+@Log
 public class BuyerResource {
 
 
     @Inject
     BuyerService buyerService;
+
 
 
     /**

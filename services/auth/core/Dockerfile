@@ -27,10 +27,10 @@ LABEL name="AUTH"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.ASAFEFEFstripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
+LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
 
 LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/auth/`)"
-LABEL traefik.http.routers.auth.middlewares=ASAFEFEFstripprefixregex
+LABEL traefik.http.routers.auth.middlewares=stripprefixregex
 
 
 COPY --chown=1001:0 src/main/liberty/config /config/

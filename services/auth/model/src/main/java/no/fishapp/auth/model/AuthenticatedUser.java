@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "auth_users")
-public class AuthenticatedUser {
+public class AuthenticatedUser implements Serializable {
 
 
     @Id

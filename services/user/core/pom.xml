@@ -18,6 +18,7 @@
         <postgre.version>42.2.14</postgre.version>
         <jakartaee.version>8.0.0</jakartaee.version>
         <microprofile.version>4.0.1</microprofile.version>
+
     </properties>
 
     <dependencies>
@@ -36,6 +37,7 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
+
 
         <!--    Json web token    -->
         <dependency>
@@ -79,6 +81,7 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+
 
     </dependencies>
 

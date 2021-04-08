@@ -2,6 +2,7 @@ package no.fishapp.auth.control;
 
 import io.jsonwebtoken.Claims;
 import no.fishapp.auth.model.AuthenticatedUser;
+import no.fishapp.auth.model.DTO.NewAuthUserData;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
 import no.fishapp.auth.model.Group;
 import org.eclipse.microprofile.jwt.Claim;
@@ -54,6 +55,26 @@ public class AuthenticationService {
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
 
+
+    public boolean isAuthValid(String username,String password) {
+        var result = identityStoreHandler.validate(new UsernamePasswordCredential(username, password));
+        return result.getStatus() == CredentialValidationResult.Status.VALID;
+    }
+
+    /**
+     * Util method, gets the current {@link CredentialValidationResult}
+     *
+     * @param userId   Users id
+     * @param password Users password
+     * @return the credential val result for this username pass combo
+     */
+    public CredentialValidationResult getValidationResult(String userId, String password) {
+        return identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
+    }
+
+
+
+
     /**
      * Returns the user with the provided user principal
      *
@@ -74,19 +95,19 @@ public class AuthenticationService {
     }
 
 
+
+
     public String getToken(UsernamePasswordData usernamePasswordData) {
         String token = null;
 
         AuthenticatedUser user = this.getUserFromPrincipal(usernamePasswordData.getUserName());
-
+        System.out.println(user.getId());
         if (user != null) {
-            CredentialValidationResult validationResult = identityStoreHandler.validate(new UsernamePasswordCredential(
-                    String.valueOf(user.getId()),
-                    usernamePasswordData.getPassword()));
-
-            if (validationResult.getStatus() == CredentialValidationResult.Status.VALID) {
-                token = keyService.generateNewJwtToken(usernamePasswordData
-                                                               .getUserName(),
+            var validationResult = getValidationResult(String.valueOf(user.getId()),usernamePasswordData.getPassword());
+            System.out.println(validationResult.getStatus());
+            System.out.println(isAuthValid(validationResult));
+            if (isAuthValid(validationResult)) {
+                token = keyService.generateNewJwtToken(usernamePasswordData.getUserName(),
                                                        user.getId(),
                                                        validationResult.getCallerGroups());
             }
@@ -109,16 +130,6 @@ public class AuthenticationService {
         return authenticatedUser;
     }
 
-    /**
-     * Util method, gets the current {@link CredentialValidationResult}
-     *
-     * @param userId   Users id
-     * @param password Users password
-     * @return the credential val result for this username pass combo
-     */
-    public CredentialValidationResult getValidationResult(long userId, String password) {
-        return identityStoreHandler.validate(new UsernamePasswordCredential(String.valueOf(userId), password));
-    }
 
     /**
      * Returns the logged in user - if not logged in or error fetching user null is returned
@@ -127,6 +138,7 @@ public class AuthenticationService {
      */
     public AuthenticatedUser getCurrentAuthUser() {
         var maybeSubject = jwtSubject.get();
+        //todo:handle pot error
         return maybeSubject.map(s -> getUserFromId(Long.parseLong(s))).orElse(null);
     }
 
@@ -152,13 +164,13 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticatedUser createUser(UsernamePasswordData usernamePasswordData, List<String> groups) {
-        if (!isPrincipalInUse(usernamePasswordData.getUserName())) {
-            AuthenticatedUser user = new AuthenticatedUser(hasher.generate(usernamePasswordData.getPassword()
+    public AuthenticatedUser createUser(NewAuthUserData newAuthUserData) {
+        if (!isPrincipalInUse(newAuthUserData.getUserName())) {
+            AuthenticatedUser user = new AuthenticatedUser(hasher.generate(newAuthUserData.getPassword()
                                                                                                .toCharArray()),
-                                                           usernamePasswordData.getUserName()
+                                                           newAuthUserData.getUserName()
             );
-            groups.stream().filter(Group::isValidGroupName).forEach(groupName -> {
+            newAuthUserData.getGroups().stream().filter(Group::isValidGroupName).forEach(groupName -> {
                 Group dbGroup = entityManager.find(Group.class, groupName);
                 if (dbGroup != null) {
                     user.getGroups().add(dbGroup);
@@ -186,8 +198,7 @@ public class AuthenticationService {
         boolean suc                        = false;
         var maybeSubject = jwtSubject.get();
         if (maybeSubject.isPresent()){
-            var     credentialValidationResult = getValidationResult(Long.parseLong(maybeSubject.get()), oldPass);
-            if (isAuthValid(credentialValidationResult)) {
+            if (isAuthValid(maybeSubject.get(), oldPass)) {
                 AuthenticatedUser user = getCurrentAuthUser();
                 user.setPassword(hasher.generate(newPass.toCharArray()));
                 entityManager.merge(user);

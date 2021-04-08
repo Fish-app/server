@@ -26,10 +26,16 @@ LABEL name="USER"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.ASAFEFEFstripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
+LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
 
-LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/user/`)"
-LABEL traefik.http.routers.auth.middlewares=ASAFEFEFstripprefixregex
+LABEL traefik.http.routers.user.rule="PathPrefix(`/api/user/`)"
+LABEL traefik.http.routers.user.middlewares=stripprefixregex
+
+ENV fishapp_system_url=http://host.docker.internal/
+
+# todo:remove inject when starting container
+ENV http_client_username="fishapp"
+ENV http_client_password="fishapp"
 
 
 COPY --chown=1001:0 src/main/liberty/config /config/

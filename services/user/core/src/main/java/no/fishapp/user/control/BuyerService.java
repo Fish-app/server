@@ -1,29 +1,36 @@
 package no.fishapp.user.control;
 
 
+import com.ibm.websphere.security.jwt.Claims;
 import no.fishapp.auth.model.AuthenticatedUser;
+import no.fishapp.auth.model.DTO.NewAuthUserData;
 import no.fishapp.auth.model.Group;
 import no.fishapp.user.client.AuthClient;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
 import no.fishapp.user.model.user.Buyer;
 import no.fishapp.user.model.user.DTO.BuyerNewData;
+import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class BuyerService {
 
     @PersistenceContext
     EntityManager entityManager;
+
     @Inject
-    JsonWebToken webToken;
+    @Claim(Claims.SUBJECT)
+    Instance<Optional<String>> jwtSubject;
 
     @Inject
     @RestClient
@@ -35,13 +42,18 @@ public class BuyerService {
      * @return the logged in buyer or null
      */
     public Buyer getLoggedInBuyer() {
-        return getBuyer(Long.parseLong(webToken.getSubject()));
+        //todo:handle pot error
+        return jwtSubject.get().map(s -> this.getBuyer(Long.parseLong(s))).orElse(null);
     }
 
 
     public Buyer createBuyer(BuyerNewData buyerNewData) throws UsernameAlreadyInUseException {
         // not super necesery with future here but when images is implemented they can be prematurly sored while the username is validating
-        var addAuth = authClient.addAuthUser(buyerNewData, List.of(Group.USER_GROUP_NAME, Group.BUYER_GROUP_NAME));
+        var newUserDto = new NewAuthUserData();
+        newUserDto.setUserName(buyerNewData.getUserName());
+        newUserDto.setPassword(buyerNewData.getPassword());
+        newUserDto.setGroups(List.of(Group.USER_GROUP_NAME, Group.BUYER_GROUP_NAME));
+        var addAuth = authClient.addAuthUser(newUserDto);
 
         AuthenticatedUser authenticatedUser = addAuth.toCompletableFuture().join();
 

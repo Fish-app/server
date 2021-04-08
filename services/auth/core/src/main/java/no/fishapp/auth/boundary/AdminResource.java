@@ -26,8 +26,8 @@ public class AdminResource {
     AdminService adminService;
 
     @PATCH
-    @Path("changepasswordaa")
-    public Response changePasswordaa(
+    @Path("changepassword")
+    public Response changePassword(
             AdminChangePasswordData adminChangePasswordData
     ) {
         Response.ResponseBuilder resp;

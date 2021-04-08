@@ -27,10 +27,10 @@ LABEL name="STORE"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.ASAFEFEFstripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
+LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
 
 LABEL traefik.http.routers.store.rule="PathPrefix(`/api/store/`)"
-LABEL traefik.http.routers.store.middlewares=ASAFEFEFstripprefixregex
+LABEL traefik.http.routers.store.middlewares=stripprefixregex
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
