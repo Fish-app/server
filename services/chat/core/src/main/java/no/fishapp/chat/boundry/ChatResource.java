@@ -1,7 +1,8 @@
-package no.fishapp.chat.core.boundry;
+package no.fishapp.chat.boundry;
 
 
-import no.fishapp.chat.core.control.ChatService;
+import no.fishapp.auth.model.Group;
+import no.fishapp.chat.control.ChatService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -25,15 +26,11 @@ public class ChatResource {
     @Inject
     ChatService chatService;
 
-    @Inject
-    UserService userService;
-
     /**
      * Returns a list of elements with Conversation to the current
      * authenticated user. Used in app to display the current users conversation
      *
      * @param includeLastMsg if true, attach the last message
-     *
      * @return a json encoded list of ConversationDTOS
      */
     @GET
@@ -47,35 +44,9 @@ public class ChatResource {
         if (includeLastMsg == null) {
             includeLastMsg = false;
         }
-        Response response;
-        User     currentUser = userService.getLoggedInUser();
-        if (currentUser != null) {
-            var conversationStream = currentUser.getUserConversations().stream()
-                                                .map(ConversationDTO::buildFromConversation);
 
 
-            if (includeLastMsg) {
-
-                conversationStream = conversationStream.map(conversationDTO -> {
-                                                                if (conversationDTO.getLastMessageId() != - 1) {
-                                                                    conversationDTO.setLastMessage(
-                                                                            MessageDTO.buildFromMessage(
-                                                                                    chatService.getMessage(conversationDTO.getLastMessageId())));
-                                                                }
-                                                                return conversationDTO;
-                                                            }
-
-                );
-
-
-            }
-            response = Response.ok(conversationStream.collect(Collectors.toList())).build();
-
-
-        } else {
-            response = Response.serverError().build();
-        }
-        return response;
+        return Response.ok(chatService.getCurrentUserConversations(includeLastMsg)).build();
     }
 
 
@@ -83,7 +54,6 @@ public class ChatResource {
      * Used to start a new conversation and associate it with a listing
      *
      * @param listingId The listing ID associated with the conversation
-     *
      * @return A ConversationDTO holding metadata about the new conversation,
      * If conversation already exsist, we return the existing conversation.
      */
@@ -100,7 +70,7 @@ public class ChatResource {
         boolean hasListingConv = user.getUserConversations()
                                      .stream()
                                      .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
-        if (! hasListingConv) {
+        if (!hasListingConv) {
             conversation = chatService.newListingConversation(listingId);
             if (conversation != null) {
                 response = Response.ok(ConversationDTO.buildFromConversation(conversation)).build();
@@ -126,7 +96,6 @@ public class ChatResource {
      *
      * @param conversationId the conversation to send the message to
      * @param newMessageBody a JSON encoded MessageBody
-     *
      * @return the updated ConversationDTO in JSON with new metadata, such as new latest message Id.
      */
     @POST
@@ -145,7 +114,7 @@ public class ChatResource {
             if (newMessageBody.getMessageText() == null) {
                 response = Response.status(Response.Status.FORBIDDEN).build(); //invalid messsage body
             } else {
-                if (! newMessageBody.getMessageText().isBlank()) {
+                if (!newMessageBody.getMessageText().isBlank()) {
                     Conversation result = chatService.sendMessage(newMessageBody.getMessageText(), conversation);
                     if (result != null) {
                         response = Response.ok(ConversationDTO.buildFromConversation(result)).build();
@@ -167,7 +136,6 @@ public class ChatResource {
      *
      * @param conversationId id of the conversation
      * @param lastId         message Id if the last message to start the list from
-     *
      * @return a json encoded list of MessageDTO elements
      */
     @GET
@@ -204,7 +172,6 @@ public class ChatResource {
      * @param conversationId the conversation id to get messages for
      * @param fromId         lower limit to start get messages from
      * @param offset         the offset
-     *
      * @return a json list of message DTO elements
      */
     //FIXME: Not properly tested

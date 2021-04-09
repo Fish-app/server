@@ -4,7 +4,6 @@ package no.fishapp.chat.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.user.entity.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,9 +23,7 @@ public class Message {
     @Column(columnDefinition = "TEXT")
     String content;
 
-
-    @ManyToOne
-    User sender;
+    long senderId;
 
     @Column(name = "created_date")
     Long createdDate;
@@ -36,9 +33,4 @@ public class Message {
         this.createdDate = new Date().getTime(); // Get epoch time
     }
 
-
-    public Message(String content, User sender) {
-        this.content = content;
-        this.sender  = sender;
-    }
 }

@@ -2,6 +2,7 @@ package no.fishapp.store.model.commodity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.fishapp.media.model.Image;
 import no.fishapp.store.model.listing.Listing;
 
 import javax.json.bind.annotation.JsonbTransient;
@@ -21,10 +22,8 @@ public class Commodity implements Serializable {
     @Column(nullable = false, columnDefinition = "TEXT")
     String name;
 
-    //    todo: fikse det her til og kun importer image og bruk objktet ikke bare id'en
-//    @OneToOne
-//    Image commodityImage;
-    long imageId;
+    @OneToOne
+    Image commodityImage;
 
     @OneToMany
     @JsonbTransient

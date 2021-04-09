@@ -4,9 +4,6 @@ package no.fishapp.chat.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.fishapp.app.chat.control.ChatService;
-import no.fishapp.app.listing.entity.Listing;
-import no.fishapp.app.user.entity.User;
 
 
 /**
@@ -25,15 +22,14 @@ public class ConversationDTO {
      * Builds a conversation DTO
      *
      * @param conversation the conversation to use for this DTO
-     *
      * @return a Conversation DTO
      */
     public static ConversationDTO buildFromConversation(Conversation conversation) {
         ConversationDTO conversationDTO = new ConversationDTO();
         conversationDTO.id            = conversation.getId();
         conversationDTO.lastMessageId = conversation.getLastMessageId();
-        conversationDTO.listing       = conversation.getConversationListing();
-        conversationDTO.starterUser   = conversation.getConversationStarterUser();
+        conversationDTO.listingId     = conversation.getListingId();
+        conversationDTO.starterUserId = conversation.getConversationStarterUserId();
         conversationDTO.createdDate   = conversation.getCreatedDate();
         return conversationDTO;
     }
@@ -44,7 +40,6 @@ public class ConversationDTO {
      *
      * @param conversation the conversation to use for this DTO
      * @param message      the last message to include in the conversation.
-     *
      * @return a Conversation DTO
      */
     public static ConversationDTO buildFromConversation(Conversation conversation, Message message) {
@@ -53,12 +48,12 @@ public class ConversationDTO {
         return convDto;
     }
 
-
+    
     long id;
     long lastMessageId;
     long createdDate;
-    User starterUser;
-    Listing listing;
+    long starterUserId;
+    long listingId;
     MessageDTO lastMessage;
 
 }

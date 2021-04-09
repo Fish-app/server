@@ -5,8 +5,11 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
                         http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 
-    <persistence-unit name="jpa-unit" transaction-type="JTA">
-        <jta-data-source>jdbc/eventjpadatasource</jta-data-source>
+    <persistence-unit name="chat-pu" transaction-type="JTA">
+        <jta-data-source>jdbc/chat-db</jta-data-source>
+        <class>no.fishapp.chat.model.Conversation</class>
+        <class>no.fishapp.chat.model.Message</class>
+        <class>no.fishapp.chat.model.MessageBody</class>
         <properties>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="both"/>

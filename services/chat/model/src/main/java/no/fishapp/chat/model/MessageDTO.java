@@ -12,10 +12,10 @@ public class MessageDTO {
 
     public static MessageDTO buildFromMessage(Message message) {
         MessageDTO messageDTO = new MessageDTO();
-        messageDTO.id          = message.getId();
-        messageDTO.content     = message.getContent();
+        messageDTO.id = message.getId();
+        messageDTO.content = message.getContent();
         messageDTO.createdDate = message.getCreatedDate();
-        messageDTO.senderId    = message.sender.getId();
+        messageDTO.senderId = message.senderId;
         return messageDTO;
     }
 

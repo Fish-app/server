@@ -29,7 +29,6 @@ public class CommodityResource {
     //@RolesAllowed({Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response addNewCommodity(
             IMultipartBody multipartBody
-            //@FormDataParam("name") String name, FormDataMultiPart photo
     ) {
         Response response = null;
         try {
@@ -44,23 +43,17 @@ public class CommodityResource {
 
     @GET
     @Path("all")
-    //@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response getAllCommoditys() {
         return Response.ok(commodityService.getAllCommodities()).build();
     }
 
     @GET
     @Path("all-display")
-    //@Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response getAllDisplayCommoditys() {
-        return Response.ok(commodityService.getAllCommodities()
-                                           .stream()
-                                           .map(CommodityDTO::new)
-                                           .collect(Collectors.toList())).build();
+        return Response.ok(commodityService.getAllDisplayCommodities()).build();
     }
 
     @GET
-    //@Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{id}")
     public Response getSingleCommoditys(
             @PathParam("id") long id

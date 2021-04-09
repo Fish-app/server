@@ -1,12 +1,15 @@
 package no.fishapp.store.listing.control;
 
 
+import io.jsonwebtoken.Claims;
 import no.fishapp.store.commodity.control.CommodityService;
 import no.fishapp.store.model.commodity.Commodity;
 import no.fishapp.store.model.listing.BuyRequest;
 import no.fishapp.store.model.listing.Listing;
 import no.fishapp.store.model.listing.OfferListing;
+import org.eclipse.microprofile.jwt.Claim;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -14,6 +17,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public class ListingService {
@@ -21,8 +25,9 @@ public class ListingService {
     @PersistenceContext
     EntityManager entityManager;
 
-//    @Inject
-//    UserService userService;
+    @Inject
+    @Claim(Claims.SUBJECT)
+    Instance<Optional<String>> jwtSubject;
 
     @Inject
     CommodityService commodityService;
@@ -59,13 +64,14 @@ public class ListingService {
 
 
         Commodity com = commodityService.getCommodity(listing.getCommodity().getId());
-        if (com != null) {
+        var userIdOption = jwtSubject.get();
+        if (com != null && userIdOption.isPresent()) {
             // todo tror det her kan jøres automatisk
             listing.setCommodity(com);
-//            listing.setCreator(userService.getLoggedInUser());
-//            com.getOfferListings().add(listing);
+            listing.setCreatorId(Long.parseLong(userIdOption.get()));
             entityManager.persist(listing);
-            //entityManager.persist(com);
+            com.getListings().add(listing);
+            entityManager.persist(com);
 
 
             return listing;
@@ -86,10 +92,13 @@ public class ListingService {
     ) {
         Commodity com = commodityService.getCommodity(buyRequest.getCommodity().getId());
 
-        if (com != null) {
+        var userIdOption = jwtSubject.get();
+        if (com != null && userIdOption.isPresent()) {
             buyRequest.setCommodity(com);
+            buyRequest.setCreatorId(Long.parseLong(userIdOption.get()));
             entityManager.persist(buyRequest);
-            //buyRequest.setCreator(userService.getLoggedInUser());
+            com.getListings().add(buyRequest);
+            entityManager.persist(com);
             return buyRequest;
         } else {
             return null;

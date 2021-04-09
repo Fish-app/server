@@ -23,7 +23,7 @@ public class Transaction {
     double price;
 
 
-    long seller;
+    long sellerId;
 
 
     long buyerId;

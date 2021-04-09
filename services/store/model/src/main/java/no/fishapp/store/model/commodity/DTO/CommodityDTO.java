@@ -15,13 +15,9 @@ public class CommodityDTO extends Commodity {
     @NotNull
     double cheapestPrice;
 
-    public CommodityDTO(Commodity commodity) {
+    public CommodityDTO(Commodity commodity, double cheapestPrice) {
         this.commodity = commodity;
-//        this.cheapestPrice = commodity.getOfferListings()
-//                                      .stream()
-//                                      .min((o1, o2) -> (int) (o1.getPrice() - o2.getPrice()))
-//                                      .map(Listing::getPrice)
-//                                      .orElse(- 1D);
+        this.cheapestPrice = cheapestPrice;
     }
 
 }

@@ -6,11 +6,13 @@ import no.fishapp.media.model.DTO.NewImageDto;
 import no.fishapp.media.model.Image;
 import no.fishapp.store.client.ImageClient;
 import no.fishapp.store.model.commodity.Commodity;
+import no.fishapp.store.model.commodity.DTO.CommodityDTO;
+import no.fishapp.store.model.listing.Listing;
+import no.fishapp.store.model.listing.OfferListing;
 import no.fishapp.util.multipartHandler.MultipartHandler;
 import no.fishapp.util.multipartHandler.MultipartNameNotFoundException;
 import no.fishapp.util.multipartHandler.MultipartReadException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.activation.DataHandler;
@@ -20,6 +22,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @ApplicationScoped
 public class CommodityService {
@@ -31,14 +35,10 @@ public class CommodityService {
     EntityManager entityManager;
 
 
-
     @Inject
     @RestClient
     ImageClient imageClient;
 
-    @Inject
-    @ConfigProperty(name = "photo.storage.path", defaultValue = "photos")
-    String photoSaveDir;
 
     public Commodity addNewCommodity(
             IMultipartBody multipartBody
@@ -54,8 +54,7 @@ public class CommodityService {
         imageDto.setImageDataStream(handler.getInputStream());
 
 
-
-        var imageFuture = imageClient.addImage(handler.getName(),handler.getContentType(), handler.getInputStream());
+        var imageFuture = imageClient.addImage(handler.getName(), handler.getContentType(), handler.getInputStream());
 
         //var imageFuture = imageClient.addAuthUser();
 
@@ -70,7 +69,7 @@ public class CommodityService {
         } else {
             entityManager.persist(image);
             //commodity.setCommodityImage(image);
-            commodity.setImageId(image.getId().longValue());
+            commodity.setCommodityImage(image);
             //commodity.setImageId(image);
 
             entityManager.persist(commodity);
@@ -82,6 +81,23 @@ public class CommodityService {
 
     public List<Commodity> getAllCommodities() {
         return entityManager.createQuery(getAllCommodities, Commodity.class).getResultList();
+    }
+
+    public List<CommodityDTO> getAllDisplayCommodities() {
+
+        List<Commodity> commodities = this.getAllCommodities();
+
+
+        return commodities.stream()
+                          .parallel()
+                          .map(commodity -> new CommodityDTO(commodity,
+                                                             commodity.getListings()
+                                                                      .stream()
+                                                                      .filter(listing -> listing instanceof OfferListing)
+                                                                      .map(Listing::getPrice)
+                                                                      .min((o1, o2) -> (int) (o1 - o2))
+                                                                      .orElse(-1D)))
+                          .collect(Collectors.toList());
     }
 
     public Commodity getCommodity(long id) {

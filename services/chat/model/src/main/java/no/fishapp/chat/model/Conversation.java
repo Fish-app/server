@@ -2,16 +2,17 @@ package no.fishapp.chat.model;
 
 
 import lombok.*;
-import no.fishapp.app.listing.entity.Listing;
-import no.fishapp.app.user.entity.User;
+
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
+@Data
 @NoArgsConstructor
 @Table(name = "conversations")
 public class Conversation {
@@ -25,12 +26,12 @@ public class Conversation {
     @Getter
     long id;
 
-    // IDs for first and last msg;
 
     @Getter
-    long lastMessageId = - 1;
+    long lastMessageId = -1;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,
+               orphanRemoval = true)
     @JsonbTransient
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -39,14 +40,12 @@ public class Conversation {
     @Enumerated(EnumType.STRING)
     State state = State.ACTIVE;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    Listing conversationListing;
+    long listingId;
 
     long listingCreatorUserId;
 
-    @Getter
-    @ManyToOne
-    User conversationStarterUser;
+
+    long conversationStarterUserId;
 
     @Getter
     @Column(name = "created_date")
@@ -57,17 +56,6 @@ public class Conversation {
         this.createdDate = new Date().getTime(); // Get epoch time
     }
 
-    public Conversation(Listing conversationListing, User currentUser) {
-        this.conversationListing     = conversationListing;
-        this.listingCreatorUserId    = conversationListing.getCreator().getId();
-        this.conversationStarterUser = currentUser;
-        this.messages                = new ArrayList<>();
-    }
-
-
-    public boolean isUserInConversation(User user) {
-        return listingCreatorUserId == user.getId() || conversationStarterUser.getId() == user.getId();
-    }
 
     public void addMessage(Message message) {
         this.lastMessageId = message.getId();
@@ -81,7 +69,11 @@ public class Conversation {
         return messages;
     }
 
-    public Listing getConversationListing() {
-        return conversationListing;
+    public Optional<Message> getFirstMessage() {
+        if (this.messages.size() > 0) {
+            return Optional.of(messages.get(0));
+        } else {
+            return Optional.empty();
+        }
     }
 }

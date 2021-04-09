@@ -52,7 +52,7 @@
         </dependency>
 
 
-        <!--    Json web token    -->
+        <!--    Json web token TODO: mabye remove these    -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -151,7 +151,8 @@
                 <configuration>
                     <container>true</container>
                     <skipDefaultPorts>true</skipDefaultPorts>
-                    <dockerRunOpts>--network fishapp_network --add-host host.docker.internal:host-gateway</dockerRunOpts>
+                    <dockerRunOpts>--network fishapp_network --add-host host.docker.internal:host-gateway
+                    </dockerRunOpts>
                 </configuration>
             </plugin>
 

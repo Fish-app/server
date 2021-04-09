@@ -4,7 +4,7 @@
 
     <groupId>no.fishapp.chat</groupId>
     <artifactId>model</artifactId>
-    <name>fishapp chat models</name>
+    <name>chat models</name>
 
     <version>1.0</version>
 
@@ -21,12 +21,6 @@
             <artifactId>jakarta.jakartaee-web-api</artifactId>
             <version>8.0.0</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.ext</groupId>
-            <artifactId>jersey-bean-validation</artifactId>
-            <version>3.0.1</version>
         </dependency>
 
 

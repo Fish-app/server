@@ -15,6 +15,6 @@
         <module>user</module>
         <module>media</module>
         <module>store</module>
-        <!--        <module>chat</module>-->
+        <module>chat</module>
     </modules>
 </project>

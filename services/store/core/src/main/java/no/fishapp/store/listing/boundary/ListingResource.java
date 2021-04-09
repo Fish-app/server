@@ -1,12 +1,16 @@
 package no.fishapp.store.listing.boundary;
 
 
+import io.jsonwebtoken.Claims;
+import lombok.extern.java.Log;
 import no.fishapp.auth.model.Group;
 import no.fishapp.store.listing.control.ListingService;
 import no.fishapp.store.model.listing.BuyRequest;
 import no.fishapp.store.model.listing.OfferListing;
+import org.eclipse.microprofile.jwt.Claim;
 
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.validation.constraints.NotNull;
@@ -15,10 +19,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Path("listing")
+@Log
 public class ListingResource {
 
     @Inject
@@ -40,7 +46,7 @@ public class ListingResource {
             OfferListing offerListing = listingService.newOfferListing(newOfferListing);
             resp = Response.ok(offerListing);
         } catch (PersistenceException e) {
-            Logger.getLogger(ListingResource.class.getName()).log(Level.SEVERE, "presist exept", e);
+            log.log(Level.SEVERE, "presist exept", e);
             resp = Response.ok("Unexpected error creating the offer listing")
                            .status(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -65,7 +71,7 @@ public class ListingResource {
             BuyRequest buyRequest = listingService.newBuyRequest(newBuyRequest);
             resp = Response.ok(buyRequest);
         } catch (PersistenceException e) {
-            Logger.getLogger(ListingResource.class.getName()).log(Level.SEVERE, "presist exept", e);
+            log.log(Level.SEVERE, "presist exept", e);
             resp = Response.ok("Unexpected error creating the offer listing")
                            .status(Response.Status.INTERNAL_SERVER_ERROR);
         }

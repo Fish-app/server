@@ -22,7 +22,6 @@ public abstract class Listing {
     long created;
 
     //    @ManyToOne
-//    User creator;
     long creatorId;
 
     public abstract String getListingType();

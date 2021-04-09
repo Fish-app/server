@@ -11,7 +11,7 @@
 
     <opentracingZipkin host="zipkin" port="9411"/>
     <variable name="default.http.port" defaultValue="80"/>
-    <variable name="default.https.port" defaultValue="443"/>
+<!--    <variable name="default.https.port" defaultValue="443"/>-->
 
     <httpEndpoint httpPort="${default.http.port}"
                   httpsPort="${default.https.port}"
