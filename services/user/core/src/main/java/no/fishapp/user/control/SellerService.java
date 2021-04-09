@@ -1,7 +1,7 @@
 package no.fishapp.user.control;
 
 
-import com.ibm.websphere.security.jwt.Claims;
+import io.jsonwebtoken.Claims;
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
 import no.fishapp.auth.model.Group;

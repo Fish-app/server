@@ -2,21 +2,10 @@
 
     <featureManager>
         <!-- https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_feat.html -->
-        <feature>microProfile-3.2</feature>
-        <feature>appSecurity-3.0</feature>
-        <feature>jpaContainer-2.2</feature>
-
+        <feature>microProfile-4.0</feature>
 
         <feature>concurrent-1.0</feature>
-
-        <!--        <feature>javaee-8.0</feature>-->
-        <!--        <feature>microProfile-3.3</feature>-->
-        <!--        <feature>jaxrs-2.1</feature>-->
-        <!--        <feature>jsonp-1.1</feature>-->
-        <!--        <feature>cdi-2.0</feature>-->
-        <!--        <feature>jpa-2.2</feature>-->
-        <!--        <feature>restConnector-2.0</feature>-->
-
+        <feature>ejbLite-3.2</feature>
 
     </featureManager>
 

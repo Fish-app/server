@@ -31,6 +31,13 @@
         </dependency>
 
         <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
             <version>${microprofile.version}</version>
@@ -78,6 +85,12 @@
         <dependency>
             <groupId>no.fishapp.user</groupId>
             <artifactId>model</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.fishapp</groupId>
+            <artifactId>util</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>

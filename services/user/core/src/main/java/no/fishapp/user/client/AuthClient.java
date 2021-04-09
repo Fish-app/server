@@ -3,13 +3,12 @@ package no.fishapp.user.client;
 
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
-import no.fishapp.user.client.containerauth.AuthBaseClientInterface;
-import no.fishapp.user.client.containerauth.RestClientAuthHandler;
+import no.fishapp.util.restClient.RestClientExceptionMapper;
+import no.fishapp.util.restClient.auth.AuthBaseClientInterface;
 import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;

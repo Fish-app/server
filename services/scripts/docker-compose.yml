@@ -19,14 +19,14 @@ services:
     networks:
       - traefik_net
       - fishapp_network
-
-  jaeger:
-    image: jaegertracing/all-in-one:1.22
-    container_name: jaeger
-
-    networks:
-      - traefik_net
-      - fishapp_network
+#
+#  jaeger:
+#    image: jaegertracing/all-in-one:1.22
+#    container_name: jaeger
+#
+#    networks:
+#      - traefik_net
+#      - fishapp_network
 
 
 

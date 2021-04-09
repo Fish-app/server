@@ -101,11 +101,8 @@ public class AuthenticationService {
         String token = null;
 
         AuthenticatedUser user = this.getUserFromPrincipal(usernamePasswordData.getUserName());
-        System.out.println(user.getId());
         if (user != null) {
             var validationResult = getValidationResult(String.valueOf(user.getId()),usernamePasswordData.getPassword());
-            System.out.println(validationResult.getStatus());
-            System.out.println(isAuthValid(validationResult));
             if (isAuthValid(validationResult)) {
                 token = keyService.generateNewJwtToken(usernamePasswordData.getUserName(),
                                                        user.getId(),

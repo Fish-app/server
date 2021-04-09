@@ -9,7 +9,7 @@ import javax.ws.rs.core.Application;
 
 
 // Roles allowed for authentication
-@DeclareRoles({Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.BUYER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+@DeclareRoles({Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.BUYER_GROUP_NAME, Group.ADMIN_GROUP_NAME, Group.CONTAINER_GROUP_NAME})
 @ApplicationPath("/")
 public class MediaApplication extends Application {
 }

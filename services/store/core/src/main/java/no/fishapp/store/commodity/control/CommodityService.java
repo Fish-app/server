@@ -30,8 +30,7 @@ public class CommodityService {
     @PersistenceContext
     EntityManager entityManager;
 
-    @Inject
-    JsonWebToken token;
+
 
     @Inject
     @RestClient
@@ -54,7 +53,9 @@ public class CommodityService {
         imageDto.setMimeType(handler.getContentType());
         imageDto.setImageDataStream(handler.getInputStream());
 
-        var imageFuture = imageClient.addAuthUser(imageDto);
+
+
+        var imageFuture = imageClient.addImage(handler.getName(),handler.getContentType(), handler.getInputStream());
 
         //var imageFuture = imageClient.addAuthUser();
 
@@ -75,6 +76,7 @@ public class CommodityService {
             entityManager.persist(commodity);
             return commodity;
         }
+
     }
 
 

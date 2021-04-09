@@ -38,6 +38,8 @@ RUN chown 1001:0 /aplication_storage
 RUN chown 1001:0 /aplication_storage/images
 USER 1001
 
+ENV fishapp_system_url=http://host.docker.internal/
+
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
 COPY --chown=1001:0 ./target/resource_jars /opt/ol/wlp/usr/shared/resources/

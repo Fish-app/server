@@ -32,6 +32,12 @@ LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[
 LABEL traefik.http.routers.store.rule="PathPrefix(`/api/store/`)"
 LABEL traefik.http.routers.store.middlewares=stripprefixregex
 
+ENV fishapp_system_url=http://host.docker.internal/
+
+# todo:remove inject when starting container
+ENV http_client_username="fishapp"
+ENV http_client_password="fishapp"
+
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
 COPY --chown=1001:0 ./target/resource_jars /opt/ol/wlp/usr/shared/resources/

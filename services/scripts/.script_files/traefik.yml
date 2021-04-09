@@ -31,9 +31,9 @@ api:
 #  dev_api_entry:
 #    address: "localhost:80"
 
-tracing:
-  jaeger:
-    samplingServerURL: jaeger:5778/sampling
-    localAgentHostPort: jaeger:6831
+#tracing:
+#  jaeger:
+#    samplingServerURL: jaeger:5778/sampling
+#    localAgentHostPort: jaeger:6831
 #    collector:
 #      endpoint: jaeger:14268/api/traces?format=jaeger.thrift

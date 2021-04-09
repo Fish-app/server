@@ -1,6 +1,7 @@
 package no.fishapp.media.boundary;
 
 import net.coobird.thumbnailator.Thumbnails;
+import no.fishapp.auth.model.Group;
 import no.fishapp.media.control.ImageService;
 import no.fishapp.media.model.DTO.NewImageDto;
 import no.fishapp.media.model.Image;
@@ -8,6 +9,7 @@ import no.fishapp.util.multipartHandler.MultipartNameNotFoundException;
 import no.fishapp.util.multipartHandler.MultipartReadException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -51,6 +54,7 @@ public class ImageResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.WILDCARD)
+    @RolesAllowed(Group.BUYER_GROUP_NAME)
     public Response getPhoto(@Positive @PathParam("id") int id, @QueryParam("width") int width) {
         Image imageObject = entityManager.find(Image.class, BigInteger.valueOf(id));
         if (imageObject != null) {
@@ -80,10 +84,17 @@ public class ImageResource {
 
     @PUT
     @Path("new")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response saveImage(NewImageDto imageDto) {
+    @RolesAllowed(Group.CONTAINER_GROUP_NAME)
+    public Response saveImage(@HeaderParam("name") String filename, @HeaderParam("mimetype")String mimetype, InputStream inputStream) {
         try {
+            NewImageDto imageDto = new NewImageDto();
+
+            imageDto.setName(filename);
+            imageDto.setMimeType(mimetype);
+            imageDto.setImageDataStream(inputStream);
             Image image = imageService.saveImage(imageDto);
+            System.out.println(image.getId());
+            System.out.println("\n\n\n\n\n");
         } catch (MultipartNameNotFoundException | MultipartReadException | IOException e) {
             e.printStackTrace();
         }
@@ -92,22 +103,7 @@ public class ImageResource {
     }
 
 
-//    @PUT
-//    @Path("new")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-//    public Response saveImage(@FormDataParam("name") String name, FormDataMultiPart formData) {
-//        Response.ResponseBuilder response;
-//
-//
-//        List<FormDataBodyPart> imgParts = formData.getFields("img");//todo: shold not be hard coded
-//        if ((imgParts != null) && !imgParts.isEmpty()) {
-//
-//        } else {
-//            response = Response.ok().status(Response.Status.BAD_REQUEST);
-//        }
-//        return null;
-//
-//    }
+
 
 
 }

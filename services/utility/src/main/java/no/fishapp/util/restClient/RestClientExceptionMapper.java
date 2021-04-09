@@ -1,4 +1,4 @@
-package no.fishapp.user.client;
+package no.fishapp.util.restClient;
 
 import lombok.extern.java.Log;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;

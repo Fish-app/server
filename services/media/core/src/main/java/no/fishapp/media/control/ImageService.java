@@ -6,6 +6,7 @@ import no.fishapp.util.multipartHandler.MultipartNameNotFoundException;
 import no.fishapp.util.multipartHandler.MultipartReadException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -15,8 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 
-@Transactional
-@RequestScoped
+@ApplicationScoped
 public class ImageService {
     @PersistenceContext
     EntityManager entityManager;
@@ -31,6 +31,7 @@ public class ImageService {
 
         image.setMimeType(imageDto.getMimeType());
         entityManager.persist(image);
+        entityManager.flush();
 
 
         image.setName(image.getId().toString() + "--" + imageDto.getName());

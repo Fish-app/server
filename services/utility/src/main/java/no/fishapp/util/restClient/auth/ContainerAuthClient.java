@@ -1,10 +1,7 @@
-package no.fishapp.user.client.containerauth;
+package no.fishapp.util.restClient.auth;
 
-import no.fishapp.auth.model.AuthenticatedUser;
-import no.fishapp.auth.model.DTO.NewAuthUserData;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
-import no.fishapp.user.client.RestClientExceptionMapper;
-import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
+import no.fishapp.util.restClient.RestClientExceptionMapper;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -14,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.concurrent.CompletionStage;
 
 
 @RegisterRestClient(configKey = "authClient")

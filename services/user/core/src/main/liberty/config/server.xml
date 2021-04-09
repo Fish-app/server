@@ -4,6 +4,7 @@
         <!-- https://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_feat.html -->
         <feature>microProfile-4.0</feature>
 
+        <feature>concurrent-1.0</feature>
         <feature>ejbLite-3.2</feature>
 
 
@@ -20,11 +21,6 @@
 
     <application location="core-1.0.war" type="war" context-root="/">
     </application>
-
-<!--    TODO:use mp properties on the issuer-->
-    <jwtConsumer id="fishappJWTConsumer" issuer="fishapp">
-    </jwtConsumer>
-
 
     <include location="server_ds_config.xml"/>
 

@@ -15,7 +15,7 @@ import javax.ws.rs.core.Application;
         groupsQuery = "select groups_name from user_groups as ug, auth_users as us where cast(us.id as text) = ? and us.id = ug.user_id",
         priority = 80)
 // Roles allowed for authentication
-@DeclareRoles({Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.BUYER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
+@DeclareRoles({Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.BUYER_GROUP_NAME, Group.ADMIN_GROUP_NAME, Group.CONTAINER_GROUP_NAME})
 @ApplicationPath("/")
 public class AuthApplication extends Application {
 }

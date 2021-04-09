@@ -1,24 +1,27 @@
 package no.fishapp.store.client;
 
 
+import com.ibm.websphere.jaxrs20.multipart.IMultipartBody;
 import no.fishapp.media.model.DTO.NewImageDto;
 import no.fishapp.media.model.Image;
+import no.fishapp.util.restClient.auth.AuthBaseClientInterface;
+import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
 import java.util.concurrent.CompletionStage;
 
 @RegisterRestClient(configKey = "imageClient")
 @Path("image")
-public interface ImageClient extends AutoCloseable {
-
+@ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
+public interface ImageClient extends AutoCloseable, AuthBaseClientInterface {
+    //        imageDto.setName(handler.getName());
+//        imageDto.setMimeType(handler.getContentType());
+//        imageDto.setImageDataStream(handler.getInputStream());
+//
     @PUT
     @Path("new")
-    @Produces(MediaType.APPLICATION_JSON)
-    //@Consumes(MediaType.MULTIPART_FORM_DATA)
-    public CompletionStage<Image> addAuthUser(NewImageDto newImageDto);
+    public CompletionStage<Image> addImage(@HeaderParam("name") String filename, @HeaderParam("mimetype")String mimetype, InputStream inputStream);
 }

@@ -32,6 +32,8 @@ LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[
 LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/auth/`)"
 LABEL traefik.http.routers.auth.middlewares=stripprefixregex
 
+ENV fishapp_system_url=http://host.docker.internal/
+
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/

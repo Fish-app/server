@@ -1,8 +1,4 @@
-package no.fishapp.user.client.containerauth;
-
-import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
-
-import javax.inject.Inject;
+package no.fishapp.util.restClient.auth;
 
 
 public interface AuthBaseClientInterface {
