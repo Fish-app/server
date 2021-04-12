@@ -1,0 +1,39 @@
+## traefik.yml
+
+# Docker configuration backend
+providers:
+  docker:
+    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.localhost`)"
+
+# API and dashboard configuration
+api:
+  insecure: true
+
+#http:
+#  routers:
+#    api-service:
+#      middlewares:
+#        - "strip-path-prefix-regex"
+#
+#  middlewares:
+#    strip-path-prefix-regex:
+#      stripPrefixRegex:
+#        regex:
+#          - "/api/[a-z0-9]?/"
+#
+
+##
+#log:
+#  level: DEBUG
+
+
+#entryPoints:
+#  dev_api_entry:
+#    address: "localhost:80"
+
+#tracing:
+#  jaeger:
+#    samplingServerURL: jaeger:5778/sampling
+#    localAgentHostPort: jaeger:6831
+#    collector:
+#      endpoint: jaeger:14268/api/traces?format=jaeger.thrift

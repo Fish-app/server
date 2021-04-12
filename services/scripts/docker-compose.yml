@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  traefik:
+    image: traefik:2.4.7
+    container_name: traefik
+
+    ports:
+      - 8080:8080
+      - 80:80
+
+    volumes:
+      - type: bind
+        source: $PWD/.script_files/traefik.yml
+        target: /etc/traefik/traefik.yml
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+
+    networks:
+      - traefik_net
+      - fishapp_network
+#
+#  jaeger:
+#    image: jaegertracing/all-in-one:1.22
+#    container_name: jaeger
+#
+#    networks:
+#      - traefik_net
+#      - fishapp_network
+
+
+
+networks:
+  traefik_net:
+  fishapp_network:
+    external: true
+
+
+
