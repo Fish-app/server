@@ -1,7 +1,8 @@
 package no.fishapp.util.restClient.auth;
 
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
-import no.fishapp.util.restClient.RestClientExceptionMapper;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientExceptionMapper;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -22,10 +23,10 @@ public interface ContainerAuthClient {
     @POST
     @Path("authentication/login")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(UsernamePasswordData usernamePasswordData);
+    public Response login(UsernamePasswordData usernamePasswordData) throws RestClientHttpException;
 
     @GET
     @Path("key.pem")
     @Produces(MediaType.TEXT_PLAIN)
-    public String getPubKey();
+    public String getPubKey() throws RestClientHttpException;
 }

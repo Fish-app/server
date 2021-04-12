@@ -18,7 +18,8 @@ import java.util.Optional;
 public class Conversation {
 
     public enum State {
-        ACTIVE, COMPLETED
+        ACTIVE,
+        COMPLETED
     }
 
     @Id
@@ -31,7 +32,7 @@ public class Conversation {
     long lastMessageId = -1;
 
     @OneToMany(cascade = CascadeType.ALL,
-               orphanRemoval = true)
+            orphanRemoval = true)
     @JsonbTransient
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -75,5 +76,9 @@ public class Conversation {
         } else {
             return Optional.empty();
         }
+    }
+
+    public boolean isUserInConv(long id) {
+        return id == conversationStarterUserId || id == listingCreatorUserId;
     }
 }

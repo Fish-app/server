@@ -22,6 +22,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -53,16 +54,12 @@ public class CommodityService {
         imageDto.setMimeType(handler.getContentType());
         imageDto.setImageDataStream(handler.getInputStream());
 
-
         var imageFuture = imageClient.addImage(handler.getName(), handler.getContentType(), handler.getInputStream());
-
-        //var imageFuture = imageClient.addAuthUser();
 
         Commodity commodity = new Commodity();
         commodity.setName(commodityName);
 
         Image image = imageFuture.toCompletableFuture().join();
-        //Long image = imageFuture.toCompletableFuture().join();
 
         if (image == null) {
             throw new MultipartReadException("error saving image", "image");
@@ -100,8 +97,8 @@ public class CommodityService {
                           .collect(Collectors.toList());
     }
 
-    public Commodity getCommodity(long id) {
-        return entityManager.find(Commodity.class, id);
+    public Optional<Commodity> getCommodity(long id) {
+        return Optional.ofNullable(entityManager.find(Commodity.class, id));
     }
 
 

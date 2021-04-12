@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 @Path("rating")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -29,40 +30,27 @@ public class RatingResource {
             @NotNull @QueryParam("transactionid") long id,
             @NotNull @QueryParam("stars") int ratingValue
     ) {
-        Response.ResponseBuilder resp;
+        Optional<Rating> ratingOptional = ratingService.newRating(id, ratingValue);
 
-        try {
-            //Rating rating = ratingService.newRating(id, ratingValue);
-            //resp = Response.ok(rating.getStars());
+        return ratingOptional.map(rating -> Response.ok(rating.getStars()))
+                             .orElse(Response.ok()
+                                             .status(Response.Status.INTERNAL_SERVER_ERROR))
+                             .build();
 
-            resp = Response.ok();
-
-        } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the offer listing")
-                           .status(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
-        return resp.build();
 
     }
 
 
-    // this entire method just bad, room for optimization
     @GET
     @Path("{id}")
     public Response getUserRating(
             @PathParam("id") long id
     ) {
-        Response.ResponseBuilder resp;
+        Optional<Float> ratingOptional = ratingService.getUserRating(id);
 
-        try {
-            double rating = ratingService.getUserRating(id);
-            resp = Response.ok(rating);
-        } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the offer listing")
-                           .status(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-        return resp.build();
+        return ratingOptional.map(Response::ok)
+                             .orElse(Response.ok(-1))
+                             .build();
     }
 
     @GET
@@ -71,17 +59,11 @@ public class RatingResource {
     public Response getTransactionRating(
             @PathParam("id") long id
     ) {
-        Response.ResponseBuilder resp;
+        Optional<Rating> ratingOptional = ratingService.getTransactionRating(id);
 
-        try {
-            Rating rating = ratingService.getTransactionRating(id);
-            int ratingVal = (rating == null) ? -1 : rating.getStars();
-            resp = Response.ok(ratingVal);
-        } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the offer listing")
-                           .status(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-        return resp.build();
+        return ratingOptional.map(rating -> Response.ok(rating.getStars()))
+                             .orElse(Response.ok(-1))
+                             .build();
 
     }
 }

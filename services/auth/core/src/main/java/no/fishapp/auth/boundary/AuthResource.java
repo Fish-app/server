@@ -18,6 +18,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Optional;
 
 @Path("authentication")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -46,25 +47,14 @@ public class AuthResource {
             @NotNull UsernamePasswordData usernamePasswordData
     ) {
 
-
         Response.ResponseBuilder response;
+        Optional<String>         loginToken = authService.getToken(usernamePasswordData);
 
+        return loginToken.map(s -> Response.ok().header(HttpHeaders.AUTHORIZATION,
+                                                        "Bearer " + s))
+                         .orElse(Response.ok().status(Response.Status.UNAUTHORIZED)).build();
 
-        String loginToken = authService.getToken(usernamePasswordData);
-
-        if (loginToken != null) {
-            response = Response.ok().header(HttpHeaders.AUTHORIZATION,
-                                            "Bearer " + loginToken);
-
-        } else {
-            response = Response.ok().status(Response.Status.UNAUTHORIZED);
-        }
-
-
-        return response.build();
     }
-
-
 
 
     @PUT
@@ -85,13 +75,8 @@ public class AuthResource {
     @Path("newuser")
     @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
     public AuthenticatedUser newUser(NewAuthUserData newAuthUserData) {
-        if (newAuthUserData == null) {
-            //todo:handle
-            System.out.println("isnull aaaaaaaaaaaaaaaaaaaaaaaa");
-            return null;
-        }
         if (!authService.isPrincipalInUse(newAuthUserData.getUserName())) {
-            return authService.createUser(newAuthUserData);
+            return authService.createUser(newAuthUserData).orElse(null);
         }
         return null;
 

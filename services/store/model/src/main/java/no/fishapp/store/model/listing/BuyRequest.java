@@ -39,6 +39,7 @@ public class BuyRequest extends Listing {
             name = "buy_request_commodity",
             joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
+    @EqualsAndHashCode.Exclude
     private Commodity commodity;
 
     //    @JsonbTransient

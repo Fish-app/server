@@ -8,12 +8,14 @@ import no.fishapp.auth.model.Group;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Startup actions for authentication that are executed on server start.
@@ -36,7 +38,8 @@ public class AuthenticationStartup {
     private String password;
 
     @PostConstruct
-    public void initialize(){
+    @Asynchronous
+    public void initialize() {
         this.persistUserGroups();
         this.createContainerJwtUser();
 
@@ -54,10 +57,10 @@ public class AuthenticationStartup {
         }
     }
 
-    public void createContainerJwtUser(){
-        AuthenticatedUser user = authenticationService.getUserFromPrincipal(username);
+    public void createContainerJwtUser() {
+        Optional<AuthenticatedUser> user = authenticationService.getUserFromPrincipal(username);
 
-        if (user == null){
+        if (user.isEmpty()) {
             var newAuthUserData = new NewAuthUserData();
             newAuthUserData.setUserName(username);
             newAuthUserData.setPassword(password);

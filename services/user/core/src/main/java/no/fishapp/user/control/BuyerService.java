@@ -41,14 +41,17 @@ public class BuyerService {
      *
      * @return the logged in buyer or null
      */
-    public Buyer getLoggedInBuyer() {
-        //todo:handle pot error
-        return jwtSubject.get().map(s -> this.getBuyer(Long.parseLong(s))).orElse(null);
+    public Optional<Buyer> getLoggedInBuyer() {
+        if (jwtSubject.get().isPresent()) {
+            long userId = Long.parseLong(jwtSubject.get().get());
+            return getBuyer(userId);
+        } else {
+            return Optional.empty();
+        }
     }
 
 
     public Buyer createBuyer(BuyerNewData buyerNewData) throws UsernameAlreadyInUseException {
-        // not super necesery with future here but when images is implemented they can be prematurly sored while the username is validating
         var newUserDto = new NewAuthUserData();
         newUserDto.setUserName(buyerNewData.getUserName());
         newUserDto.setPassword(buyerNewData.getPassword());
@@ -74,12 +77,12 @@ public class BuyerService {
      * @return the buyer if found null if not
      * @throws NoResultException
      */
-    public Buyer getBuyer(long buyerId) throws NoResultException {
+    public Optional<Buyer> getBuyer(long buyerId) throws NoResultException {
         try {
-            return entityManager.find(Buyer.class, buyerId);
+            return Optional.of(entityManager.find(Buyer.class, buyerId));
         } catch (Exception ignored) {
         }
-        return null;
+        return Optional.empty();
     }
 
 

@@ -6,6 +6,7 @@ import lombok.extern.java.Log;
 import no.fishapp.auth.model.Group;
 import no.fishapp.store.listing.control.ListingService;
 import no.fishapp.store.model.listing.BuyRequest;
+import no.fishapp.store.model.listing.DTO.ChatListingInfo;
 import no.fishapp.store.model.listing.OfferListing;
 import org.eclipse.microprofile.jwt.Claim;
 
@@ -14,10 +15,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -25,6 +24,8 @@ import java.util.logging.Logger;
 
 @Path("listing")
 @Log
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ListingResource {
 
     @Inject
@@ -36,22 +37,18 @@ public class ListingResource {
      * @return return the offer listing if successful, error msg if not
      */
     @POST
-    @Path("newOfferListing")
+    @Path("offer/new")
     @RolesAllowed(value = {Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
-    public Response newOfferListing(OfferListing newOfferListing
+    public Response newOfferListing(
+            OfferListing newOfferListing
     ) {
-        Response.ResponseBuilder resp;
+        Optional<OfferListing> offerListing = listingService.newOfferListing(newOfferListing);
 
-        try {
-            OfferListing offerListing = listingService.newOfferListing(newOfferListing);
-            resp = Response.ok(offerListing);
-        } catch (PersistenceException e) {
-            log.log(Level.SEVERE, "presist exept", e);
-            resp = Response.ok("Unexpected error creating the offer listing")
-                           .status(Response.Status.INTERNAL_SERVER_ERROR);
-        }
+        return offerListing.map(Response::ok)
+                           .orElse(Response.ok("Unexpected error creating the offer listing")
+                                           .status(Response.Status.INTERNAL_SERVER_ERROR))
+                           .build();
 
-        return resp.build();
     }
 
     /**
@@ -60,49 +57,37 @@ public class ListingResource {
      * @return the buy request object if successful, error msg if not
      */
     @POST
-    @Path("newBuyRequest")
+    @Path("buy/new")
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newBuyRequest(
             BuyRequest newBuyRequest
     ) {
-        Response.ResponseBuilder resp;
+        Optional<BuyRequest> buyRequest = listingService.newBuyRequest(newBuyRequest);
 
-        try {
-            BuyRequest buyRequest = listingService.newBuyRequest(newBuyRequest);
-            resp = Response.ok(buyRequest);
-        } catch (PersistenceException e) {
-            log.log(Level.SEVERE, "presist exept", e);
-            resp = Response.ok("Unexpected error creating the offer listing")
-                           .status(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
-        return resp.build();
+        return buyRequest.map(Response::ok)
+                         .orElse(Response.ok("Unexpected error creating the buy request")
+                                         .status(Response.Status.INTERNAL_SERVER_ERROR))
+                         .build();
     }
 
     @GET
-    @Path("{id}")
+    @Path("offer/{id}")
     public Response getOfferListing(
             @NotNull @PathParam("id") Long id
     ) {
-        OfferListing result = listingService.findOfferListingById(id);
-        if (result == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        } else {
-            return Response.ok(result).build();
-        }
+        Optional<OfferListing> offerListing = listingService.findOfferListingById(id);
+
+        return offerListing.map(Response::ok).orElse(Response.status(Response.Status.NOT_FOUND)).build();
     }
 
     @GET
-    @Path("buyrequest/{id}")
+    @Path("buy/{id}")
     public Response getBuyRequest(
             @NotNull @PathParam("id") Long id
     ) {
-        BuyRequest result = listingService.findBuyRequestById(id);
-        if (result == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        } else {
-            return Response.ok(result).build();
-        }
+        Optional<BuyRequest> buyRequest = listingService.findBuyRequestById(id);
+
+        return buyRequest.map(Response::ok).orElse(Response.status(Response.Status.NOT_FOUND)).build();
     }
 
 
@@ -112,5 +97,20 @@ public class ListingResource {
             @PathParam("id") long id
     ) {
         return Response.ok(listingService.getCommodityOfferListings(id)).build();
+    }
+
+    @GET
+    @Path("listing/{id}")
+    @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
+    public Response getListingById(
+            @PathParam("id") Long id
+    ) {
+        var listing = listingService.findListingById(id).map(ChatListingInfo::new);
+        if (listing.isPresent()) {
+            return Response.ok(listing.get()).build();
+        } else {
+            System.out.println(listing);
+            return Response.ok().status(Response.Status.NOT_FOUND).build();
+        }
     }
 }

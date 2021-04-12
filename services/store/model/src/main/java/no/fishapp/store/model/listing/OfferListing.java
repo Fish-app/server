@@ -52,5 +52,6 @@ public class OfferListing extends Listing {
             joinColumns = @JoinColumn(name = "listing_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "commodity_id", referencedColumnName = "id"))
     @NotNull
+    @EqualsAndHashCode.Exclude
     Commodity commodity;
 }

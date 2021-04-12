@@ -60,23 +60,19 @@ public class ListingService {
      *
      * @return the created offer listing object
      */
-    public OfferListing newOfferListing(OfferListing listing) {
-
-
-        Commodity com = commodityService.getCommodity(listing.getCommodity().getId());
-        var userIdOption = jwtSubject.get();
-        if (com != null && userIdOption.isPresent()) {
-            // todo tror det her kan jøres automatisk
-            listing.setCommodity(com);
+    public Optional<OfferListing> newOfferListing(OfferListing listing) {
+        Optional<Commodity> com          = commodityService.getCommodity(listing.getCommodity().getId());
+        var                 userIdOption = jwtSubject.get();
+        if (com.isPresent() && userIdOption.isPresent()) {
+            listing.setCommodity(com.get());
             listing.setCreatorId(Long.parseLong(userIdOption.get()));
             entityManager.persist(listing);
-            com.getListings().add(listing);
-            entityManager.persist(com);
+            com.get().getListings().add(listing);
+            entityManager.persist(com.get());
 
-
-            return listing;
+            return Optional.of(listing);
         } else {
-            return null;
+            return Optional.empty();
         }
 
 
@@ -87,69 +83,47 @@ public class ListingService {
      *
      * @return the created buy request
      */
-    public BuyRequest newBuyRequest(
+    public Optional<BuyRequest> newBuyRequest(
             BuyRequest buyRequest
     ) {
-        Commodity com = commodityService.getCommodity(buyRequest.getCommodity().getId());
-
-        var userIdOption = jwtSubject.get();
-        if (com != null && userIdOption.isPresent()) {
-            buyRequest.setCommodity(com);
+        Optional<Commodity> com          = commodityService.getCommodity(buyRequest.getCommodity().getId());
+        var                 userIdOption = jwtSubject.get();
+        if (com.isPresent() && userIdOption.isPresent()) {
+            buyRequest.setCommodity(com.get());
             buyRequest.setCreatorId(Long.parseLong(userIdOption.get()));
             entityManager.persist(buyRequest);
-            com.getListings().add(buyRequest);
-            entityManager.persist(com);
-            return buyRequest;
+            com.get().getListings().add(buyRequest);
+            entityManager.persist(com.get());
+            return Optional.of(buyRequest);
         } else {
-            return null;
+            return Optional.empty();
         }
 
     }
 
-
-    /**
-     * Returns a listing if found in the persistence backend
-     *
-     * @param listingId The ID of the listing
-     * @return null if not found or on failure, otherwise the found listing object
-     */
-    public Listing findListingById(long listingId) {
-        try {
-            return entityManager.find(Listing.class, listingId);
-        } catch (PersistenceException pe) {
-            System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
-            return null;
-        }
-    }
 
     public List<OfferListing> getCommodityOfferListings(long id) {
         var query = entityManager.createQuery(COMODITY_LISTINGS, OfferListing.class);
         query.setParameter("cid", id);
 
-        try {
-            var numWith = query.getResultList();
-
-            return numWith;
-        } catch (NoResultException ignore) {
-        }
-        return null;
+        return query.getResultList();
     }
 
-    public OfferListing findOfferListingById(long listingId) {
-        try {
-            return entityManager.find(OfferListing.class, listingId);
-        } catch (PersistenceException pe) {
-            System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
-            return null;
-        }
+    public Optional<OfferListing> findOfferListingById(long listingId) {
+        return Optional.ofNullable(entityManager.find(OfferListing.class, listingId));
+
     }
 
-    public BuyRequest findBuyRequestById(long requestId) {
+    public Optional<BuyRequest> findBuyRequestById(long requestId) {
+        return Optional.ofNullable(entityManager.find(BuyRequest.class, requestId));
+    }
+
+    public Optional<Listing> findListingById(long requestId) {
         try {
-            return entityManager.find(BuyRequest.class, requestId);
+            return Optional.ofNullable(entityManager.find(Listing.class, requestId));
         } catch (PersistenceException pe) {
             System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
-            return null;
+            return Optional.empty();
         }
     }
 

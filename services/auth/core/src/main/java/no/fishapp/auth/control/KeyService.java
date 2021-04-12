@@ -16,8 +16,11 @@ import java.nio.file.Paths;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Set;
@@ -88,8 +91,9 @@ public class KeyService {
      */
     public String generateNewJwtToken(String principalName, long userId, Set<String> groups) {
         try {
-            Date now        = new Date();
-            Date expiration = Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant());
+
+            Instant now            = Instant.now();
+            Instant expirationTime = now.plus(1, ChronoUnit.DAYS);
             JwtBuilder jb = Jwts.builder()
                                 .setHeaderParam("typ", "JWT")               // type
                                 .setHeaderParam("alg", "RS256")             // algorithm
@@ -97,8 +101,8 @@ public class KeyService {
                                 .setSubject(String.valueOf(userId))
                                 .setId(UUID.randomUUID().toString())                    // id
                                 .claim("iss", issuer)
-                                .setIssuedAt(now)
-                                .setExpiration(expiration)
+                                .setIssuedAt(Date.from(now))
+                                .setExpiration(Date.from(expirationTime))
                                 .claim("upn", principalName)                               // user principal name
                                 .claim("groups", groups)
                                 .signWith(this.getRSAPrivate());

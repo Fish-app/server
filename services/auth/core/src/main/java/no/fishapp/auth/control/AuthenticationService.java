@@ -56,8 +56,8 @@ public class AuthenticationService {
     }
 
 
-    public boolean isAuthValid(String username,String password) {
-        var result = identityStoreHandler.validate(new UsernamePasswordCredential(username, password));
+    public boolean isAuthValid(String userId, String password) {
+        var result = identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
 
@@ -73,47 +73,41 @@ public class AuthenticationService {
     }
 
 
-
-
     /**
      * Returns the user with the provided user principal
      *
      * @param principal the principal to search for
      * @return the user if found null if not.
      */
-    public AuthenticatedUser getUserFromPrincipal(String principal) {
+    public Optional<AuthenticatedUser> getUserFromPrincipal(String principal) {
         TypedQuery<AuthenticatedUser> query = entityManager.createQuery(GET_USER_BY_PRINCIPAL_QUERY,
                                                                         AuthenticatedUser.class
         );
         query.setParameter("pname", principal);
         try {
-            return query.getSingleResult();
+            return Optional.of(query.getSingleResult());
         } catch (NoResultException ignore) {
-            return null;
+            return Optional.empty();
         }
 
     }
 
 
+    public Optional<String> getToken(UsernamePasswordData usernamePasswordData) {
 
-
-    public String getToken(UsernamePasswordData usernamePasswordData) {
-        String token = null;
-
-        AuthenticatedUser user = this.getUserFromPrincipal(usernamePasswordData.getUserName());
-        if (user != null) {
-            var validationResult = getValidationResult(String.valueOf(user.getId()),usernamePasswordData.getPassword());
+        Optional<AuthenticatedUser> userOptional = this.getUserFromPrincipal(usernamePasswordData.getUserName());
+        if (userOptional.isPresent()) {
+            var user = userOptional.get();
+            var validationResult = getValidationResult(String.valueOf(user.getId()),
+                                                       usernamePasswordData.getPassword());
             if (isAuthValid(validationResult)) {
-                token = keyService.generateNewJwtToken(usernamePasswordData.getUserName(),
-                                                       user.getId(),
-                                                       validationResult.getCallerGroups());
+                return Optional.of(keyService.generateNewJwtToken(usernamePasswordData.getUserName(),
+                                                                  user.getId(),
+                                                                  validationResult.getCallerGroups()));
             }
         }
 
-
-        return token;
-
-
+        return Optional.empty();
     }
 
     /**
@@ -122,9 +116,8 @@ public class AuthenticationService {
      * @param userId the id of the user to find
      * @return the user with the provided id null if none are found
      */
-    public AuthenticatedUser getUserFromId(long userId) {
-        AuthenticatedUser authenticatedUser = entityManager.find(AuthenticatedUser.class, userId);
-        return authenticatedUser;
+    public Optional<AuthenticatedUser> getUserFromId(long userId) {
+        return Optional.ofNullable(entityManager.find(AuthenticatedUser.class, userId));
     }
 
 
@@ -133,10 +126,13 @@ public class AuthenticationService {
      *
      * @return the logged in user or null
      */
-    public AuthenticatedUser getCurrentAuthUser() {
-        var maybeSubject = jwtSubject.get();
-        //todo:handle pot error
-        return maybeSubject.map(s -> getUserFromId(Long.parseLong(s))).orElse(null);
+    public Optional<AuthenticatedUser> getCurrentAuthUser() {
+        if (jwtSubject.get().isPresent()) {
+            long userId = Long.parseLong(jwtSubject.get().get());
+            return getUserFromId(userId);
+        } else {
+            return Optional.empty();
+        }
     }
 
 
@@ -151,7 +147,6 @@ public class AuthenticationService {
         query.setParameter("pname", principal);
         try {
             long numWith = (long) query.getSingleResult();
-            System.out.println(numWith);
             if (numWith == 0) {
                 return false;
             }
@@ -161,10 +156,10 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticatedUser createUser(NewAuthUserData newAuthUserData) {
+    public Optional<AuthenticatedUser> createUser(NewAuthUserData newAuthUserData) {
         if (!isPrincipalInUse(newAuthUserData.getUserName())) {
             AuthenticatedUser user = new AuthenticatedUser(hasher.generate(newAuthUserData.getPassword()
-                                                                                               .toCharArray()),
+                                                                                          .toCharArray()),
                                                            newAuthUserData.getUserName()
             );
             newAuthUserData.getGroups().stream().filter(Group::isValidGroupName).forEach(groupName -> {
@@ -175,9 +170,9 @@ public class AuthenticationService {
             });
 
             entityManager.persist(user);
-            return user;
+            return Optional.of(user);
         } else {
-            return null;
+            return Optional.empty();
         }
 
 
@@ -192,11 +187,12 @@ public class AuthenticationService {
      * @return true if password is changed false if not
      */
     public boolean changePassword(String newPass, String oldPass) {
-        boolean suc                        = false;
-        var maybeSubject = jwtSubject.get();
-        if (maybeSubject.isPresent()){
-            if (isAuthValid(maybeSubject.get(), oldPass)) {
-                AuthenticatedUser user = getCurrentAuthUser();
+        boolean                     suc          = false;
+        var                         maybeSubject = jwtSubject.get();
+        Optional<AuthenticatedUser> userOptional = getCurrentAuthUser();
+        if (userOptional.isPresent()) {
+            var user = userOptional.get();
+            if (isAuthValid(String.valueOf(user.getId()), oldPass)) {
                 user.setPassword(hasher.generate(newPass.toCharArray()));
                 entityManager.merge(user);
                 suc = true;

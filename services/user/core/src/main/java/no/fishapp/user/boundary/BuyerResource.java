@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +33,6 @@ public class BuyerResource {
     BuyerService buyerService;
 
 
-
     /**
      * Returns the current logged in buyer
      *
@@ -41,14 +41,10 @@ public class BuyerResource {
     @GET
     @Path("current")
     public Response getCurrentBuyer() {
-        Response.ResponseBuilder resp;
-        Buyer                    buyer = buyerService.getLoggedInBuyer();
-        if (buyer == null) {
-            resp = Response.ok("Could not find buyer").status(Response.Status.INTERNAL_SERVER_ERROR);
-        } else {
-            resp = Response.ok(buyer);
-        }
-        return resp.build();
+        Optional<Buyer> buyer = buyerService.getLoggedInBuyer();
+        return buyer.map(Response::ok)
+                    .orElse(Response.ok("Could not find buyer").status(Response.Status.INTERNAL_SERVER_ERROR))
+                    .build();
     }
 
     /**
@@ -68,7 +64,7 @@ public class BuyerResource {
             resp = Response.ok(newBuyer);
 
         } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the user").status(500);
+            resp = Response.ok("Unexpected error creating the user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } catch (UsernameAlreadyInUseException e) {
             resp = Response.ok(
                     "User already exist").status(Response.Status.CONFLICT);

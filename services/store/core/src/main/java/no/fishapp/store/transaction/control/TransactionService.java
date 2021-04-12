@@ -2,6 +2,7 @@ package no.fishapp.store.transaction.control;
 
 
 import io.jsonwebtoken.Claims;
+import lombok.extern.java.Log;
 import no.fishapp.auth.model.Group;
 import no.fishapp.store.listing.control.ListingService;
 import no.fishapp.store.model.listing.Listing;
@@ -14,10 +15,14 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.core.SecurityContext;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 
+
+@Log
 public class TransactionService {
 
     @PersistenceContext
@@ -31,47 +36,62 @@ public class TransactionService {
     Instance<Optional<String>> jwtSubject;
 
     @Inject
-    SecurityContext securityContext;
+    @Claim("groups")
+    Instance<Optional<HashSet<String>>> jwtGroups;
 
     private static final String RATING_EXISTS_QUERY = "select ts from Transaction ts where ts.sellerId = :uid or ts.buyerId = :uid";
 
 
     public List<Transaction> getUserTransactions() {
-        if (jwtSubject.get().isEmpty()) {
-            return null;
+        if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
+            log.log(Level.SEVERE, "Error reading jwt token");
+            return new ArrayList<>(); // ehhh
         }
 
+        long currentUserId = Long.parseLong(jwtSubject.get()
+                                                      .get());
+
         var query = entityManager.createQuery(RATING_EXISTS_QUERY, Transaction.class);
-        query.setParameter("uid", jwtSubject.get().get());
+        query.setParameter("uid", currentUserId);
 
         try {
             return query.getResultList();
         } catch (NoResultException ignore) {
         }
-        return null;
+        return new ArrayList<>();
     }
 
 
-    public Transaction getTransaction(long id) {
-        return entityManager.find(Transaction.class, id);
+    public Optional<Transaction> getTransaction(long id) {
+        return Optional.ofNullable(entityManager.find(Transaction.class, id));
     }
 
-    public Transaction newTransaction(StartTransactionData transactionData) {
-        Listing listing = listingService.findListingById(transactionData.getListingId());
+    public Optional<Transaction> newTransaction(StartTransactionData transactionData) {
+        if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
+            log.log(Level.SEVERE, "Error reading jwt token");
+            return Optional.empty(); // ehhh
+        }
+
+        long currentUserId = Long.parseLong(jwtSubject.get()
+                                                      .get());
+
+        Optional<Listing> listingOptional = listingService.findListingById(transactionData.getListingId());
+        HashSet<String>   groups          = jwtGroups.get().get();
 
         // TODO: if seller init this is a issue
-        if (listing != null && !securityContext.isUserInRole(Group.SELLER_GROUP_NAME) && jwtSubject.get().isPresent()) {
+        if (!groups.contains(Group.SELLER_GROUP_NAME) && listingOptional.isPresent()) {
+            Listing     listing     = listingOptional.get();
             Transaction transaction = new Transaction();
             transaction.setAmount(transactionData.getAmount());
             transaction.setPrice(listing.getPrice());
             transaction.setSellerId(listing.getCreatorId());
-            transaction.setBuyerId(Long.parseLong(jwtSubject.get().get()));
+            transaction.setBuyerId(currentUserId);
             transaction.setListing(listing);
             entityManager.persist(transaction);
-            return transaction;
+            return Optional.of(transaction);
 
         }
-        return null;
+        return Optional.empty();
     }
 
 }

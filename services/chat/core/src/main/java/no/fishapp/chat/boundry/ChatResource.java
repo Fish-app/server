@@ -3,10 +3,13 @@ package no.fishapp.chat.boundry;
 
 import no.fishapp.auth.model.Group;
 import no.fishapp.chat.control.ChatService;
+import no.fishapp.chat.model.MessageBody;
+import no.fishapp.chat.model.MessageDTO;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -15,10 +18,8 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Stateless
-@Path("chat")
+@Path("/")
 @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
-
 public class ChatResource {
 
     public static final String UTF8_CHARSET = "; charset=utf-8";
@@ -36,7 +37,7 @@ public class ChatResource {
     @GET
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     @Produces(MediaType.APPLICATION_JSON + UTF8_CHARSET)
-    @Path("myconversations")
+    @Path("conversations")
     @Valid
     public Response getCurrentUserConversationsRequest(
             @QueryParam("include-lastmessage") Boolean includeLastMsg
@@ -44,7 +45,6 @@ public class ChatResource {
         if (includeLastMsg == null) {
             includeLastMsg = false;
         }
-
 
         return Response.ok(chatService.getCurrentUserConversations(includeLastMsg)).build();
     }
@@ -57,6 +57,8 @@ public class ChatResource {
      * @return A ConversationDTO holding metadata about the new conversation,
      * If conversation already exsist, we return the existing conversation.
      */
+
+    // TODO: change name/path? mere korrekt og kall den for get conversation siden det e hva som skjer 90% av tia
     @POST
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     @Produces(MediaType.APPLICATION_JSON + UTF8_CHARSET)
@@ -64,31 +66,12 @@ public class ChatResource {
     public Response startConversationRequest(
             @NotNull @PathParam("id") long listingId
     ) {
-        Response     response;
-        Conversation conversation = null;
-        User         user         = userService.getLoggedInUser();
-        boolean hasListingConv = user.getUserConversations()
-                                     .stream()
-                                     .anyMatch(userConv -> userConv.getConversationListing().getId() == listingId);
-        if (!hasListingConv) {
-            conversation = chatService.newListingConversation(listingId);
-            if (conversation != null) {
-                response = Response.ok(ConversationDTO.buildFromConversation(conversation)).build();
-            } else {
-                response = Response.serverError().build();
-            }
-        } else {
-            // Find the existing conversations and return the on with matching listing id.
 
-            for (Conversation existingConversation : user.getUserConversations()) {
-                if (existingConversation.getId() == listingId) {
-                    Conversation reload = chatService.getConversation(existingConversation.getId());
-                    return Response.ok(ConversationDTO.buildFromConversation(reload)).build();
-                }
-            }
-            response = Response.notModified().build();
-        }
-        return response;
+        var userConv = chatService.newListingConversation(listingId);
+
+        return userConv.map(Response::ok)
+                       .orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR)).build();
+
     }
 
     /**
@@ -107,25 +90,10 @@ public class ChatResource {
             @NotNull @PathParam("id") long conversationId,
             MessageBody newMessageBody
     ) {
-        Response     response     = Response.serverError().build();
-        Conversation conversation = chatService.getConversation(conversationId);
+        var userConv = chatService.sendMessage(newMessageBody.getMessageText(), conversationId);
 
-        if (conversation.isUserInConversation(userService.getLoggedInUser())) {
-            if (newMessageBody.getMessageText() == null) {
-                response = Response.status(Response.Status.FORBIDDEN).build(); //invalid messsage body
-            } else {
-                if (!newMessageBody.getMessageText().isBlank()) {
-                    Conversation result = chatService.sendMessage(newMessageBody.getMessageText(), conversation);
-                    if (result != null) {
-                        response = Response.ok(ConversationDTO.buildFromConversation(result)).build();
-                    }
-                }
-            }
-        } else {
-            response = Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-
-        return response;
+        return userConv.map(Response::ok)
+                       .orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR)).build();
     }
 
 
@@ -146,58 +114,19 @@ public class ChatResource {
             @NotNull @PathParam("id") long conversationId,
             @NotNull @QueryParam("last-id") long lastId
     ) {
-        Response     response;
-        Conversation conversation = chatService.getConversation(conversationId);
+        var messages = chatService.getMessagesTo(conversationId, lastId);
 
-        if (conversation.isUserInConversation(userService.getLoggedInUser())) {
-            if (conversation.getLastMessageId() == lastId) {
-                response = Response.ok().build();
-            } else {
-                List<Message> messages = chatService.getMessagesTo(conversationId, lastId);
-                List<MessageDTO> messageDTOS = messages.stream()
-                                                       .map(MessageDTO::buildFromMessage)
-                                                       .collect(Collectors.toList());
-                response = Response.ok(messageDTOS).build();
-            }
-        } else {
-            response = Response.status(Response.Status.UNAUTHORIZED).build();
-        }
 
-        return response;
-    }
-
-    /**
-     * Returns an interval of messages in a JSON list
-     *
-     * @param conversationId the conversation id to get messages for
-     * @param fromId         lower limit to start get messages from
-     * @param offset         the offset
-     * @return a json list of message DTO elements
-     */
-    //FIXME: Not properly tested
-    @GET
-    @Valid
-    @Path("{id}/range")
-    @Produces(MediaType.APPLICATION_JSON + UTF8_CHARSET)
-    public Response getMessageRange(
-            @NotNull @PathParam("id") Long conversationId,
-            @NotNull @QueryParam("from") Long fromId,
-            @NotNull @QueryParam("offset") Long offset
-    ) {
-        Response     response;
-        Conversation conversation = chatService.getConversation(conversationId);
-
-        if (conversation.isUserInConversation(userService.getLoggedInUser())) {
-            List<Message> messages = chatService.getMessageRange(conversationId, fromId, offset);
-            List<MessageDTO> messageDTOS = messages.stream()
+        if (messages.isPresent()) {
+            List<MessageDTO> messageDTOS = messages.get().stream()
                                                    .map(MessageDTO::buildFromMessage)
                                                    .collect(Collectors.toList());
-            response = Response.ok(messageDTOS).build();
-            //FIXME: Returnerer samme resultat med messages (ufiltrert)
-        } else {
-            response = Response.status(Response.Status.UNAUTHORIZED).build();
-        }
 
-        return response;
+            return Response.ok(messageDTOS).build();
+        } else {
+            // todo: maby just propegate the 404 if wrong id is given, but if that happens somone is probably not beeing nice
+            return Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 }
