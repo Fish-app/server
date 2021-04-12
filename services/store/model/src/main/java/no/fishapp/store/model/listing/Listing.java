@@ -1,6 +1,7 @@
 package no.fishapp.store.model.listing;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.fishapp.store.model.commodity.Commodity;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @NoArgsConstructor
+@EqualsAndHashCode
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Listing {
 

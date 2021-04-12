@@ -29,8 +29,8 @@ LABEL version="$VERSION-$REVISION"
 LABEL traefik.docker.network=fishapp_network
 LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
 
-LABEL traefik.http.routers.store.rule="PathPrefix(`/api/chat/`)"
-LABEL traefik.http.routers.store.middlewares=stripprefixregex
+LABEL traefik.http.routers.chat.rule="PathPrefix(`/api/chat/`)"
+LABEL traefik.http.routers.chat.middlewares=stripprefixregex
 
 ENV fishapp_system_url=http://host.docker.internal/
 

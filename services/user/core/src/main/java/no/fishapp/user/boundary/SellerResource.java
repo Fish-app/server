@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 
 @Path("seller")
@@ -35,15 +36,10 @@ public class SellerResource {
     @GET
     @Path("current")
     public Response getSeller() {
-        Response.ResponseBuilder resp;
-        Seller                   seller = sellerService.getLoggedInSeller();
-        if (seller == null) {
-            resp = Response.ok("Could not find seller").status(Response.Status.INTERNAL_SERVER_ERROR);
-
-        } else {
-            resp = Response.ok(seller);
-        }
-        return resp.build();
+        Optional<Seller> seller = sellerService.getLoggedInSeller();
+        return seller.map(Response::ok)
+                     .orElse(Response.ok("Could not find seller").status(Response.Status.INTERNAL_SERVER_ERROR))
+                     .build();
     }
 
     /**

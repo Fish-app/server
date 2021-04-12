@@ -2,6 +2,7 @@ package no.fishapp.store.rating.control;
 
 
 import io.jsonwebtoken.Claims;
+import lombok.extern.java.Log;
 import no.fishapp.auth.model.Group;
 import no.fishapp.store.model.rating.Rating;
 import no.fishapp.store.model.transaction.Transaction;
@@ -14,10 +15,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.core.SecurityContext;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.logging.Level;
 
+@Log
 public class RatingService {
 
 
@@ -36,7 +40,8 @@ public class RatingService {
 
 
     @Inject
-    SecurityContext securityContext;
+    @Claim("groups")
+    Instance<Optional<HashSet<String>>> jwtGroups;
 
 
     private static final String RATING_EXISTS_QUERY = "select count (rt) from Rating rt where  rt.issuerId = :isu_id and  rt.userRatedId = :rtd_id and rt.ratedTransactions.id = :t_id";
@@ -46,21 +51,26 @@ public class RatingService {
     private static final String USER_RATING = "select avg (rt.stars) from Rating rt where rt.userRatedId = :rtd_id";
 
 
-    public Rating newRating(long transactionId, int ratingValue) {
-        if (jwtSubject.get().isEmpty()) {
-            return null;
+    public Optional<Rating> newRating(long transactionId, int ratingValue) {
+        if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
+            log.log(Level.SEVERE, "Error reading jwt token");
+            return Optional.empty();
         }
-        Rating      rating        = new Rating();
-        Transaction transaction   = transactionService.getTransaction(transactionId);
-        long        currentUserId = Long.parseLong(jwtSubject.get().get());
-        boolean     isSeller      = securityContext.isUserInRole(Group.SELLER_GROUP_NAME);
-        boolean isInTransaction = (isSeller) ?
-                                  transaction.getSellerId() == currentUserId :
-                                  transaction.getBuyerId() == currentUserId;
+
+        long currentUserId = Long.parseLong(jwtSubject.get().get());
+
+        HashSet<String> groups = jwtGroups.get().get();
 
 
-        if (isInTransaction) {
-            long ratingReceiverId = isSeller ? transaction.getBuyerId() : transaction.getSellerId();
+        Rating                rating              = new Rating();
+        Optional<Transaction> transactionOptional = transactionService.getTransaction(transactionId);
+        boolean               isSeller            = groups.contains(Group.SELLER_GROUP_NAME);
+
+
+        if (transactionOptional.map(transaction -> transaction.isUserInTransaction(currentUserId))
+                               .orElse(false)) {
+            Transaction transaction      = transactionOptional.get();
+            long        ratingReceiverId = isSeller ? transaction.getBuyerId() : transaction.getSellerId();
 
             if (!doRatingExists(transactionId, currentUserId, ratingReceiverId)) {
                 rating.setIssuerId(currentUserId);
@@ -68,47 +78,49 @@ public class RatingService {
                 rating.setStars(ratingValue);
                 rating.setRatedTransactions(transaction);
                 entityManager.persist(rating);
-                return rating;
+                return Optional.of(rating);
             }
         }
-        return null;
+        return Optional.empty();
 
     }
 
-    public Rating getTransactionRating(long transactionId) {
-        if (jwtSubject.get().isEmpty()) {
-            return null;
+    public Optional<Rating> getTransactionRating(long transactionId) {
+        if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
+            log.log(Level.SEVERE, "Error reading jwt token");
+            return Optional.empty();
         }
-        Rating      rating        = new Rating();
-        Transaction transaction   = transactionService.getTransaction(transactionId);
-        long        currentUserId = Long.parseLong(jwtSubject.get().get());
-        boolean     isSeller      = securityContext.isUserInRole(Group.SELLER_GROUP_NAME);
-        boolean isInTransaction = (isSeller) ?
-                                  transaction.getSellerId() == currentUserId :
-                                  transaction.getBuyerId() == currentUserId;
+
+        long currentUserId = Long.parseLong(jwtSubject.get().get());
+
+        HashSet<String> groups = jwtGroups.get().get();
 
 
-        if (isInTransaction) {
-            long ratingReceiverId = isSeller ? transaction.getBuyerId() : transaction.getSellerId();
+        Rating                rating              = new Rating();
+        Optional<Transaction> transactionOptional = transactionService.getTransaction(transactionId);
+        boolean               isSeller            = groups.contains(Group.SELLER_GROUP_NAME);
 
+        if (transactionOptional.map(transaction -> transaction.isUserInTransaction(currentUserId))
+                               .orElse(false)) {
+            Transaction transaction      = transactionOptional.get();
+            long        ratingReceiverId = isSeller ? transaction.getBuyerId() : transaction.getSellerId();
             return getRating(transactionId, currentUserId, ratingReceiverId);
-
         }
-        return null;
+        return Optional.empty();
     }
 
-    Rating getRating(long transId, long issuId, long ratedId) {
+    Optional<Rating> getRating(long transId, long issuId, long ratedId) {
         var query = entityManager.createQuery(GET_TRANSACT_RATING_QUERY, Rating.class);
 
         query.setParameter("isu_id", issuId);
         query.setParameter("rtd_id", ratedId);
         query.setParameter("t_id", transId);
         try {
-            return query.getSingleResult();
+            return Optional.of(query.getSingleResult());
 
         } catch (NoResultException ignore) {
         }
-        return null;
+        return Optional.empty();
     }
 
 
@@ -128,18 +140,19 @@ public class RatingService {
     }
 
 
-    public float getUserRating(long userId) {
+    public Optional<Float> getUserRating(long userId) {
         Query query = entityManager.createQuery(USER_RATING);
         query.setParameter("rtd_id", userId);
         try {
-            return (float) query.getSingleResult();
+            return Optional.ofNullable((Float) query.getSingleResult());
 
-        } catch (Exception ignore) {
-            //TODO: make return zero before prod
-            Random r = new Random();
-            return r.nextFloat() * 5;
+        } catch (NoResultException e) {
+
+//            //TODO: make return zero before prod
+//            Random r = new Random();
+//            return r.nextFloat() * 5;
         }
-
+        return Optional.empty();
 
         ///return 0F;
 

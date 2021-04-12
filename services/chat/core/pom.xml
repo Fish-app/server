@@ -52,25 +52,6 @@
         </dependency>
 
 
-        <!--    Json web token TODO: mabye remove these    -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.11.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.11.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.2</version>
-            <scope>runtime</scope>
-        </dependency>
-
         <!--    Lombok annotations    -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -87,6 +68,17 @@
         </dependency>
         <dependency>
             <groupId>no.fishapp.chat</groupId>
+            <artifactId>model</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.fishapp</groupId>
+            <artifactId>util</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>no.fishapp.store</groupId>
             <artifactId>model</artifactId>
             <version>1.0</version>
             <scope>compile</scope>

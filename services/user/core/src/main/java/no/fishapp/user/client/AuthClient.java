@@ -3,7 +3,7 @@ package no.fishapp.user.client;
 
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
-import no.fishapp.util.restClient.RestClientExceptionMapper;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientExceptionMapper;
 import no.fishapp.util.restClient.auth.AuthBaseClientInterface;
 import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;

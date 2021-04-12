@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Transactional
 @RequestScoped
@@ -28,9 +29,10 @@ public class AdminService {
      * @return true if user is found and password changed otherwise false
      */
     public boolean changeUserPassword(long userId, String newPassword) {
-        boolean           suc  = false;
-        AuthenticatedUser user = authenticationService.getUserFromId(userId);
-        if (user != null) {
+        boolean                     suc          = false;
+        Optional<AuthenticatedUser> userOptional = authenticationService.getUserFromId(userId);
+        if (userOptional.isPresent()) {
+            AuthenticatedUser user = userOptional.get();
             user.setPassword(hasher.generate(newPassword.toCharArray()));
             entityManager.merge(user);
             suc = true;

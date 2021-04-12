@@ -20,9 +20,6 @@
         <microprofile.version>4.0.1</microprofile.version>
 
 
-
-
-
     </properties>
 
     <dependencies>
@@ -41,7 +38,6 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
-
 
 
         <!--    Json web token    -->
@@ -126,7 +122,8 @@
                 <configuration>
                     <container>true</container>
                     <skipDefaultPorts>true</skipDefaultPorts>
-                    <dockerRunOpts>--network fishapp_network --add-host host.docker.internal:host-gateway</dockerRunOpts>
+                    <dockerRunOpts>--network fishapp_network --add-host host.docker.internal:host-gateway
+                    </dockerRunOpts>
                 </configuration>
             </plugin>
 

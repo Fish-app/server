@@ -40,12 +40,21 @@ public class SellerService {
     @RestClient
     AuthClient authClient;
 
+    public Optional<Seller> getLoggedInSeller() {
+        if (jwtSubject.get().isPresent()) {
+            long userId = Long.parseLong(jwtSubject.get().get());
+            return getSeller(userId);
+        } else {
+            return Optional.empty();
+        }
+    }
+
     public Seller createSeller(SellerNewData sellerNewData) throws UsernameAlreadyInUseException {
         var newUserDto = new NewAuthUserData();
         newUserDto.setUserName(sellerNewData.getUserName());
         newUserDto.setPassword(sellerNewData.getPassword());
         newUserDto.setGroups(List.of(no.fishapp.auth.model.Group.USER_GROUP_NAME,
-                no.fishapp.auth.model.Group.SELLER_GROUP_NAME
+                                     no.fishapp.auth.model.Group.SELLER_GROUP_NAME
         ));
         var addAuth = authClient.addAuthUser(newUserDto);
 
@@ -64,21 +73,12 @@ public class SellerService {
         return newSeller;
     }
 
-    /**
-     * Returns the currently logged inn seller
-     *
-     * @return the seller objet
-     */
-    public Seller getLoggedInSeller() {
-        //todo:handle pot error
-        return jwtSubject.get().map(s -> this.getSeller(Long.parseLong(s))).orElse(null);
-    }
 
-    public Seller getSeller(long sellerId) throws NoResultException {
+    public Optional<Seller> getSeller(long sellerId) throws NoResultException {
         try {
-            return entityManager.find(Seller.class, sellerId);
+            return Optional.of(entityManager.find(Seller.class, sellerId));
         } catch (Exception ignored) {
         }
-        return null;
+        return Optional.empty();
     }
 }

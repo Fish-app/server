@@ -14,10 +14,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path("commodity")
 @Transactional
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class CommodityResource {
 
     @Inject
@@ -58,12 +61,11 @@ public class CommodityResource {
     public Response getSingleCommoditys(
             @PathParam("id") long id
     ) {
-        Commodity commodity = commodityService.getCommodity(id);
-        if (commodity == null) {
-            return Response.ok().status(Response.Status.BAD_REQUEST).build();
-        } else {
-            return Response.ok(commodity).build();
+        Optional<Commodity> commodity = commodityService.getCommodity(id);
 
-        }
+        return commodity.map(Response::ok)
+                        .orElse(Response.ok().status(Response.Status.BAD_REQUEST))// todo: kansje bedre med 404
+                        .build();
+
     }
 }

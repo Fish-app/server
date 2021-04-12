@@ -3,11 +3,14 @@ package no.fishapp.util.restClient.auth;
 
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
@@ -17,12 +20,15 @@ import javax.enterprise.concurrent.ManagedScheduledExecutorService;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -33,12 +39,7 @@ public class RestClientAuthHandler {
 
     private static RestClientAuthHandler instance;
 
-    public static RestClientAuthHandler getInstance(){
-        if (instance == null){
-            //todo: this is a issue
-            instance = new RestClientAuthHandler();
-            instance.init();
-        }
+    public static RestClientAuthHandler getInstance() {
         return instance;
     }
 
@@ -63,23 +64,64 @@ public class RestClientAuthHandler {
     ManagedScheduledExecutorService scheduledExec;
     private JwtParser jwtParser;
 
+    private String tokenString;
+
+
     private PublicKey jwtPubKey;
+    private boolean isKeyValid = false;
 
     @PostConstruct
-    @Asynchronous
-    public void init(){
-        log.log(Level.WARNING,"created rest auth handler");
+    public void startup() {
         instance = this;
-        this.jwtPubKey = getTokenPubKey();
-        this.jwtParser = buildJwtParser();
 
-        refreshToken();
-
-
+        tokenLoop();
     }
 
-    @SneakyThrows
-    private PublicKey getTokenPubKey(){
+    @Asynchronous
+    private void tokenLoop() {
+        Instant refreshTime;
+        log.finer("starting token refresh");
+
+        try {
+
+            if (!isKeyValid) {
+                log.finer("fetching signing key");
+
+                this.jwtPubKey = getTokenPubKey();
+                this.jwtParser = buildJwtParser();
+                log.fine("successfully refreshed container signing key");
+
+            }
+
+
+            String authHeader = getLoginToken();
+            this.tokenString = authHeader;
+
+            refreshTime = this.getRefreshTime(authHeader);
+
+            log.info("successfully refreshed container token");
+        } catch (RestClientHttpException e) {
+            log.log(Level.WARNING,
+                    String.format("Conection http %s error geting inter container login token. Retrying in 10s",
+                                  e.getHttpStatusCode()));
+            refreshTime = Instant.now().plus(10, ChronoUnit.SECONDS);
+        } catch (SignatureException e) {
+            log.log(Level.WARNING, "Error validating inter container login token. refreshing private key");
+            isKeyValid = false;
+            refreshTime = Instant.now().plus(1, ChronoUnit.SECONDS);
+        }
+
+        Duration waitTime = Duration.between(Instant.now(), refreshTime);
+
+        //TODO: handle if negative (or chek that the jwt parser wil cath it)
+        scheduledExec.schedule(this::tokenLoop, waitTime.getSeconds(), TimeUnit.SECONDS);
+    }
+
+    public String getAuthTokenHeader() {
+        return tokenString;
+    }
+
+    private PublicKey getTokenPubKey() throws RestClientHttpException {
         // todo: handle errors
         var pkey = authClient.getPubKey();
         String publicKeyPEM = pkey
@@ -89,54 +131,37 @@ public class RestClientAuthHandler {
 
         byte[] encoded = Base64.getDecoder().decode(publicKeyPEM.getBytes());
 
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encoded);
-        return keyFactory.generatePublic(keySpec);
+        try {
+            KeyFactory         keyFactory = KeyFactory.getInstance("RSA");
+            X509EncodedKeySpec keySpec    = new X509EncodedKeySpec(encoded);
+            return keyFactory.generatePublic(keySpec);
+        } catch (Exception ignore) {
+        }
+        return null;
 
     }
 
-    private JwtParser buildJwtParser(){
+    public String getLoginToken() throws RestClientHttpException {
+        Response response = authClient.login(new UsernamePasswordData(password, username));
+        return (String) response.getHeaders().getFirst("Authorization");
+    }
+
+    private JwtParser buildJwtParser() {
         return Jwts.parserBuilder().setSigningKey(this.jwtPubKey).requireIssuer(fishappJwtIssuer).build();
     }
 
 
-    private String tokenString;
+    private Instant getRefreshTime(String authHeader) throws SignatureException {
 
 
+        String  token = authHeader.replaceFirst("Bearer ", "");
+        Instant refreshTime;
 
+        log.log(Level.ALL, "Refreshed jwt token");
+        var jwtClaims = jwtParser.parseClaimsJws(token);
+        isKeyValid = true;
+        return jwtClaims.getBody().getExpiration().toInstant().minus(20, ChronoUnit.MINUTES);
 
-    public String getAuthTokenHeader() {
-        return tokenString;
-    }
-
-
-    private void refreshToken(){
-        //todo: if failed wait 30 sec and try again elns
-
-        Response response = authClient.login(new UsernamePasswordData(password, username));
-
-
-
-
-
-        String authHeader = (String) response.getHeaders().getFirst("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")){
-            System.out.println(authHeader);
-            String token = authHeader.replaceFirst("Bearer ", "");
-            Instant refreshTime;
-            try {
-                this.tokenString = authHeader;
-                log.log(Level.ALL, "Refreshed jwt token");
-                var jwtClaims = jwtParser.parseClaimsJws(token);
-                refreshTime = jwtClaims.getBody().getExpiration().toInstant().minus(20, ChronoUnit.MINUTES);
-            } catch (Exception e) {
-                log.log(Level.SEVERE, "Error geting inter container login token. Retrying in 10s");
-                refreshTime = Instant.now().plus(10, ChronoUnit.SECONDS);
-            }
-           Duration waitTime = Duration.between(Instant.now(),refreshTime);
-            //TODO: handle if negative (or chek that the jwt parser wil cath it)
-            scheduledExec.schedule(this::refreshToken, waitTime.getSeconds(), TimeUnit.SECONDS);
-        }
 
     }
 

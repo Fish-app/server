@@ -23,5 +23,8 @@ public interface ImageClient extends AutoCloseable, AuthBaseClientInterface {
 //
     @PUT
     @Path("new")
-    public CompletionStage<Image> addImage(@HeaderParam("name") String filename, @HeaderParam("mimetype")String mimetype, InputStream inputStream);
+    CompletionStage<Image> addImage(
+            @HeaderParam("name") String filename,
+            @HeaderParam("mimetype") String mimetype,
+            InputStream inputStream);
 }

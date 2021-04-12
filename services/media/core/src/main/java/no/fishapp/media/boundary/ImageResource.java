@@ -85,7 +85,11 @@ public class ImageResource {
     @PUT
     @Path("new")
     @RolesAllowed(Group.CONTAINER_GROUP_NAME)
-    public Response saveImage(@HeaderParam("name") String filename, @HeaderParam("mimetype")String mimetype, InputStream inputStream) {
+    public Response saveImage(
+            @HeaderParam("name") String filename,
+            @HeaderParam("mimetype") String mimetype,
+            InputStream inputStream) {
+        Response response;
         try {
             NewImageDto imageDto = new NewImageDto();
 
@@ -93,17 +97,13 @@ public class ImageResource {
             imageDto.setMimeType(mimetype);
             imageDto.setImageDataStream(inputStream);
             Image image = imageService.saveImage(imageDto);
-            System.out.println(image.getId());
-            System.out.println("\n\n\n\n\n");
+            response = Response.ok(image).build();
         } catch (MultipartNameNotFoundException | MultipartReadException | IOException e) {
-            e.printStackTrace();
+            response = Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        return Response.ok("test").build();
+        return response;
     }
-
-
-
 
 
 }

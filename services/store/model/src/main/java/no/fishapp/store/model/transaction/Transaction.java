@@ -36,5 +36,9 @@ public class Transaction {
         created = System.currentTimeMillis() / 1000L;
     }
 
+    public boolean isUserInTransaction(long userId) {
+        return sellerId == userId || buyerId == userId;
+    }
+
 
 }

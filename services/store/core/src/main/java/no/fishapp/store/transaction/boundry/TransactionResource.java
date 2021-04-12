@@ -14,6 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Optional;
 
 @Path("transaction")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -29,35 +30,22 @@ public class TransactionResource {
     @POST
     @RolesAllowed({Group.BUYER_GROUP_NAME})
     public Response newTransaction(StartTransactionData transactionData) {
-        Response.ResponseBuilder resp;
+        Optional<Transaction> transactionOptional = transactionService.newTransaction(transactionData);
 
-        try {
-            //Transaction transaction = transactionService.newTransaction(transactionData);
-            //resp = Response.ok(transaction);
-            resp = Response.ok();
-        } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error")
-                           .status(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
-        return resp.build();
+        return transactionOptional.map(Response::ok)
+                                  .orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR))
+                                  .build();
     }
 
 
     @GET
     @Path("{id}")
     public Response getTransactionReceipt(@PathParam("id") int transactionId) {
-        Response.ResponseBuilder resp;
+        Optional<Transaction> transactionOptional = transactionService.getTransaction(transactionId);
 
-        try {
-            Transaction transaction = transactionService.getTransaction(transactionId);
-            resp = Response.ok(transaction);
-        } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the offer listing")
-                           .status(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
-        return resp.build();
+        return transactionOptional.map(Response::ok)
+                                  .orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR))
+                                  .build();
     }
 
     @GET
