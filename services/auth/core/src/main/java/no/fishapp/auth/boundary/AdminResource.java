@@ -31,11 +31,11 @@ public class AdminResource {
             AdminChangePasswordData adminChangePasswordData
     ) {
         Response.ResponseBuilder resp;
-        boolean sucsess = adminService.changeUserPassword(
+        boolean success = adminService.changeUserPassword(
                 adminChangePasswordData.getUserId(),
                 adminChangePasswordData.getNewPassword()
         );
-        if (!sucsess) {
+        if (!success) {
             resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } else {
             resp = Response.ok();
