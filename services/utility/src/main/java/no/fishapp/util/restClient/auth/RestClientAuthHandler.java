@@ -60,8 +60,10 @@ public class RestClientAuthHandler {
     @Inject
     @RestClient
     ContainerAuthClient authClient;
+    
     @Resource
     ManagedScheduledExecutorService scheduledExec;
+
     private JwtParser jwtParser;
 
     private String tokenString;
@@ -84,7 +86,7 @@ public class RestClientAuthHandler {
 
         try {
 
-            if (!isKeyValid) {
+            if (! isKeyValid) {
                 log.finer("fetching signing key");
 
                 this.jwtPubKey = getTokenPubKey();
@@ -103,11 +105,13 @@ public class RestClientAuthHandler {
         } catch (RestClientHttpException e) {
             log.log(Level.WARNING,
                     String.format("Conection http %s error geting inter container login token. Retrying in 10s",
-                                  e.getHttpStatusCode()));
+                                  e.getHttpStatusCode()
+                    )
+            );
             refreshTime = Instant.now().plus(10, ChronoUnit.SECONDS);
         } catch (SignatureException e) {
             log.log(Level.WARNING, "Error validating inter container login token. refreshing private key");
-            isKeyValid = false;
+            isKeyValid  = false;
             refreshTime = Instant.now().plus(1, ChronoUnit.SECONDS);
         }
 

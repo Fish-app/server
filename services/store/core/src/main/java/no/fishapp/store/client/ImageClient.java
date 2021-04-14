@@ -17,14 +17,12 @@ import java.util.concurrent.CompletionStage;
 @Path("image")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface ImageClient extends AutoCloseable, AuthBaseClientInterface {
-    //        imageDto.setName(handler.getName());
-//        imageDto.setMimeType(handler.getContentType());
-//        imageDto.setImageDataStream(handler.getInputStream());
-//
+
     @PUT
     @Path("new")
     CompletionStage<Image> addImage(
             @HeaderParam("name") String filename,
             @HeaderParam("mimetype") String mimetype,
-            InputStream inputStream);
+            InputStream inputStream
+    );
 }

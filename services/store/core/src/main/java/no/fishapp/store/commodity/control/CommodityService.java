@@ -93,7 +93,8 @@ public class CommodityService {
                                                                       .filter(listing -> listing instanceof OfferListing)
                                                                       .map(Listing::getPrice)
                                                                       .min((o1, o2) -> (int) (o1 - o2))
-                                                                      .orElse(-1D)))
+                                                                      .orElse(- 1D)
+                          ))
                           .collect(Collectors.toList());
     }
 
