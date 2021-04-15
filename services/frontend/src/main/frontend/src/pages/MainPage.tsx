@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import '../index.css;
+import '../index.scss';
 import {Breadcrumb, Layout, Menu} from 'antd';
 import {UploadOutlined, UserOutlined, VideoCameraOutlined} from '@ant-design/icons';
 

@@ -1,9 +1,9 @@
 import React, {Component, Dispatch, SetStateAction, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {AppNavigator, APP_STATES} from "./services/navigator";
+import {AppNavigator, APP_STATES} from "../src/main/frontend/src/services/navigator";
 import {LoginCard} from "./components/LoginCard";
-import {MainPage} from "./pages/MainPage";
+import {MainPage} from "../src/main/frontend/src/pages/MainPage";
 
 
 function PagerPage() {

@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import '../index.css;
-import * as apiRequests from '../services/axios_api';
+import * as apiRequests from '../../src/main/frontend/src/services/axios_api';
 import {Form, Input, Button, Checkbox} from 'antd';
 import axios from "axios";
-import {AppSession} from "../services/Session";
+import {AppSession} from "../../src/main/frontend/src/services/Session";
 
 const layout = {
     labelCol: {
