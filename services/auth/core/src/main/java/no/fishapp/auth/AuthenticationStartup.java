@@ -37,11 +37,20 @@ public class AuthenticationStartup {
     @ConfigProperty(name = "fishapp.service.password", defaultValue = "fishapp")
     private String password;
 
+    @Inject
+    @ConfigProperty(name = "fishapp.service.adminUsername", defaultValue = "fishapp")
+    private String adminUsername;
+
+    @Inject
+    @ConfigProperty(name = "fishapp.service.adminPassword", defaultValue = "fishapp")
+    private String adminPassword;
+
     @PostConstruct
     @Asynchronous
     public void initialize() {
         this.persistUserGroups();
         this.createContainerJwtUser();
+        this.createAdminUser();
 
     }
 
@@ -65,6 +74,19 @@ public class AuthenticationStartup {
             newAuthUserData.setUserName(username);
             newAuthUserData.setPassword(password);
             newAuthUserData.setGroups(List.of(Group.CONTAINER_GROUP_NAME));
+            var authUser = authenticationService.createUser(newAuthUserData);
+            //todo: chek if this has sucseded
+        }
+    }
+
+    public void createAdminUser() {
+        Optional<AuthenticatedUser> user = authenticationService.getUserFromPrincipal(adminUsername);
+
+        if (user.isEmpty()) {
+            var newAuthUserData = new NewAuthUserData();
+            newAuthUserData.setUserName(adminUsername);
+            newAuthUserData.setPassword(adminPassword);
+            newAuthUserData.setGroups(List.of(Group.ADMIN_GROUP_NAME));
             var authUser = authenticationService.createUser(newAuthUserData);
             //todo: chek if this has sucseded
         }

@@ -16,5 +16,6 @@
         <module>media</module>
         <module>store</module>
         <module>chat</module>
+        <module>frontend</module>
     </modules>
 </project>
