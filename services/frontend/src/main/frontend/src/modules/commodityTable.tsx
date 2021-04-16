@@ -6,21 +6,7 @@ import './../index.css';
 import {Table, Tag, Space} from 'antd';
 
 import * as apiRequests from '../services/axios_api';
-
-
-class CommodityImage {
-    public id: number;
-
-    constructor() {
-        this.id = -1;
-    }
-}
-
-class Commodity {
-    public commodityImage: CommodityImage | undefined;
-    public id: number | undefined;
-    public name: string | undefined;
-}
+import {Commodity, CommodityImage} from "../services/ApiModels";
 
 
 export function CommodityTable() {
@@ -61,6 +47,6 @@ const columns = [
             alt="new"
             id={imageData.id.toString()}/>,
     },
-    
+
 ];
 

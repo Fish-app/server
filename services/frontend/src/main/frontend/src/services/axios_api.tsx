@@ -82,4 +82,23 @@ export function getAllCommoditys() {
     ).then(value => value.data)
 }
 
+export function getSeller() {
+    return axios({
+            ...apiConfig,
+            url: '/store/commodity/all',
+            method: 'get',
+            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+        }
+    ).then(value => value.data)
+}
+
+export function getBuyer() {
+    return axios({
+            ...apiConfig,
+            url: '/store/commodity/all',
+            method: 'get',
+            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+        }
+    ).then(value => value.data)
+}
 

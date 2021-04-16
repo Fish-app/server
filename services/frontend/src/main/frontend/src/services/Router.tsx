@@ -18,13 +18,14 @@ export function TopRouter(): ReactElement {
             <Route exact path="/">
                 <LoginPage/>
             </Route>
-            <Route path={`/home/`}>
+
+            <Route path={[`/home/`]}>
                 <MainPage/>
             </Route>
             {/*<Redirect from="/home/" to="/home/commodity" />*/}
-            {/*<Route path={`/home/:homeSection`}>*/}
-            {/*    <MainPage/>*/}
-            {/*</Route>*/}
+            <Route path={`/home/user/:userID`}>
+                <MainPage/>
+            </Route>
             {/*<Redirect from="/users/:id" to="/users/profile/:id" />*/}
             {/*<Route path={`/commodity/:commodityid`}>*/}
             {/*    <MainPage/>*/}
