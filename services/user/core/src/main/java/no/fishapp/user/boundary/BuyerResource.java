@@ -63,8 +63,6 @@ public class BuyerResource {
             var newBuyer = buyerService.createBuyer(buyerNewData);
             resp = Response.ok(newBuyer);
 
-        } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } catch (UsernameAlreadyInUseException e) {
             resp = Response.ok(
                     "User already exist").status(Response.Status.CONFLICT);

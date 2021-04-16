@@ -6,14 +6,20 @@ import no.fishapp.auth.model.AuthenticatedUser;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
 @RequestScoped
 public class AdminService {
+
+    private static final String ALL_USERS = "select us from AuthenticatedUser us";
+
     @Inject
     AuthenticationService authenticationService;
     @PersistenceContext
@@ -26,6 +32,7 @@ public class AdminService {
      *
      * @param userId      the id to change
      * @param newPassword the new password for the id
+     *
      * @return true if user is found and password changed otherwise false
      */
     public boolean changeUserPassword(long userId, String newPassword) {
@@ -39,5 +46,17 @@ public class AdminService {
         }
         return suc;
     }
+
+
+    public List<AuthenticatedUser> getAllAuthUsers() {
+        var query = entityManager.createQuery(ALL_USERS, AuthenticatedUser.class);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException ignore) {
+        }
+        return new ArrayList<>();
+    }
+
 
 }

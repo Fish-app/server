@@ -1,23 +1,48 @@
-import React from 'react';
+import React, {ReactElement, useState} from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import '../index.scss';
 import {Breadcrumb, Layout, Menu} from 'antd';
 import {UploadOutlined, UserOutlined, VideoCameraOutlined} from '@ant-design/icons';
+import {AuthUsersTable} from "../modules/usersTable";
+import {CommodityTable} from "../modules/commodityTable";
 
 const {Header, Content, Footer, Sider} = Layout;
 
+enum HomPageCategories {
+    Home,
+    Commodity,
+    User,
+    Listings
+}
+
+const HomePageContent = HomPageCategories.Home
+
+
+function Abcccc(props: { currentCat: HomPageCategories }): ReactElement {
+    switch (props.currentCat) {
+        case HomPageCategories.Home:
+            return <h1>home</h1>
+        case HomPageCategories.User:
+            return <AuthUsersTable/>
+        case HomPageCategories.Commodity:
+            return <CommodityTable/>
+        default:
+            return <h1>not found</h1>
+    }
+}
 
 export function MainPage() {
+    const [currentIndex, setIndex] = useState(HomePageContent)
 
 
     return <Layout className="layout">
         <Header>
-            <div className="logo"/>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                <Menu.Item key="1">nav 1</Menu.Item>
-                <Menu.Item key="2">nav 2</Menu.Item>
-                <Menu.Item key="3">nav 3</Menu.Item>
+            <div className="logo">Fishapp</div>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+                <Menu.Item key="1" onClick={info => setIndex(HomPageCategories.Home)}>nav 1</Menu.Item>
+                <Menu.Item key="2" onClick={info => setIndex(HomPageCategories.User)}>nav 2</Menu.Item>
+                <Menu.Item key="3" onClick={info => setIndex(HomPageCategories.Commodity)}>nav 3</Menu.Item>
             </Menu>
         </Header>
         <Content style={{padding: '0 50px'}}>
@@ -26,7 +51,8 @@ export function MainPage() {
                 <Breadcrumb.Item>List</Breadcrumb.Item>
                 <Breadcrumb.Item>App</Breadcrumb.Item>
             </Breadcrumb>
-            <div className="site-layout-content">Content</div>
+            <div className="site-layout-content"><Abcccc currentCat={currentIndex}/></div>
+
         </Content>
         <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
     </Layout>

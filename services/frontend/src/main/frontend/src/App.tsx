@@ -10,6 +10,7 @@ import {
     useRouteMatch,
     useParams
 } from "react-router-dom";
+import {TopRouter} from "./services/Router";
 
 function Home() {
     return <h2>Home</h2>;
@@ -67,33 +68,34 @@ function Topic() {
 function App() {
     return (
         <div className="App">
-            <Router>
-                <div>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/topics">Topics</Link>
-                        </li>
-                    </ul>
+            <TopRouter/>
+            {/*<Router>*/}
+            {/*    <div>*/}
+            {/*        <ul>*/}
+            {/*            <li>*/}
+            {/*                <Link to="/">Home</Link>*/}
+            {/*            </li>*/}
+            {/*            <li>*/}
+            {/*                <Link to="/about">About</Link>*/}
+            {/*            </li>*/}
+            {/*            <li>*/}
+            {/*                <Link to="/topics">Topics</Link>*/}
+            {/*            </li>*/}
+            {/*        </ul>*/}
 
-                    <Switch>
-                        <Route path="/about">
-                            <About/>
-                        </Route>
-                        <Route path="/topics">
-                            <Topics/>
-                        </Route>
-                        <Route path="/">
-                            <Home/>
-                        </Route>
-                    </Switch>
-                </div>
-            </Router>
+            {/*        <Switch>*/}
+            {/*            <Route path="/about">*/}
+            {/*                <About/>*/}
+            {/*            </Route>*/}
+            {/*            <Route path="/topics">*/}
+            {/*                <Topics/>*/}
+            {/*            </Route>*/}
+            {/*            <Route path="/">*/}
+            {/*                <Home/>*/}
+            {/*            </Route>*/}
+            {/*        </Switch>*/}
+            {/*    </div>*/}
+            {/*</Router>*/}
 
         </div>
     );

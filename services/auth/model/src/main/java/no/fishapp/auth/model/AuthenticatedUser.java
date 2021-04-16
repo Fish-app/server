@@ -33,12 +33,10 @@ public class AuthenticatedUser implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @JsonbTransient
     @Column(nullable = false, unique = true)
     private String principalName;
 
     @ManyToMany
-    @JsonbTransient
     @JoinTable(
             name = "user_groups",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

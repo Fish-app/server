@@ -2,6 +2,8 @@ import axios from "axios";
 import {Session} from "inspector";
 import {AppSession} from "./Session";
 
+const BASE_URL = 'http://localhost:80/api';
+
 const apiConfig = {
     // `url` is the server URL that will be used for the request
     // url: '/user',
@@ -12,7 +14,7 @@ const apiConfig = {
     // `baseURL` will be prepended to `url` unless `url` is absolute.
     // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
     // to methods of that instance.
-    baseURL: 'http://localhost:80/api',
+    baseURL: BASE_URL,
 
 
     // `headers` are custom headers to be sent
@@ -37,32 +39,47 @@ const apiConfig = {
 
 }
 
+export const IMAGE_URL = BASE_URL + '/media/image/';
+
 export function login(username: string, password: string) {
-    let a = axios({
+    return axios({
             ...apiConfig,
             url: '/auth/authentication/login',
             method: 'post',
             data: {userName: username, password: password}
         }
     )
-
-
-    a.then(value => console.log(value))
-
-   
-    return a
 }
 
 export function getCurrentUser() {
-    let a = axios({
+    return axios({
             ...apiConfig,
             url: '/user/seller/current',
             method: 'get',
             headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
         }
     )
-
-    a.then(value => console.log(value))
-    return a
-
 }
+
+export function getAllAuthUsers() {
+    return axios({
+            ...apiConfig,
+            url: '/auth/admin/all',
+            method: 'get',
+            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+        }
+    ).then(value => value.data)
+}
+
+
+export function getAllCommoditys() {
+    return axios({
+            ...apiConfig,
+            url: '/store/commodity/all',
+            method: 'get',
+            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+        }
+    ).then(value => value.data)
+}
+
+
