@@ -36,6 +36,9 @@ const HomePageContent = HomPageCategories.Home
 //
 function Abcccc(props: { setIndex: (abc: HomPageCategories) => any }): ReactElement {
     let {home_spot} = useParams<{ home_spot: string }>();
+   
+    let {path, url} = useRouteMatch();
+
 
     switch (getPathAsEnum(home_spot)) {
         case HomPageCategories.Home:
@@ -46,6 +49,10 @@ function Abcccc(props: { setIndex: (abc: HomPageCategories) => any }): ReactElem
             return <AuthUsersTable/>
         case HomPageCategories.Commodity:
             props.setIndex(HomPageCategories.Commodity)
+
+
+            console.log(path)
+            console.log(url)
             return <CommodityTable/>
         default:
             return <h1>not found</h1>
