@@ -16,7 +16,6 @@ import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -24,9 +23,9 @@ import java.util.Optional;
 @RequestScoped
 public class AuthenticationService {
 
-    final static String GET_USER_BY_PRINCIPAL_QUERY = "SELECT authUsr FROM AuthenticatedUser AS authUsr WHERE authUsr.principalName = :pname";
+    static final String GET_USER_BY_PRINCIPAL_QUERY = "SELECT authUsr FROM AuthenticatedUser AS authUsr WHERE authUsr.principalName = :pname";
 
-    final static String GET_NUM_WITH_PRINCIPAL_QUERY = "SELECT count(au) FROM AuthenticatedUser as au WHERE au.principalName = :pname";
+    static final String GET_NUM_WITH_PRINCIPAL_QUERY = "SELECT count(au) FROM AuthenticatedUser as au WHERE au.principalName = :pname";
 
 
     @Inject
@@ -48,8 +47,8 @@ public class AuthenticationService {
     /**
      * Util method checks if the auth {@link CredentialValidationResult} result is valid
      *
-     * @param result
-     * @return
+     * @param result the result from a credential validation
+     * @return true if the status on the result is valid, false if not
      */
     public boolean isAuthValid(CredentialValidationResult result) {
         return result.getStatus() == CredentialValidationResult.Status.VALID;
@@ -137,7 +136,7 @@ public class AuthenticationService {
 
 
     /**
-     * Cheks if the provided principal is currently in use
+     * Checks if the provided principal is currently in use
      *
      * @param principal the principal to chek
      * @return true if the principal is used false if not

@@ -46,19 +46,19 @@ public class CommodityResource {
 
     @GET
     @Path("all")
-    public Response getAllCommoditys() {
+    public Response getAllCommodities() {
         return Response.ok(commodityService.getAllCommodities()).build();
     }
 
     @GET
     @Path("all-display")
-    public Response getAllDisplayCommoditys() {
+    public Response getAllDisplayCommodities() {
         return Response.ok(commodityService.getAllDisplayCommodities()).build();
     }
 
     @GET
     @Path("{id}")
-    public Response getSingleCommoditys(
+    public Response getSingleCommodities(
             @PathParam("id") long id
     ) {
         Optional<Commodity> commodity = commodityService.getCommodity(id);
