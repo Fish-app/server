@@ -32,7 +32,8 @@ LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[
 LABEL traefik.http.routers.store.rule="PathPrefix(`/api/store/`)"
 LABEL traefik.http.routers.store.middlewares=stripprefixregex
 
-ENV fishapp_system_url=http://host.docker.internal/
+#ENV fishapp_system_url=http://host.docker.internal/
+ENV fishapp_system_url=http://remote-run.uials.no/
 
 # todo:remove inject when starting container
 ENV http_client_username="fishapp"

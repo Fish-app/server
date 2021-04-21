@@ -23,14 +23,14 @@ ARG VERSION=1.0
 ARG REVISION=SNAPSHOT
 
 
-LABEL name="AUTH"
+LABEL name="checkout"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
 LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
 
-LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/auth/`)"
-LABEL traefik.http.routers.auth.middlewares=stripprefixregex
+LABEL traefik.http.routers.checkout.rule="PathPrefix(`/api/checkout/`)"
+LABEL traefik.http.routers.checkout.middlewares=stripprefixregex
 
 #ENV fishapp_system_url=http://host.docker.internal/
 ENV fishapp_system_url=http://remote-run.uials.no/
