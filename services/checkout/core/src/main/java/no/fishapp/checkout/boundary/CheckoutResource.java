@@ -26,12 +26,16 @@ public class CheckoutResource {
     public Response isSubscriptionValid(
             long userId
     ) {
-return Response.accepted().build();
+        return Response.accepted().build();
     }
 
+
     @GET
-    public Response test(){
-        return Response.ok(checkoutService.createNewSubscription()).build();
+    @Path("new-sub")
+    public Response newSubscription(){
+        var retv = checkoutService.newSubscription();
+
+        return retv.map(Response::ok).orElse(Response.serverError()).build();
     }
 
 

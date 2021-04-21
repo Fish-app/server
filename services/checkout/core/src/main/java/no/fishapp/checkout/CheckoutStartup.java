@@ -42,6 +42,8 @@ private CheckoutService checkoutService;
     @ConfigProperty(name = "fishapp.checkout.items.subscription.name")
     private String subscriptionItemName;
 
+
+
     @PostConstruct
     @Asynchronous
     public void initialize() {
@@ -59,7 +61,8 @@ private CheckoutService checkoutService;
 
             // item
             Item item = new Item();
-            item.setReference("Subscription item");
+            item.setId(subscriptionItemName);
+            item.setReference("Subscription_item");
             item.setName("seller subscription");
             item.setQuantity(1);
             item.setUnit("unit");

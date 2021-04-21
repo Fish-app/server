@@ -7,6 +7,9 @@
 
     <persistence-unit name="checkout-pu" transaction-type="JTA">
         <jta-data-source>jdbc/checkout-db</jta-data-source>
+        <class>no.fishapp.checkout.model.Payment</class>
+        <class>no.fishapp.checkout.model.SubscribedUser</class>
+        <class>no.fishapp.checkout.model.dibsapi.Item</class>
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>

@@ -34,6 +34,7 @@ LABEL traefik.http.routers.checkout.middlewares=stripprefixregex
 
 #ENV fishapp_system_url=http://host.docker.internal/
 ENV fishapp_system_url=http://remote-run.uials.no/
+ENV SEC_TLS_TRUSTDEFAULTCERTS=true
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
