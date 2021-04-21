@@ -54,7 +54,6 @@ public class ImageResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.WILDCARD)
-    @RolesAllowed(Group.BUYER_GROUP_NAME)
     public Response getPhoto(@Positive @PathParam("id") int id, @QueryParam("width") int width) {
         Image imageObject = entityManager.find(Image.class, BigInteger.valueOf(id));
         if (imageObject != null) {

@@ -5,8 +5,8 @@ services:
     container_name: traefik
 
     ports:
-      - 8080:8080
-      - 80:80
+      - 158.38.101.5:8080:8080
+      - 158.38.101.5:80:80
 
     volumes:
       - type: bind

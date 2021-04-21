@@ -28,9 +28,6 @@ public class AuthResource {
     @Inject
     AuthenticationService authService;
 
-    @Inject
-    KeyService keyService;
-
 
     /**
      * Authenticates a user if providing a correct email/password combination.
