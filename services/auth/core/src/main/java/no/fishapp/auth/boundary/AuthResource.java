@@ -17,6 +17,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 @Path("authentication")
@@ -45,8 +46,7 @@ public class AuthResource {
     public Response login(
             @NotNull UsernamePasswordData usernamePasswordData
     ) {
-
-        Optional<String>         loginToken = authService.getToken(usernamePasswordData);
+        Optional<String> loginToken = authService.getToken(usernamePasswordData);
 
         return loginToken.map(s -> Response.ok().header(HttpHeaders.AUTHORIZATION,
                                                         "Bearer " + s))

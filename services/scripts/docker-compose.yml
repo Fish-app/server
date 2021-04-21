@@ -19,7 +19,7 @@ services:
     networks:
       - traefik_net
       - fishapp_network
-#
+  #
 #  jaeger:
 #    image: jaegertracing/all-in-one:1.22
 #    container_name: jaeger
@@ -27,6 +27,10 @@ services:
 #    networks:
 #      - traefik_net
 #      - fishapp_network
+#
+#    labels:
+#      - traefik.http.services.my-service.loadbalancer.server.port=16686
+
 
 
 

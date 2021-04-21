@@ -23,14 +23,14 @@ ARG VERSION=1.0
 ARG REVISION=SNAPSHOT
 
 
-LABEL name="AUTH"
+LABEL name="Frontend"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
+LABEL traefik.http.middlewares.stripprefixregexFrontend.stripprefixregex.regex="\/admin\/"
 
-LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/auth/`)"
-LABEL traefik.http.routers.auth.middlewares=stripprefixregex
+LABEL traefik.http.routers.frontend.rule="PathPrefix(`/admin/`)"
+LABEL traefik.http.routers.frontend.middlewares=stripprefixregexFrontend
 
 ENV fishapp_system_url=http://host.docker.internal/
 
@@ -42,7 +42,9 @@ ENV http_client_password="fishapp"
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
-COPY --chown=1001:0 ./target/resource_jars /opt/ol/wlp/usr/shared/resources/
-COPY --chown=1001:0 ./target/core-1.0.war /config/apps
+#COPY --chown=1001:0 ./target/resource_jars /opt/ol/wlp/usr/shared/resources/
+#COPY --chown=1001:0 ./target/frontend-1.0.war /config/dropins/
+COPY --chown=1001:0 ./target/frontend-1.0.war /config/apps/
+
 
 EXPOSE 80 443

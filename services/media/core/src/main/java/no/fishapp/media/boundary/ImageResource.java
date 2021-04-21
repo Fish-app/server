@@ -49,12 +49,13 @@ public class ImageResource {
      *
      * @param id    id of the image
      * @param width desired return width
+     *
      * @return image or 404
      */
     @GET
     @Path("{id}")
     @Produces(MediaType.WILDCARD)
-    @RolesAllowed(Group.BUYER_GROUP_NAME)
+    // @RolesAllowed(Group.BUYER_GROUP_NAME)
     public Response getPhoto(@Positive @PathParam("id") int id, @QueryParam("width") int width) {
         Image imageObject = entityManager.find(Image.class, BigInteger.valueOf(id));
         if (imageObject != null) {
@@ -66,7 +67,7 @@ public class ImageResource {
                 } else {
                     Thumbnails.of(image.toFile())
                               .size(width, width)
-                              .outputFormat(imageObject.getMimeType())
+                              .useOriginalFormat()
                               .toOutputStream(outputStream);
                 }
             };
@@ -88,7 +89,8 @@ public class ImageResource {
     public Response saveImage(
             @HeaderParam("name") String filename,
             @HeaderParam("mimetype") String mimetype,
-            InputStream inputStream) {
+            InputStream inputStream
+    ) {
         Response response;
         try {
             NewImageDto imageDto = new NewImageDto();
