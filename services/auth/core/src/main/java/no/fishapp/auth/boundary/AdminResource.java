@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Transactional
-//@RolesAllowed(value = {Group.ADMIN_GROUP_NAME})
+@RolesAllowed(value = {Group.ADMIN_GROUP_NAME})
 public class AdminResource {
 
     @Inject
@@ -39,7 +39,7 @@ public class AdminResource {
                 adminChangePasswordData.getUserId(),
                 adminChangePasswordData.getNewPassword()
         );
-        if (! sucsess) {
+        if (!sucsess) {
             resp = Response.ok("Could not find user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } else {
             resp = Response.ok();

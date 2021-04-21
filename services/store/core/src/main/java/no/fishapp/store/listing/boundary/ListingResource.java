@@ -1,26 +1,20 @@
 package no.fishapp.store.listing.boundary;
 
 
-import io.jsonwebtoken.Claims;
 import lombok.extern.java.Log;
 import no.fishapp.auth.model.Group;
 import no.fishapp.store.listing.control.ListingService;
 import no.fishapp.store.model.listing.BuyRequest;
 import no.fishapp.store.model.listing.DTO.ChatListingInfo;
 import no.fishapp.store.model.listing.OfferListing;
-import org.eclipse.microprofile.jwt.Claim;
 
 import javax.annotation.security.RolesAllowed;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.persistence.PersistenceException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Path("listing")
 @Log
@@ -92,7 +86,7 @@ public class ListingResource {
 
 
     @GET
-    @Path("comodity/{id}")
+    @Path("commodity/{id}")
     public Response getCommodityOfferListings(
             @PathParam("id") long id
     ) {
@@ -109,7 +103,6 @@ public class ListingResource {
         if (listing.isPresent()) {
             return Response.ok(listing.get()).build();
         } else {
-            System.out.println(listing);
             return Response.ok().status(Response.Status.NOT_FOUND).build();
         }
     }

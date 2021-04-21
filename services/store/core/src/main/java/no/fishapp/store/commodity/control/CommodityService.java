@@ -12,7 +12,6 @@ import no.fishapp.store.model.listing.OfferListing;
 import no.fishapp.util.multipartHandler.MultipartHandler;
 import no.fishapp.util.multipartHandler.MultipartNameNotFoundException;
 import no.fishapp.util.multipartHandler.MultipartReadException;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.activation.DataHandler;
@@ -29,7 +28,8 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CommodityService {
 
-    private static final String getAllCommodities = "SELECT c from Commodity c";
+    private static final String GET_ALL_COMMODITIES = "SELECT c from Commodity c";
+    private static final String GET_DISPLAY_COMMODITIES = "SELECT DISTINCT c FROM Commodity c INNER JOIN Listing l ON l.commodity.id = c.id WHERE l.isOpen = true";
 
 
     @PersistenceContext
@@ -77,12 +77,12 @@ public class CommodityService {
 
 
     public List<Commodity> getAllCommodities() {
-        return entityManager.createQuery(getAllCommodities, Commodity.class).getResultList();
+        return entityManager.createQuery(GET_ALL_COMMODITIES, Commodity.class).getResultList();
     }
 
     public List<CommodityDTO> getAllDisplayCommodities() {
 
-        List<Commodity> commodities = this.getAllCommodities();
+        List<Commodity> commodities = entityManager.createQuery(GET_DISPLAY_COMMODITIES, Commodity.class).getResultList();
 
 
         return commodities.stream()

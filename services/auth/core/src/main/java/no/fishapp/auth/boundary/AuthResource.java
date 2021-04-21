@@ -38,7 +38,6 @@ public class AuthResource {
      * Returns a JWT token on success else an error response.
      *
      * @param usernamePasswordData the user login data
-     *
      * @return JSON Response
      */
     @POST
@@ -50,8 +49,8 @@ public class AuthResource {
         Optional<String> loginToken = authService.getToken(usernamePasswordData);
 
         return loginToken.map(s -> Response.ok().header(HttpHeaders.AUTHORIZATION,
-                                                        "Bearer " + s
-        )).orElse(Response.ok().status(Response.Status.UNAUTHORIZED)).build();
+                                                        "Bearer " + s))
+                         .orElse(Response.ok().status(Response.Status.UNAUTHORIZED)).build();
 
     }
 
@@ -74,7 +73,7 @@ public class AuthResource {
     @Path("newuser")
     @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
     public AuthenticatedUser newUser(NewAuthUserData newAuthUserData) {
-        if (! authService.isPrincipalInUse(newAuthUserData.getUserName())) {
+        if (!authService.isPrincipalInUse(newAuthUserData.getUserName())) {
             return authService.createUser(newAuthUserData).orElse(null);
         }
         return null;
@@ -89,22 +88,22 @@ public class AuthResource {
      * @param usernamePasswordData the user login data
      * @return JSON Response
      */
-    //    @POST
-    //    @Path("newuserdev")
-    //    @Produces(MediaType.APPLICATION_JSON)
-    //    public Response createUser(
-    //            @NotNull UsernamePasswordData usernamePasswordData
-    //    ) {
-    //        AuthenticatedUser user = authService.createUser(usernamePasswordData, List.of());
-    //
-    //        if (user == null) {
-    //            // TODO: rett feilkode her?
-    //            return Response.ok().status(Response.Status.NOT_MODIFIED).build();
-    //        } else {
-    //            return Response.ok(user).build();
-    //
-    //        }
-    //
-    //    }
+//    @POST
+//    @Path("newuserdev")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response createUser(
+//            @NotNull UsernamePasswordData usernamePasswordData
+//    ) {
+//        AuthenticatedUser user = authService.createUser(usernamePasswordData, List.of());
+//
+//        if (user == null) {
+//            // TODO: rett feilkode her?
+//            return Response.ok().status(Response.Status.NOT_MODIFIED).build();
+//        } else {
+//            return Response.ok(user).build();
+//
+//        }
+//
+//    }
 
 }
