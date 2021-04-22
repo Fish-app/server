@@ -48,6 +48,7 @@ public class RestClientAuthHandler {
     @ConfigProperty(name = "fishapp.service.username", defaultValue = "fishapp")
     private String username;
 
+
     @Inject
     @ConfigProperty(name = "fishapp.service.password", defaultValue = "fishapp")
     private String password;
@@ -60,7 +61,7 @@ public class RestClientAuthHandler {
     @Inject
     @RestClient
     ContainerAuthClient authClient;
-    
+
     @Resource
     ManagedScheduledExecutorService scheduledExec;
 

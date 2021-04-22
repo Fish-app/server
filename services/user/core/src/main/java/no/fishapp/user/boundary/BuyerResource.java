@@ -7,6 +7,7 @@ import no.fishapp.user.control.BuyerService;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
 import no.fishapp.user.model.user.Buyer;
 import no.fishapp.user.model.user.DTO.BuyerNewData;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -66,6 +67,9 @@ public class BuyerResource {
         } catch (UsernameAlreadyInUseException e) {
             resp = Response.ok(
                     "User already exist").status(Response.Status.CONFLICT);
+        } catch (RestClientHttpException e) {
+            //todo: use an jaxrs exeption mapper insted
+            resp = Response.serverError();
         }
         return resp.build();
 
