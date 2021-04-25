@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.configuration.injection.MockInjection;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.inject.Inject;
 
@@ -53,12 +54,13 @@ class KeyServiceTest {
     public WeldInitiator weld = WeldInitiator.from(WeldInitiator.createWeld()
                                                                 .addExtensions(ConfigExtension.class)
                                                                 .addBeanClass(KeyService.class))
+                                             .activate(RequestScoped.class)
                                              .build();
 
     @Test
     @Order(0)
     void getPublicKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
-        var pkey = keyService.getPublicKey();
+        var pkey = weld.select(KeyService.class).get().getPublicKey();
         String publicKeyPEM = pkey
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replaceAll(System.lineSeparator(), "")
@@ -79,7 +81,7 @@ class KeyServiceTest {
     @Test
     @Order(1)
     void generateNewJwtToken() throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException, InvalidKeySpecException, NoSuchAlgorithmException {
-        var pkey = keyService.getPublicKey();
+        var pkey = weld.select(KeyService.class).get().getPublicKey();
         String publicKeyPEM = pkey
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replaceAll(System.lineSeparator(), "")

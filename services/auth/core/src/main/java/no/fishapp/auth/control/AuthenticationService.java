@@ -32,20 +32,29 @@ public class AuthenticationService {
     static final String GET_NUM_WITH_PRINCIPAL_QUERY = "SELECT count(au) FROM AuthenticatedUser as au WHERE au.principalName = :pname";
 
 
-    //@Inject
+    @Inject
     IdentityStoreHandler identityStoreHandler;
 
     @PersistenceContext
     EntityManager entityManager;
 
-    //@Inject
+    /**
+     * for testing
+     *
+     * @param entityManager
+     */
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    @Inject
     PasswordHash hasher;
 
-    // @Inject
+    @Inject
     KeyService keyService;
 
-    //@Inject
-    //@Claim(Claims.SUBJECT)
+    @Inject
+    @Claim(Claims.SUBJECT)
     Instance<Optional<String>> jwtSubject;
 
 
@@ -214,5 +223,6 @@ public class AuthenticationService {
         return suc;
 
     }
+
 
 }
