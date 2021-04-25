@@ -36,14 +36,6 @@ import java.util.logging.Logger;
 public class KeyService {
 
     @Inject
-    AAA aaa = new AAA();
-
-    public String testP() {
-        System.out.println(aaa.bbb());
-        return aaa.bbb();
-    }
-
-    @Inject
     @ConfigProperty(name = "jwt.cert.file", defaultValue = "jwtkeys.ser")
     private String keyPairSaveFile;
 
@@ -144,6 +136,8 @@ public class KeyService {
      */
     private void writeKeyPair(KeyPair keyPair) {
         try {
+            File saveFile = new File(keyPairSaveFile);
+            saveFile.getParentFile().mkdirs();
             this.serializeKeyPairToFile(keyPair, keyPairSaveFile);
         } catch (IOException ex) {
             Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, null, ex);

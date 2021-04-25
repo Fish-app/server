@@ -79,7 +79,7 @@
             <scope>compile</scope>
         </dependency>
 
-        <!--    test-deps    -->
+        <!--            test-deps    -->
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -100,6 +100,14 @@
             <version>3.9.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>microprofile-config</artifactId>
+            <version>2.4.0.Final</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
 
@@ -118,6 +126,7 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
             </plugin>

@@ -32,20 +32,20 @@ public class AuthenticationService {
     static final String GET_NUM_WITH_PRINCIPAL_QUERY = "SELECT count(au) FROM AuthenticatedUser as au WHERE au.principalName = :pname";
 
 
-    @Inject
+    //@Inject
     IdentityStoreHandler identityStoreHandler;
 
     @PersistenceContext
     EntityManager entityManager;
 
-    @Inject
+    //@Inject
     PasswordHash hasher;
 
-    @Inject
+    // @Inject
     KeyService keyService;
 
-    @Inject
-    @Claim(Claims.SUBJECT)
+    //@Inject
+    //@Claim(Claims.SUBJECT)
     Instance<Optional<String>> jwtSubject;
 
 
@@ -56,12 +56,12 @@ public class AuthenticationService {
      *
      * @return true if the status on the result is valid, false if not
      */
-    public boolean isAuthValid(CredentialValidationResult result) {
+    private boolean isAuthValid(CredentialValidationResult result) {
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
 
 
-    public boolean isAuthValid(String userId, String password) {
+    private boolean isAuthValid(String userId, String password) {
         var result = identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
@@ -74,7 +74,7 @@ public class AuthenticationService {
      *
      * @return the credential val result for this username pass combo
      */
-    public CredentialValidationResult getValidationResult(String userId, String password) {
+    private CredentialValidationResult getValidationResult(String userId, String password) {
         return identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
     }
 
