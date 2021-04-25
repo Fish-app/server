@@ -8,11 +8,15 @@ import no.fishapp.auth.model.Group;
 import org.eclipse.microprofile.jwt.Claim;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.PassivationCapable;
 import javax.inject.Inject;
 import javax.persistence.*;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
+
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
@@ -44,10 +48,12 @@ public class AuthenticationService {
     @Claim(Claims.SUBJECT)
     Instance<Optional<String>> jwtSubject;
 
+
     /**
      * Util method checks if the auth {@link CredentialValidationResult} result is valid
      *
      * @param result the result from a credential validation
+     *
      * @return true if the status on the result is valid, false if not
      */
     public boolean isAuthValid(CredentialValidationResult result) {
@@ -65,6 +71,7 @@ public class AuthenticationService {
      *
      * @param userId   Users id
      * @param password Users password
+     *
      * @return the credential val result for this username pass combo
      */
     public CredentialValidationResult getValidationResult(String userId, String password) {
@@ -76,6 +83,7 @@ public class AuthenticationService {
      * Returns the user with the provided user principal
      *
      * @param principal the principal to search for
+     *
      * @return the user if found null if not.
      */
     public Optional<AuthenticatedUser> getUserFromPrincipal(String principal) {
@@ -98,11 +106,13 @@ public class AuthenticationService {
         if (userOptional.isPresent()) {
             var user = userOptional.get();
             var validationResult = getValidationResult(String.valueOf(user.getId()),
-                                                       usernamePasswordData.getPassword());
+                                                       usernamePasswordData.getPassword()
+            );
             if (isAuthValid(validationResult)) {
                 return Optional.of(keyService.generateNewJwtToken(usernamePasswordData.getUserName(),
                                                                   user.getId(),
-                                                                  validationResult.getCallerGroups()));
+                                                                  validationResult.getCallerGroups()
+                ));
             }
         }
 
@@ -113,6 +123,7 @@ public class AuthenticationService {
      * Returns the user with the provided user id.
      *
      * @param userId the id of the user to find
+     *
      * @return the user with the provided id null if none are found
      */
     public Optional<AuthenticatedUser> getUserFromId(long userId) {
@@ -139,6 +150,7 @@ public class AuthenticationService {
      * Checks if the provided principal is currently in use
      *
      * @param principal the principal to chek
+     *
      * @return true if the principal is used false if not
      */
     public boolean isPrincipalInUse(String principal) {
@@ -156,7 +168,7 @@ public class AuthenticationService {
     }
 
     public Optional<AuthenticatedUser> createUser(NewAuthUserData newAuthUserData) {
-        if (!isPrincipalInUse(newAuthUserData.getUserName())) {
+        if (! isPrincipalInUse(newAuthUserData.getUserName())) {
             AuthenticatedUser user = new AuthenticatedUser(hasher.generate(newAuthUserData.getPassword()
                                                                                           .toCharArray()),
                                                            newAuthUserData.getUserName()
@@ -183,6 +195,7 @@ public class AuthenticationService {
      *
      * @param newPass the new password
      * @param oldPass the old password
+     *
      * @return true if password is changed false if not
      */
     public boolean changePassword(String newPass, String oldPass) {

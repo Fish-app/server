@@ -36,6 +36,14 @@ import java.util.logging.Logger;
 public class KeyService {
 
     @Inject
+    AAA aaa = new AAA();
+
+    public String testP() {
+        System.out.println(aaa.bbb());
+        return aaa.bbb();
+    }
+
+    @Inject
     @ConfigProperty(name = "jwt.cert.file", defaultValue = "jwtkeys.ser")
     private String keyPairSaveFile;
 
@@ -87,6 +95,7 @@ public class KeyService {
      * @param principalName the user principal name
      * @param userId        the user id
      * @param groups        the groups the user is in
+     *
      * @return the jwt string
      */
     public String generateNewJwtToken(String principalName, long userId, Set<String> groups) {
@@ -149,6 +158,7 @@ public class KeyService {
      * Tries to deserialize the keypair saved at the provided file location
      *
      * @param file the file to deserialize from.
+     *
      * @return the deserialized key pair
      * @throws IOException if error reading the key pair
      */
@@ -168,6 +178,7 @@ public class KeyService {
      *
      * @param object the keypair to serialize.
      * @param file   the file to serialize to.
+     *
      * @throws IOException error writing object
      */
     private void serializeKeyPairToFile(KeyPair object, String file) throws IOException {
