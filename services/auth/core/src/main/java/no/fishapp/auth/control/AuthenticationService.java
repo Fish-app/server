@@ -1,6 +1,7 @@
 package no.fishapp.auth.control;
 
 import io.jsonwebtoken.Claims;
+import lombok.extern.java.Log;
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
@@ -10,7 +11,10 @@ import org.eclipse.microprofile.jwt.Claim;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
@@ -21,7 +25,9 @@ import java.util.Optional;
 
 @Transactional
 @RequestScoped
+@Log
 public class AuthenticationService {
+
 
     static final String GET_USER_BY_PRINCIPAL_QUERY = "SELECT authUsr FROM AuthenticatedUser AS authUsr WHERE authUsr.principalName = :pname";
 
@@ -34,6 +40,7 @@ public class AuthenticationService {
     @PersistenceContext
     EntityManager entityManager;
 
+
     @Inject
     PasswordHash hasher;
 
@@ -44,18 +51,19 @@ public class AuthenticationService {
     @Claim(Claims.SUBJECT)
     Instance<Optional<String>> jwtSubject;
 
+
     /**
      * Util method checks if the auth {@link CredentialValidationResult} result is valid
      *
      * @param result the result from a credential validation
      * @return true if the status on the result is valid, false if not
      */
-    public boolean isAuthValid(CredentialValidationResult result) {
+    protected boolean isAuthValid(CredentialValidationResult result) {
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
 
 
-    public boolean isAuthValid(String userId, String password) {
+    protected boolean isAuthValid(String userId, String password) {
         var result = identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
@@ -67,7 +75,7 @@ public class AuthenticationService {
      * @param password Users password
      * @return the credential val result for this username pass combo
      */
-    public CredentialValidationResult getValidationResult(String userId, String password) {
+    protected CredentialValidationResult getValidationResult(String userId, String password) {
         return identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
     }
 
@@ -79,9 +87,8 @@ public class AuthenticationService {
      * @return the user if found null if not.
      */
     public Optional<AuthenticatedUser> getUserFromPrincipal(String principal) {
-        TypedQuery<AuthenticatedUser> query = entityManager.createQuery(GET_USER_BY_PRINCIPAL_QUERY,
-                                                                        AuthenticatedUser.class
-        );
+        TypedQuery<AuthenticatedUser> query = entityManager
+                .createQuery(GET_USER_BY_PRINCIPAL_QUERY, AuthenticatedUser.class);
         query.setParameter("pname", principal);
         try {
             return Optional.of(query.getSingleResult());
@@ -94,7 +101,7 @@ public class AuthenticationService {
 
     public Optional<String> getToken(UsernamePasswordData usernamePasswordData) {
 
-        Optional<AuthenticatedUser> userOptional = this.getUserFromPrincipal(usernamePasswordData.getUserName());
+        Optional<AuthenticatedUser> userOptional = getUserFromPrincipal(usernamePasswordData.getUserName());
         if (userOptional.isPresent()) {
             var user = userOptional.get();
             var validationResult = getValidationResult(String.valueOf(user.getId()),
@@ -142,10 +149,10 @@ public class AuthenticationService {
      * @return true if the principal is used false if not
      */
     public boolean isPrincipalInUse(String principal) {
-        Query query = entityManager.createQuery(GET_NUM_WITH_PRINCIPAL_QUERY);
+        TypedQuery<Long> query = entityManager.createQuery(GET_NUM_WITH_PRINCIPAL_QUERY, Long.class);
         query.setParameter("pname", principal);
         try {
-            long numWith = (long) query.getSingleResult();
+            long numWith = query.getSingleResult();
             if (numWith == 0) {
                 return false;
             }
@@ -156,18 +163,19 @@ public class AuthenticationService {
     }
 
     public Optional<AuthenticatedUser> createUser(NewAuthUserData newAuthUserData) {
-        if (!isPrincipalInUse(newAuthUserData.getUserName())) {
-            AuthenticatedUser user = new AuthenticatedUser(hasher.generate(newAuthUserData.getPassword()
-                                                                                          .toCharArray()),
-                                                           newAuthUserData.getUserName()
-            );
-            newAuthUserData.getGroups().stream().filter(Group::isValidGroupName).forEach(groupName -> {
+        if (!isPrincipalInUse(newAuthUserData.getUserName()) && !newAuthUserData.getGroups().isEmpty()) {
+            AuthenticatedUser user = new AuthenticatedUser(hasher.generate(newAuthUserData.getPassword().toCharArray()),
+                                                           newAuthUserData.getUserName());
+            if (newAuthUserData.getGroups().stream().noneMatch(Group::isValidGroupName)) {
+                log.severe("Invalig groop names recived");
+                return Optional.empty();
+            }
+            newAuthUserData.getGroups().forEach(groupName -> {
                 Group dbGroup = entityManager.find(Group.class, groupName);
                 if (dbGroup != null) {
                     user.getGroups().add(dbGroup);
                 }
             });
-
             entityManager.persist(user);
             return Optional.of(user);
         } else {
@@ -201,5 +209,21 @@ public class AuthenticationService {
         return suc;
 
     }
+
+
+    /**
+     * For testing.
+     */
+    protected void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    /**
+     * For testing.
+     */
+    protected void setJwtSubject(Instance<Optional<String>> jwtSubject) {
+        this.jwtSubject = jwtSubject;
+    }
+
 
 }

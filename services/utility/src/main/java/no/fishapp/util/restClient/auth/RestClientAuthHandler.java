@@ -80,6 +80,9 @@ public class RestClientAuthHandler {
         tokenLoop();
     }
 
+    /**
+     *
+     */
     @Asynchronous
     private void tokenLoop() {
         Instant refreshTime;
@@ -89,11 +92,9 @@ public class RestClientAuthHandler {
 
             if (! isKeyValid) {
                 log.finer("fetching signing key");
-
                 this.jwtPubKey = getTokenPubKey();
                 this.jwtParser = buildJwtParser();
-                log.fine("successfully refreshed container signing key");
-
+                log.finer("successfully refreshed container signing key");
             }
 
 
@@ -141,9 +142,8 @@ public class RestClientAuthHandler {
             X509EncodedKeySpec keySpec    = new X509EncodedKeySpec(encoded);
             return keyFactory.generatePublic(keySpec);
         } catch (Exception ignore) {
+            return null;
         }
-        return null;
-
     }
 
     public String getLoginToken() throws RestClientHttpException {
@@ -157,10 +157,7 @@ public class RestClientAuthHandler {
 
 
     private Instant getRefreshTime(String authHeader) throws SignatureException {
-
-
-        String  token = authHeader.replaceFirst("Bearer ", "");
-        Instant refreshTime;
+        String token = authHeader.replaceFirst("Bearer ", "");
 
         log.log(Level.ALL, "Refreshed jwt token");
         var jwtClaims = jwtParser.parseClaimsJws(token);

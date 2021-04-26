@@ -27,24 +27,8 @@ public class MultipartHandler {
             if (attachment == null) {
                 continue;
             }
-
-
             DataHandler dataHandler = attachment.getDataHandler();
-//
-//
-//            MultivaluedMap<String, String> map = attachment.getHeaders();
-//            System.out.println("NameTestSak:" + dataHandler.getName());
-//            System.out.println("CONTENT TYPE:" + attachment.getContentType());
-//            System.out.println("CONTENT ID:" + attachment.getContentId());
-//            map.forEach((s, strings) -> {
-//                System.out.println("-----------------");
-//                System.out.println("key:" + s);
-//                System.out.println("val:" + strings);
-//                System.out.println("-----------------");
-//
-//            });
-//            String   fileName           = null;
-//            String   formElementName    = null;
+
             String[] contentDisposition = attachment.getHeaders().getFirst("Content-Disposition").split("; ");
             for (String tempName : contentDisposition) {
                 String[] names = tempName.split("=");
@@ -67,12 +51,13 @@ public class MultipartHandler {
 
 
     public String getFieldAsString(String fieldName) throws MultipartReadException, MultipartNameNotFoundException {
-        if (!fieldsMap.containsKey(fieldName)) {
+        if (! fieldsMap.containsKey(fieldName)) {
             throw new MultipartNameNotFoundException("No feald with key");
         }
         try {
             return new String(fieldsMap.get(fieldName).getInputStream().readAllBytes(),
-                              StandardCharsets.UTF_8);
+                              StandardCharsets.UTF_8
+            );
         } catch (IOException e) {
             throw new MultipartReadException("Error parsing string from form field: " + fieldName, e, fieldName);
 
@@ -80,7 +65,7 @@ public class MultipartHandler {
     }
 
     public int getInt(String fieldName) throws MultipartReadException, MultipartNameNotFoundException {
-        if (!fieldsMap.containsKey(fieldName)) {
+        if (! fieldsMap.containsKey(fieldName)) {
             throw new MultipartNameNotFoundException("No feald with key");
         }
         try {
@@ -92,7 +77,7 @@ public class MultipartHandler {
     }
 
     public float getFloat(String fieldName) throws MultipartReadException, MultipartNameNotFoundException {
-        if (!fieldsMap.containsKey(fieldName)) {
+        if (! fieldsMap.containsKey(fieldName)) {
             throw new MultipartNameNotFoundException("No feald with key");
         }
         try {
@@ -104,7 +89,7 @@ public class MultipartHandler {
     }
 
     public DataHandler getFieldDataHandler(String fieldName) throws MultipartNameNotFoundException {
-        if (!fieldsMap.containsKey(fieldName)) {
+        if (! fieldsMap.containsKey(fieldName)) {
             throw new MultipartNameNotFoundException("No feald with key");
         } else {
             return fieldsMap.get(fieldName);
