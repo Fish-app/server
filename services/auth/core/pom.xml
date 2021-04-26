@@ -19,10 +19,6 @@
         <jakartaee.version>8.0.0</jakartaee.version>
         <microprofile.version>4.0.1</microprofile.version>
 
-
-        <arquillian-bom.version>1.7.0.Alpha5</arquillian-bom.version>
-        <junit-jupiter.version>5.7.0</junit-jupiter.version>
-
     </properties>
 
     <dependencies>
@@ -111,25 +107,8 @@
     </dependencies>
 
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.7.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
