@@ -7,9 +7,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.smallrye.config.inject.ConfigExtension;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.jboss.weld.junit.MockBean;
-import org.jboss.weld.junit.MockEjbInjectionServices;
-import org.jboss.weld.junit.MockInterceptor;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
@@ -17,23 +14,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.internal.configuration.injection.MockInjection;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.spi.Bean;
 import javax.inject.Inject;
-
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Set;
 
 @EnableWeld
 class KeyServiceTest {
@@ -51,20 +42,16 @@ class KeyServiceTest {
     }
 
     @WeldSetup
-    public WeldInitiator weld = WeldInitiator.from(WeldInitiator.createWeld()
-                                                                .addExtensions(ConfigExtension.class)
-                                                                .addBeanClass(KeyService.class))
-                                             .activate(RequestScoped.class)
-                                             .build();
+    public WeldInitiator weld = WeldInitiator
+            .from(WeldInitiator.createWeld().addExtensions(ConfigExtension.class).addBeanClass(KeyService.class))
+            .activate(RequestScoped.class).build();
 
     @Test
     @Order(0)
     void getPublicKey() throws InvalidKeySpecException, NoSuchAlgorithmException {
         var pkey = weld.select(KeyService.class).get().getPublicKey();
-        String publicKeyPEM = pkey
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replaceAll(System.lineSeparator(), "")
-                .replace("-----END PUBLIC KEY-----", "");
+        String publicKeyPEM = pkey.replace("-----BEGIN PUBLIC KEY-----", "").replaceAll(System.lineSeparator(), "")
+                                  .replace("-----END PUBLIC KEY-----", "");
 
         byte[] encoded = Base64.getDecoder().decode(publicKeyPEM.getBytes());
 
@@ -82,10 +69,8 @@ class KeyServiceTest {
     @Order(1)
     void generateNewJwtToken() throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException, InvalidKeySpecException, NoSuchAlgorithmException {
         var pkey = weld.select(KeyService.class).get().getPublicKey();
-        String publicKeyPEM = pkey
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replaceAll(System.lineSeparator(), "")
-                .replace("-----END PUBLIC KEY-----", "");
+        String publicKeyPEM = pkey.replace("-----BEGIN PUBLIC KEY-----", "").replaceAll(System.lineSeparator(), "")
+                                  .replace("-----END PUBLIC KEY-----", "");
 
         byte[] encoded = Base64.getDecoder().decode(publicKeyPEM.getBytes());
 

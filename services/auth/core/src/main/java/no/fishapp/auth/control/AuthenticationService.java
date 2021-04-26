@@ -1,6 +1,7 @@
 package no.fishapp.auth.control;
 
 import io.jsonwebtoken.Claims;
+import lombok.extern.java.Log;
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
@@ -25,7 +26,10 @@ import java.util.Optional;
 
 @Transactional
 @RequestScoped
+@Log
 public class AuthenticationService {
+
+
 
     static final String GET_USER_BY_PRINCIPAL_QUERY = "SELECT authUsr FROM AuthenticatedUser AS authUsr WHERE authUsr.principalName = :pname";
 
@@ -43,9 +47,11 @@ public class AuthenticationService {
      *
      * @param entityManager
      */
-    public void setEntityManager(EntityManager entityManager) {
+    protected void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    protected void setJwtSubject(Instance<Optional<String>> jwtSubject){this.jwtSubject=jwtSubject;}
 
     @Inject
     PasswordHash hasher;
@@ -65,12 +71,12 @@ public class AuthenticationService {
      *
      * @return true if the status on the result is valid, false if not
      */
-    private boolean isAuthValid(CredentialValidationResult result) {
+    protected boolean isAuthValid(CredentialValidationResult result) {
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
 
 
-    private boolean isAuthValid(String userId, String password) {
+    protected boolean isAuthValid(String userId, String password) {
         var result = identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
         return result.getStatus() == CredentialValidationResult.Status.VALID;
     }
@@ -83,7 +89,7 @@ public class AuthenticationService {
      *
      * @return the credential val result for this username pass combo
      */
-    private CredentialValidationResult getValidationResult(String userId, String password) {
+    protected CredentialValidationResult getValidationResult(String userId, String password) {
         return identityStoreHandler.validate(new UsernamePasswordCredential(userId, password));
     }
 
@@ -111,7 +117,7 @@ public class AuthenticationService {
 
     public Optional<String> getToken(UsernamePasswordData usernamePasswordData) {
 
-        Optional<AuthenticatedUser> userOptional = this.getUserFromPrincipal(usernamePasswordData.getUserName());
+        Optional<AuthenticatedUser> userOptional = getUserFromPrincipal(usernamePasswordData.getUserName());
         if (userOptional.isPresent()) {
             var user = userOptional.get();
             var validationResult = getValidationResult(String.valueOf(user.getId()),
@@ -163,10 +169,10 @@ public class AuthenticationService {
      * @return true if the principal is used false if not
      */
     public boolean isPrincipalInUse(String principal) {
-        Query query = entityManager.createQuery(GET_NUM_WITH_PRINCIPAL_QUERY);
+        TypedQuery<Long> query = entityManager.createQuery(GET_NUM_WITH_PRINCIPAL_QUERY, Long.class);
         query.setParameter("pname", principal);
         try {
-            long numWith = (long) query.getSingleResult();
+            long numWith =  query.getSingleResult();
             if (numWith == 0) {
                 return false;
             }
@@ -177,18 +183,21 @@ public class AuthenticationService {
     }
 
     public Optional<AuthenticatedUser> createUser(NewAuthUserData newAuthUserData) {
-        if (! isPrincipalInUse(newAuthUserData.getUserName())) {
+        if (! isPrincipalInUse(newAuthUserData.getUserName()) && !newAuthUserData.getGroups().isEmpty()) {
             AuthenticatedUser user = new AuthenticatedUser(hasher.generate(newAuthUserData.getPassword()
                                                                                           .toCharArray()),
                                                            newAuthUserData.getUserName()
             );
-            newAuthUserData.getGroups().stream().filter(Group::isValidGroupName).forEach(groupName -> {
+            if (newAuthUserData.getGroups().stream().noneMatch(Group::isValidGroupName)){
+                log.severe("Invalig groop names recived");
+                return Optional.empty();
+            }
+            newAuthUserData.getGroups().forEach(groupName -> {
                 Group dbGroup = entityManager.find(Group.class, groupName);
                 if (dbGroup != null) {
                     user.getGroups().add(dbGroup);
                 }
             });
-
             entityManager.persist(user);
             return Optional.of(user);
         } else {
