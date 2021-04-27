@@ -137,7 +137,7 @@ public class KeyService {
     private void writeKeyPair(KeyPair keyPair) {
         try {
             File saveFile = new File(keyPairSaveFile);
-            saveFile.getParentFile().mkdirs();
+            Optional.ofNullable(saveFile.getParentFile()).ifPresent(file -> file.mkdirs());
             this.serializeKeyPairToFile(keyPair, keyPairSaveFile);
         } catch (IOException ex) {
             Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, null, ex);
