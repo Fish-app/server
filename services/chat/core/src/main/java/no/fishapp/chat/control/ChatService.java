@@ -51,6 +51,11 @@ public class ChatService {
 
     private static final String GET_CONV = "select cv from Conversation cv where cv.listingId = :lid AND cv.conversationStarterUserId = :uid";
 
+    /**
+     * Retrieves a list of the conversations belonging to a user of the specified ID.
+     * @param id of the user
+     * @return A list holding the conversations. If none was found, we return NULL
+     */
     public List<Conversation> getUserConversations(long id) {
         var query = entityManager.createQuery(GET_USER_CONVS, Conversation.class);
         query.setParameter("uid", id);
@@ -62,6 +67,12 @@ public class ChatService {
         return null;
     }
 
+    /**
+     * Retrieves a specific conversation
+     * @param uid
+     * @param listingId
+     * @return
+     */
     private Optional<Conversation> getUserListingConversation(long uid, long listingId) {
         var query = entityManager.createQuery(GET_CONV, Conversation.class);
 
