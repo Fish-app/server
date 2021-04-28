@@ -1,4 +1,4 @@
-package no.fishapp.checkout.model.DTO;
+package no.fishapp.checkout.model.dibsapi.responses;
 
 import lombok.Data;
 

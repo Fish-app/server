@@ -2,13 +2,11 @@ package no.fishapp.checkout.client;
 
 import no.fishapp.checkout.client.exceptionHandlers.RestClientExceptionMapper;
 import no.fishapp.checkout.client.exceptionHandlers.RestClientHttpException;
-import no.fishapp.checkout.model.DTO.NewSubscription;
-import no.fishapp.checkout.model.DTO.SubscriptionResponse;
-import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
+import no.fishapp.checkout.model.dibsapi.NewSubscription;
+import no.fishapp.checkout.model.dibsapi.responses.SubscriptionResponse;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -24,22 +22,23 @@ public interface DibsPaymentClient {
 
     @POST
     @Path("/v1/payments/")
-    SubscriptionResponse newSubscription(@HeaderParam("Authorization") String privateKey, NewSubscription newSubscription) throws RestClientHttpException;
+    SubscriptionResponse newSubscription(
+            @HeaderParam("Authorization") String privateKey,
+            NewSubscription newSubscription) throws RestClientHttpException;
+
+    @GET
+    @Path("/v1/subscriptions/{subscriptionId}")
+    Response getSubscriptionDetails(
+            @PathParam("subscriptionId") String subscriptionId,
+            @HeaderParam("Authorization") String privateKey) throws RestClientHttpException;
 
     @POST
     @Path("/v1/payments/{paymentId}/cancels")
-    CompletionStage<Void> cancelPayment(@PathParam("paymentId") String paymentId) throws RestClientHttpException;
+    Response cancelPayment(@PathParam("paymentId") String paymentId) throws RestClientHttpException;
 
     @POST
     @Path("/v1/subscriptions/charges")
-    CompletionStage<Void> makeBulkCharge()  throws RestClientHttpException;
-
-
-
-
-
-
-
+    CompletionStage<Void> makeBulkCharge() throws RestClientHttpException;
 
 
 }

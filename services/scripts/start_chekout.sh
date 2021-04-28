@@ -4,6 +4,7 @@ mvn -f ./../checkout/pom.xml package && \
 docker build ./../checkout/core -t fishapp-checkout:latest && \
 docker run  \
   -d -t \
+  -e API_PRIV_KEY=test-secret-key-c8d3197e79b34339aa2a20b24a20c77b\
   --network=fishapp_network \
   --rm \
   --mount source=imageVolume,target=/aplication_storage/images \

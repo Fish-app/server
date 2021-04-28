@@ -4,8 +4,6 @@ import lombok.Data;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Data
@@ -42,22 +40,25 @@ public class Item {
     private int unitPrice;
 
     /**
-     * Tax rate in percentages that is 10 = 10%
+     * Tax rate in 1/100 percentages i.e 2500 = 25%
      */
     private int taxRate;
 
     /**
      * The amount of VAT/tax
+     * is in hundredths i.e. 10000 is interpeted as "100.00"
      */
     private int taxAmount;
 
     /**
      * Product total amount including VAT
+     * is in hundredths i.e. 10000 is interpeted as "100.00"
      */
     private int grossTotalAmount;
 
     /**
      * Product total amount excluding VAT
+     * is in hundredths i.e. 10000 is interpeted as "100.00"
      */
     private int netTotalAmount;
 }

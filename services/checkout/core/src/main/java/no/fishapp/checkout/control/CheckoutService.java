@@ -4,13 +4,12 @@ import io.jsonwebtoken.Claims;
 import lombok.extern.java.Log;
 import no.fishapp.checkout.client.DibsPaymentClient;
 import no.fishapp.checkout.client.exceptionHandlers.RestClientHttpException;
-import no.fishapp.checkout.model.DTO.NewSubscription;
-import no.fishapp.checkout.model.DTO.SubscriptionResponse;
-import no.fishapp.checkout.model.dibsapi.Checkout;
-import no.fishapp.checkout.model.dibsapi.Item;
-import no.fishapp.checkout.model.dibsapi.Order;
-import no.fishapp.checkout.model.dibsapi.SubscriptionInfo;
+import no.fishapp.checkout.exeptions.UserAlreadySubscribedException;
+import no.fishapp.checkout.model.SubscribedUser;
+import no.fishapp.checkout.model.dibsapi.*;
+import no.fishapp.checkout.model.dibsapi.responses.SubscriptionResponse;
 import no.fishapp.checkout.model.enums.Currencies;
+import no.fishapp.checkout.model.enums.SubscriptionStatus;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -18,16 +17,16 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.logging.Level;
 
 @Log
@@ -65,30 +64,128 @@ public class CheckoutService {
     @RestClient
     DibsPaymentClient dibsPaymentClient;
 
-    public Optional<Item> getItem(String itemId){
+    public Optional<Item> getItem(String itemId) {
         return Optional.ofNullable(entityManager.find(Item.class, itemId));
     }
 
 
+    public static String GET_ALL_ACTIVE_SUBSCRIPTIONS;
+    public static String GET_USER_SUBSCRIPTION = "SELECT su FROM SubscribedUser su WHERE su.userid = :uid";
 
-    public void chargeSubscriptions(){
+
+    public void chargeSubscriptions() {
+
 
     }
 
+    private Optional<SubscribedUser> getSubscribedUser(long userId) {
+        TypedQuery<SubscribedUser> query = entityManager.createQuery(GET_USER_SUBSCRIPTION, SubscribedUser.class);
+        query.setParameter("uid", userId);
+
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
 
 
-    public Optional<SubscriptionResponse> newSubscription(){
+    public boolean cansleSubscription() {
+        if (jwtSubject.get().isEmpty()) {
+            // this is bad but unlikely
+            log.log(Level.SEVERE, "Error reading jwt token");
+            return false;
+        }
+        long currentUserId = Long.parseLong(jwtSubject.get().get());
+
+
+        SubscribedUser subscribedUser = entityManager.find(SubscribedUser.class, currentUserId);
+
+        if (subscribedUser != null) {
+            subscribedUser.setWillRenew(false);
+            // this is to enshure the user wil not be charged again even if the
+            // call to cansle the payment objet fails
+            entityManager.persist(subscribedUser);
+            try {
+                var resp = dibsPaymentClient.cancelPayment(subscribedUser.getSubscriptionId());
+
+                subscribedUser.setSubscriptionId(null);
+                entityManager.persist(subscribedUser);
+                return true;
+            } catch (RestClientHttpException e) {
+                var a = e.getResponse();
+                System.out.println("STATUSCODE: " + a.getStatus());
+                System.out.println("CONTENT: " + a.readEntity(String.class));
+
+                return false;
+            }
+
+
+        } else {
+            return false;
+        }
+
+
+    }
+
+    public boolean isSubscriptionValid(long userId) {
+        Optional<SubscribedUser> subscribedUser = getSubscribedUser(userId);
+
+        return subscribedUser.map(user -> {
+            switch (user.getSubscriptionStatus()) {
+                case OK:
+                    return true;
+                case PENDING:
+                    try {
+                        dibsPaymentClient.getSubscriptionDetails(user.getSubscriptionId(), dibsApiKey);
+                        user.setSubscriptionStatus(SubscriptionStatus.OK);
+                        entityManager.persist(user);
+                        return true;
+                    } catch (RestClientHttpException e) {
+                        var a = e.getResponse();
+                        System.out.println("STATUSCODE: " + a.getStatus());
+                        System.out.println("CONTENT: " + a.readEntity(String.class));
+                        return false;
+                    }
+                case NOT_ACTIVE:
+                default:
+                    return false;
+            }
+        }).orElse(false);
+    }
+
+
+    public Optional<SubscriptionResponse> newSubscription() throws UserAlreadySubscribedException {
         if (jwtSubject.get().isEmpty()) {
             log.log(Level.SEVERE, "Error reading jwt token");
             return Optional.empty();
         }
         long currentUserId = Long.parseLong(jwtSubject.get().get());
 
+        Optional<SubscribedUser> subscribedUserOptional = getSubscribedUser(currentUserId);
 
-        NewSubscription      newSubscription = this.createNewSubscription(currentUserId);
+        SubscribedUser subscribedUser = subscribedUserOptional.orElseGet(() -> {
+            var newUser = new SubscribedUser();
+            newUser.setUserid(currentUserId);
+            newUser.setWillRenew(true);
+            return newUser;
+        });
+
+        if (subscribedUser.getSubscriptionStatus() == SubscriptionStatus.OK) {
+            throw new UserAlreadySubscribedException();
+        }
+
+        subscribedUser.setSubscriptionStatus(SubscriptionStatus.PENDING);
+
+
+        NewSubscription newSubscription = this.createNewSubscription(currentUserId);
+        entityManager.persist(newSubscription.getOrder());
         try {
             SubscriptionResponse resp = dibsPaymentClient.newSubscription(dibsApiKey, newSubscription);
-            
+            subscribedUser.setSubscriptionId(resp.getPaymentId());
+            subscribedUser.addOrder(newSubscription.getOrder());
+
+
             return Optional.of(resp);
         } catch (RestClientHttpException e) {
             var a = e.getResponse();
@@ -97,18 +194,21 @@ public class CheckoutService {
 
             e.printStackTrace();
             return Optional.empty();
+        } finally {
+            entityManager.persist(subscribedUser);
         }
 
 
     }
 
 
-    public NewSubscription createNewSubscription(long userId){
+    public NewSubscription createNewSubscription(long userId) {
 
 
-        Order order =  this.getDefaultSubscriptionOrder(userId);
-        Checkout checkout = this.getDefaultCheckout();
+        DibsOrder        order            = this.getDefaultSubscriptionOrder(userId);
+        Checkout         checkout         = this.getDefaultCheckout();
         SubscriptionInfo subscriptionInfo = this.getDefaultSubInfo();
+
 
         // new sub req
 
@@ -122,6 +222,10 @@ public class CheckoutService {
     }
 
 
+
+
+
+
     /*
     I know this is not ideal. Hardcoding implementations like this makes change harder
     there are multiple alternatives, the best being simply generating from values in the database.
@@ -130,25 +234,26 @@ public class CheckoutService {
     2. you do not have to change code when implementing new stuff
      */
 
-    public Item getSubscriptionItem(){
+    public Item getSubscriptionItem() {
         // ehhh to litte time
         return this.getItem(subscriptionItemName).orElse(null);
     }
 
-    public Order getDefaultSubscriptionOrder(long userId){
+    public DibsOrder getDefaultSubscriptionOrder(long userId) {
         Item suscriptionItem = this.getSubscriptionItem();
 
-        Order order = new Order();
+        DibsOrder dibsOrder = new DibsOrder();
 
-        order.setItems(List.of(suscriptionItem));
-        order.setAmount(1);
-        order.setCurrency(Currencies.NOK);
-        order.setReference(String.format("USER:%s-ITEM:%s", userId, suscriptionItem.getId()));
+        dibsOrder.setItems(List.of(suscriptionItem));
+        dibsOrder.setAmount(1);
+        dibsOrder.setCurrency(Currencies.NOK);
+        dibsOrder.setReference(String.format("USER:%s-ITEM:%s-%s", userId, suscriptionItem.getId(), UUID.randomUUID()));
+        dibsOrder.calculateAndSetAmount();
 
-        return order;
+        return dibsOrder;
     }
 
-    public Checkout getDefaultCheckout(){
+    public Checkout getDefaultCheckout() {
         Checkout checkout = new Checkout();
 
         checkout.setIntegrationType("hostedPaymentPage");
@@ -158,11 +263,11 @@ public class CheckoutService {
         return checkout;
     }
 
-    public SubscriptionInfo getDefaultSubInfo(){
+    public SubscriptionInfo getDefaultSubInfo() {
         SubscriptionInfo subscriptionInfo = new SubscriptionInfo();
 
         // the end date is required so...
-        subscriptionInfo.setEndDate(Instant.now().plus(100000, ChronoUnit.DAYS).toString());
+        subscriptionInfo.setEndDate(Instant.now().plus(1000, ChronoUnit.DAYS).toString());
         subscriptionInfo.setInterval(3);
         return subscriptionInfo;
     }

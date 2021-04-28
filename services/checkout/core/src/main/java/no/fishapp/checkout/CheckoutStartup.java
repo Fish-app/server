@@ -1,7 +1,6 @@
 package no.fishapp.checkout;
 
 
-
 import lombok.SneakyThrows;
 import no.fishapp.checkout.control.CheckoutService;
 import no.fishapp.checkout.model.dibsapi.Item;
@@ -12,8 +11,6 @@ import javax.ejb.*;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -23,8 +20,8 @@ import java.util.Random;
 @Startup
 public class CheckoutStartup {
 
-@Inject
-private CheckoutService checkoutService;
+    @Inject
+    private CheckoutService checkoutService;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -41,7 +38,6 @@ private CheckoutService checkoutService;
     @Inject
     @ConfigProperty(name = "fishapp.checkout.items.subscription.name")
     private String subscriptionItemName;
-
 
 
     @PostConstruct
@@ -66,11 +62,11 @@ private CheckoutService checkoutService;
             item.setName("seller subscription");
             item.setQuantity(1);
             item.setUnit("unit");
-            item.setUnitPrice(1);
+            item.setUnitPrice(10000);
             item.setTaxRate(0);
             item.setTaxAmount(0);
-            item.setGrossTotalAmount(1);
-            item.setNetTotalAmount(1);
+            item.setGrossTotalAmount(10000);
+            item.setNetTotalAmount(10000);
 
 
             entityManager.persist(item);
@@ -78,10 +74,8 @@ private CheckoutService checkoutService;
     }
 
     @SneakyThrows
-    @Schedules({
-            @Schedule(dayOfMonth="First", hour = "3"),
-    })
-    public void chargeSubscriptionTask(){
+    @Schedules({@Schedule(dayOfMonth = "1", hour = "3", persistent = false),})
+    public void chargeSubscriptionTask() {
 
         // this may seem stupid mainly because it technically is but.
         // if this task is triggered in a cluster of these containers without this spreading the api
@@ -91,8 +85,8 @@ private CheckoutService checkoutService;
         // takes responsibility and handles the refreshing.
         //
         // But time is fleeting and life is short so this shitty wait solution got to be good enough
-        Random random = new Random();
-        int sleeptime = random.nextInt(3000);
+        Random random    = new Random();
+        int    sleeptime = random.nextInt(3000);
         Thread.sleep(sleeptime);
 
         checkoutService.chargeSubscriptions();
