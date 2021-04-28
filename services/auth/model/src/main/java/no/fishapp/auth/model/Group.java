@@ -1,18 +1,20 @@
 package no.fishapp.auth.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Arrays;
 
-/*
-	Represents a user group in the application. A user group is
-	used for permissions, where each group has different permissions when 
-	accessing resources. 
-*/
+/**
+ * Represents the differen groops used for authentication in the application.
+ */
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "group_names")
 public class Group implements Serializable {
 
@@ -22,14 +24,13 @@ public class Group implements Serializable {
     public static final String ADMIN_GROUP_NAME = "admin";
     public static final String CONTAINER_GROUP_NAME = "container";
 
-    public static final String[] GROUPS = {CONTAINER_GROUP_NAME,USER_GROUP_NAME, BUYER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME};
+    public static final String[] GROUPS = {CONTAINER_GROUP_NAME, USER_GROUP_NAME, BUYER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME};
 
-
+    /**
+     * The group name.
+     */
     @Id
     String name;
-
-    public Group() {
-    }
 
     public Group(String name) {
         this.name = name;

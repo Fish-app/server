@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.InvalidKeyException;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.java.Log;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
@@ -17,21 +18,17 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
- * The type Key service.
+ * Manages the jwt key and tokens for the aplication.
+ * this is done by offering tokens from {@link KeyService#generateNewJwtToken(String, long, Set)} and
+ * signed by the {@link PrivateKey} paired with the {@link PublicKey} provided as a object or b64 encoded fron {@link KeyService#getPublicKey()}
  */
+@Log
 @ApplicationScoped
 public class KeyService {
 
@@ -39,9 +36,6 @@ public class KeyService {
     @ConfigProperty(name = "jwt.cert.file", defaultValue = "jwtkeys.ser")
     private String keyPairSaveFile;
 
-    /**
-     * The Issuer.
-     */
     @Inject
     @ConfigProperty(name = "mp.jwt.verify.issuer", defaultValue = "issuer")
     private String issuer;
@@ -49,64 +43,58 @@ public class KeyService {
     private KeyPair keyPair = null;
 
     /**
-     * Gets rsa public key.
+     * Returns the rsa {@link PublicKey}.
      *
-     * @return the rsa public key
+     * @return the {@link PublicKey}.
      */
     private PublicKey getRSAPublic() {
         return keyPair.getPublic();
     }
 
     /**
-     * Gets rsa private key.
+     * Returns the rsa {@link PrivateKey}.
      *
-     * @return the rsa private key
+     * @return the {@link PrivateKey}
      */
     private PrivateKey getRSAPrivate() {
         return keyPair.getPrivate();
     }
 
     /**
-     * Gets public key.
+     * Returns the base64 encoded public key String.
      *
-     * @return the public key
+     * @return the base64 encoded public key String.
      */
     public String getPublicKey() {
-        String key = Base64.getMimeEncoder(64, "\n".getBytes())
-                           .encodeToString(keyPair.getPublic().getEncoded());
+        String key = Base64.getMimeEncoder(64, "\n".getBytes()).encodeToString(keyPair.getPublic().getEncoded());
 
 
-        return "-----BEGIN PUBLIC KEY-----\n" +
-                key +
-                "\n-----END PUBLIC KEY-----";
+        return "-----BEGIN PUBLIC KEY-----\n" + key + "\n-----END PUBLIC KEY-----";
     }
 
     /**
-     * Generate new jwt token string.
+     * Generate a new base 64 encoded JWT with the provided {@code principalName} as {@code upn},
+     * {@code userId} as {@code sub} and {@code groups} as {@code groups}.
      *
      * @param principalName the user principal name
      * @param userId        the user id
-     * @param groups        the groups the user is in
-     *
-     * @return the jwt string
+     * @param groups        A set containing the group names the user is a member of
+     * @return the base 64 encoded JWT sting containing the provided values.
      */
     public String generateNewJwtToken(String principalName, long userId, Set<String> groups) {
         try {
 
             Instant now            = Instant.now();
             Instant expirationTime = now.plus(1, ChronoUnit.DAYS);
-            JwtBuilder jb = Jwts.builder()
-                                .setHeaderParam("typ", "JWT")               // type
+            JwtBuilder jb = Jwts.builder().setHeaderParam("typ", "JWT")               // type
                                 .setHeaderParam("alg", "RS256")             // algorithm
                                 .setHeaderParam("kid", "abc-1234567890")    // key id
                                 .setSubject(String.valueOf(userId))
                                 .setId(UUID.randomUUID().toString())                    // id
-                                .claim("iss", issuer)
-                                .setIssuedAt(Date.from(now))
+                                .claim("iss", issuer).setIssuedAt(Date.from(now))
                                 .setExpiration(Date.from(expirationTime))
                                 .claim("upn", principalName)                               // user principal name
-                                .claim("groups", groups)
-                                .signWith(this.getRSAPrivate());
+                                .claim("groups", groups).signWith(this.getRSAPrivate());
             return jb.compact();
         } catch (InvalidKeyException ignore) {
         }
@@ -114,9 +102,9 @@ public class KeyService {
     }
 
     /**
-     * read a keypair from file
+     * Reads the {@link KeyPair} from the file path defined in {@link KeyService#keyPairSaveFile}.
      *
-     * @return the keypair if success null if not
+     * @return the {@code KeyPair} if success {@code null} if not.
      */
     private KeyPair readKeyPair() {
         KeyPair result = null;
@@ -124,35 +112,40 @@ public class KeyService {
         try {
             result = deserializeKeyPair(new File(this.keyPairSaveFile));
         } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, "Failed to read keyfile", ex);
+            log.log(Level.SEVERE, "Failed to read keyfile", ex);
         }
         return result;
     }
 
     /**
-     * Save the keypair to file
+     * Saves the {@link KeyPair} to the file path defined in {@link KeyService#keyPairSaveFile}.
+     * If the filepath's parent dirs does not exist they wil be generated.
      *
      * @param keyPair the keypair to save
      */
     private void writeKeyPair(KeyPair keyPair) {
         try {
             File saveFile = new File(keyPairSaveFile);
-            Optional.ofNullable(saveFile.getParentFile()).ifPresent(file -> file.mkdirs());
+            Optional.ofNullable(saveFile.getParentFile()).ifPresent(File::mkdirs);
             this.serializeKeyPairToFile(keyPair, keyPairSaveFile);
         } catch (IOException ex) {
-            Logger.getLogger(KeyService.class.getName()).log(Level.SEVERE, null, ex);
+            log.log(Level.SEVERE, "Error writing keypair to file", ex);
         }
     }
 
+    /**
+     * Generate the rsa {@link KeyPair}.
+     *
+     * @return the generated {@link KeyPair}
+     */
     private KeyPair createKeyPair() {
         return Keys.keyPairFor(SignatureAlgorithm.RS256);
     }
 
     /**
-     * Tries to deserialize the keypair saved at the provided file location
+     * Tries to deserialize the {@link KeyPair} from the provided {@link File}.
      *
      * @param file the file to deserialize from.
-     *
      * @return the deserialized key pair
      * @throws IOException if error reading the key pair
      */
@@ -168,11 +161,10 @@ public class KeyService {
     }
 
     /**
-     * Serializes the provided keypair object
+     * Tries to serialize the {@link KeyPair} to the provided {@link File}.
      *
      * @param object the keypair to serialize.
      * @param file   the file to serialize to.
-     *
      * @throws IOException error writing object
      */
     private void serializeKeyPairToFile(KeyPair object, String file) throws IOException {

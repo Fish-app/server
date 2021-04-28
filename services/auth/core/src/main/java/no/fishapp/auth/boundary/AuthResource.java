@@ -2,10 +2,9 @@ package no.fishapp.auth.boundary;
 
 
 import no.fishapp.auth.control.AuthenticationService;
-import no.fishapp.auth.control.KeyService;
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
-import no.fishapp.auth.model.DTO.UserChangPasswordData;
+import no.fishapp.auth.model.DTO.UserChangePasswordData;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
 import no.fishapp.auth.model.Group;
 
@@ -17,7 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.Optional;
 
 @Path("authentication")
@@ -29,38 +27,38 @@ public class AuthResource {
     @Inject
     AuthenticationService authService;
 
-    @Inject
-    KeyService keyService;
-
 
     /**
-     * Authenticates a user if providing a correct email/password combination.
-     * Returns a JWT token on success else an error response.
+     * Returns a Jwt token if the provided {@link UsernamePasswordData} yields a valid login,
+     * Returns http 401 response if not.
      *
-     * @param usernamePasswordData the user login data
-     * @return JSON Response
+     * @param usernamePasswordData the {@link UsernamePasswordData} object.
+     * @return http 200 with the Json web token in the {@link HttpHeaders#AUTHORIZATION} of the response.
      */
     @POST
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(
-            @NotNull UsernamePasswordData usernamePasswordData
-    ) {
+            @NotNull UsernamePasswordData usernamePasswordData) {
         Optional<String> loginToken = authService.getToken(usernamePasswordData);
 
-        return loginToken.map(s -> Response.ok().header(HttpHeaders.AUTHORIZATION,
-                                                        "Bearer " + s))
+        return loginToken.map(s -> Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + s))
                          .orElse(Response.ok().status(Response.Status.UNAUTHORIZED)).build();
 
     }
 
 
+    /**
+     * Change the password for the current logged in {@link AuthenticatedUser} to the values spesified in the provided {@link UserChangePasswordData}
+     *
+     * @param changPasswordData the {@link UserChangePasswordData} object.
+     * @return http 200 on sucsess if wrong old password http 403 is returned
+     */
     @PUT
     @Path("changepass")
     @Valid
     public Response changePassword(
-            UserChangPasswordData changPasswordData
-    ) {
+            UserChangePasswordData changPasswordData) {
         if (authService.changePassword(changPasswordData.getNewPassword(), changPasswordData.getOldPassword())) {
             return Response.ok().build();
         } else {
@@ -69,6 +67,13 @@ public class AuthResource {
     }
 
 
+    /**
+     * Adds a new {@link AuthenticatedUser} from the provided {@link NewAuthUserData}.
+     * This endpoint is used by other services not Users.
+     *
+     * @param newAuthUserData the {@link NewAuthUserData} object.
+     * @return a new auth user object if successful null if not
+     */
     @POST
     @Path("newuser")
     @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
@@ -80,30 +85,5 @@ public class AuthResource {
 
 
     }
-
-    /**
-     * Authenticates a user if providing a correct email/password combination.
-     * Returns a JWT token on success else an error response.
-     *
-     * @param usernamePasswordData the user login data
-     * @return JSON Response
-     */
-//    @POST
-//    @Path("newuserdev")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response createUser(
-//            @NotNull UsernamePasswordData usernamePasswordData
-//    ) {
-//        AuthenticatedUser user = authService.createUser(usernamePasswordData, List.of());
-//
-//        if (user == null) {
-//            // TODO: rett feilkode her?
-//            return Response.ok().status(Response.Status.NOT_MODIFIED).build();
-//        } else {
-//            return Response.ok(user).build();
-//
-//        }
-//
-//    }
 
 }

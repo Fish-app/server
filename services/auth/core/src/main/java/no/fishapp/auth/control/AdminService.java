@@ -18,6 +18,9 @@ import java.util.Optional;
 @RequestScoped
 public class AdminService {
 
+    /**
+     * Returns all users
+     */
     private static final String ALL_USERS = "select us from AuthenticatedUser us";
 
     @Inject
@@ -32,7 +35,6 @@ public class AdminService {
      *
      * @param userId      the id to change
      * @param newPassword the new password for the id
-     *
      * @return true if user is found and password changed otherwise false
      */
     public boolean changeUserPassword(long userId, String newPassword) {
@@ -48,6 +50,11 @@ public class AdminService {
     }
 
 
+    /**
+     * Returns all current auth users
+     *
+     * @return all auth users
+     */
     public List<AuthenticatedUser> getAllAuthUsers() {
         var query = entityManager.createQuery(ALL_USERS, AuthenticatedUser.class);
 
