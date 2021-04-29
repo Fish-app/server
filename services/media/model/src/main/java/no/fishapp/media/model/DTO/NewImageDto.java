@@ -8,6 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import java.io.InputStream;
 
 
+/**
+ * This DTO is used for saving an {@link no.fishapp.media.model.Image}.
+ */
 @Data
 @NoArgsConstructor
 public class NewImageDto {
@@ -20,5 +23,5 @@ public class NewImageDto {
     @Min(0)
     private int size;
 
-    private InputStream ImageDataStream;
+    private InputStream imageDataStream;
 }
