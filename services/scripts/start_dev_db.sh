@@ -10,7 +10,6 @@ docker run  \
   -e USER_USERNAME='fishmarket' \
   -e USER_PASSWORD='lkjfdsblkdfjglksjdfhglkdjf' \
   -v $PWD/.script_files/_init-user-db.sh:/docker-entrypoint-initdb.d/_init-user-db.sh \
-  --ip="192.168.0.123" \
   --hostname=fishapp_db \
   --name=fishapp_db \
   --rm \
