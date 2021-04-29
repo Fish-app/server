@@ -21,9 +21,9 @@
                   id="defaultHttpEndpoint"
                   host="*">
     </httpEndpoint>
-    <!--    <applicationManager autoExpand="true"/>-->
+    <applicationManager autoExpand="true"/>
 
-    <application location="frontend-1.0.war" type="war" context-root="/">
+    <application location="frontend-1.0.war" type="war" context-root="/admin">
     </application>
 
 

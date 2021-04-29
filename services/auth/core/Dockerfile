@@ -27,10 +27,7 @@ LABEL name="AUTH"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
-
 LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/auth/`)"
-LABEL traefik.http.routers.auth.middlewares=stripprefixregex
 
 ENV fishapp_system_url=http://host.docker.internal/
 
@@ -39,6 +36,12 @@ ENV http_admin_password="a"
 
 ENV http_client_username="fishapp"
 ENV http_client_password="fishapp"
+
+USER root
+RUN mkdir -p -m 777  /aplication_storage/token_key
+RUN chown 1001:0 /aplication_storage
+RUN chown 1001:0 /aplication_storage/token_key
+USER 1001
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/
