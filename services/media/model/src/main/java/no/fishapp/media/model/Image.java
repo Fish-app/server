@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * Represents a storeable image.
+ * Represents a storable image.
  */
 @Data
 @Entity
@@ -19,17 +19,21 @@ import java.math.BigInteger;
 public class Image implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    //The id of the image
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 
+    //The filename of the image
     @NotEmpty
     private String name;
 
+    //The mimetype of the image
     @NotEmpty
     @Column(name = "mime_type")
     private String mimeType;
 
+    //The size of the image
     @Min(0)
     private int size;
 

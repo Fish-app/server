@@ -2,20 +2,22 @@ package no.fishapp.media.control;
 
 import no.fishapp.media.model.DTO.NewImageDto;
 import no.fishapp.media.model.Image;
+import no.fishapp.util.multipartHandler.MultipartHandler;
 import no.fishapp.util.multipartHandler.MultipartNameNotFoundException;
 import no.fishapp.util.multipartHandler.MultipartReadException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 
-
+/**
+ * Manages saving and getting {@link Image}
+ * Saves images to a filepath. Uses {@link EntityManager} to communicate with the database
+ */
 @ApplicationScoped
 public class ImageService {
     @PersistenceContext
@@ -25,7 +27,14 @@ public class ImageService {
     @ConfigProperty(name = "photo.storage.path", defaultValue = "images/items")
     String imageStoragePath;
 
-
+    /**
+     * Creates and saves an {@link Image} from a {@link NewImageDto} and returns it.
+     * @param imageDto the {@code NewImageDto} containing the image data
+     * @return the {@code Image} that was created and saved
+     * @throws MultipartReadException if an error occurs with the {@link MultipartHandler} while reading a string
+     * @throws MultipartNameNotFoundException if {@link MultipartHandler} can't find a field with specified name
+     * @throws IOException if an I/O error occurs
+     */
     public Image saveImage(NewImageDto imageDto) throws MultipartReadException, MultipartNameNotFoundException, IOException {
         Image image = new Image();
 
