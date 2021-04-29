@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * The MessageBody is used by clients
+ * to store content when sending a new {@link Message}.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

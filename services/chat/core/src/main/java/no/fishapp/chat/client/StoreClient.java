@@ -18,6 +18,14 @@ import java.util.concurrent.CompletionStage;
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface StoreClient extends AutoCloseable, AuthBaseClientInterface {
 
+    /**
+     * This client is used to send a HTTP request to the store microservices-component to associate a
+     * conversation with the requested listing. A custom type {@link ChatListingInfo}is used to hold
+     * the information.
+     * @param listingId The ID of the listing
+     * @return A {@link ChatListingInfo} object encapsulated inside a {@link CompletionStage}.
+     * @throws RestClientHttpException A exception that catches any HTTP failure codes if present
+     */
     @GET
     @Path("listing/listing/{id}")
     @Produces(MediaType.APPLICATION_JSON)
