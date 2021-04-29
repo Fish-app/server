@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDTO {
-
     public static MessageDTO buildFromMessage(Message message) {
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.id = message.getId();
@@ -25,7 +24,7 @@ public class MessageDTO {
     }
 
     /**
-     * These variables holds the same data as the {@link Conversation} class
+     * These variables holds the same data as the {@link Message} class
      */
     long id;
     long createdDate;

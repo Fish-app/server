@@ -55,5 +55,4 @@ public class Message {
     protected void onCreate() {
         this.createdDate = new Date().getTime(); // Get epoch time
     }
-
 }

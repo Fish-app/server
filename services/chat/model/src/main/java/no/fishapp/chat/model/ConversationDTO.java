@@ -34,7 +34,6 @@ public class ConversationDTO {
         return conversationDTO;
     }
 
-
     /**
      * Builds a {@link ConversationDTO} and attach the last message as a {@code MessageDTO}
      *
@@ -57,5 +56,4 @@ public class ConversationDTO {
     long starterUserId;
     long listingId;
     MessageDTO lastMessage;
-
 }
