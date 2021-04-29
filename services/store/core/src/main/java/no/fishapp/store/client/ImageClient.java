@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.concurrent.CompletionStage;
 
 @RegisterRestClient(configKey = "imageClient")
-@Path("image")
+@Path("/api/media/image/")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface ImageClient extends AutoCloseable, AuthBaseClientInterface {
 

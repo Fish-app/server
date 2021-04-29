@@ -14,10 +14,12 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
+import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,7 +59,7 @@ public class BuyerResource {
     @Path("create")
     @PermitAll
     public Response createBuyer(
-            BuyerNewData buyerNewData
+            @NotNull BuyerNewData buyerNewData
     ) {
         Response.ResponseBuilder resp;
         try {
@@ -69,6 +71,7 @@ public class BuyerResource {
                     "User already exist").status(Response.Status.CONFLICT);
         } catch (RestClientHttpException e) {
             //todo: use an jaxrs exeption mapper insted
+            log.severe("HTTP " + e.getHttpStatusCode() + " error from inter container rest client");
             resp = Response.serverError();
         }
         return resp.build();
