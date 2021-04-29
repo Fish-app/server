@@ -36,7 +36,7 @@ const HomePageContent = HomPageCategories.Home
 //
 function Abcccc(props: { setIndex: (abc: HomPageCategories) => any }): ReactElement {
     let {home_spot} = useParams<{ home_spot: string }>();
-   
+
     let {path, url} = useRouteMatch();
 
 
@@ -67,6 +67,7 @@ export function MainPage() {
 
     console.log(path)
     console.log(url)
+    console.log(`${url}/home`)
     return <Layout className="layout">
         <Header>
             <div className="logo">Fishapp</div>
@@ -85,7 +86,7 @@ export function MainPage() {
             <div className="site-layout-content">
 
                 <Switch>
-                    <Route path={`/home/:home_spot`}>
+                    <Route path={`/admin/home/:home_spot`}>
                         <Abcccc setIndex={setIndex}/>
                     </Route>
                 </Switch>

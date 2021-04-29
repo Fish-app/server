@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import * as apiRequests from '../services/axios_api';
 import {Form, Input, Button, Checkbox} from 'antd';
-import { Redirect, Route, RouteComponentProps, RouteProps , useHistory} from 'react-router-dom'
+import {Redirect, Route, RouteComponentProps, RouteProps, useHistory} from 'react-router-dom'
 import axios from "axios";
 import {AuthHandler} from "../services/AuthHandler";
 
@@ -37,7 +37,7 @@ export function LoginPage() {
         //let aaa = await apiRequests.getCurrentUser();
         //console.log(aaa)
 
-        history.push("/home")
+        history.push("/admin/home")
 
         console.log('Success:', values);
     };
