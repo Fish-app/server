@@ -17,20 +17,28 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Rating {
 
-    //Id of the rating
+    /**
+     * Id of the rating
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    //Id of the user that created the rating
+    /**
+     * Id of the user that created the rating
+     */
     long issuerId;
 
-    //Id of the user that did the rating
+    /**
+     * Id of the user that did the rating
+     */
     long userRatedId;
 
     @ManyToOne
     Transaction ratedTransactions;
 
-    //Value of the rating
+    /**
+     * Value of the rating
+     */
     int stars;
 }

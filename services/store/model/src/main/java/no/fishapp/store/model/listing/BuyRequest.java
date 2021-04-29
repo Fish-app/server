@@ -23,14 +23,20 @@ public class BuyRequest extends Listing {
         return "Request";
     }
 
-    //Amount you want to buy
+    /**
+     * Amount you want to buy
+     */
     @Column(nullable = false, name = "amount")
     int amount;
 
-    //Additional info about the request
+    /**
+     * Additional info about the request
+     */
     String info;
 
-    //Maximum distance you want to travel
+    /**
+     * Maximum distance you want to travel
+     */
     double maxDistance;
 
     @ManyToOne(cascade = CascadeType.ALL)

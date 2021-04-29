@@ -13,19 +13,27 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 public class Transaction {
-    //Id of the transaction
+    /**
+     * Id of the transaction
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    //Time the transaction was created
+    /**
+     * Time the transaction was created
+     */
     long created;
 
-    //Amount that was bought in the transaction
+    /**
+     * Amount that was bought in the transaction
+     */
     @Column(nullable = false)
     int amount;
 
-    //Price the item was bought for
+    /**
+     * Price the item was bought for
+     */
     @Column(nullable = false)
     double price;
 
