@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * This and the message DTO exists so the message backlog does not have to include the
+ * This and the {@link MessageDTO} exists so the message backlog does not have to include the
  * user object of the sender once per message, when all that's needed is the user id
  * <p>
  * Returns metadata about a conversation; what order asscoiated, the current count of msgs
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ConversationDTO {
 
     /**
-     * Builds a conversation DTO
+     * Builds a {@link ConversationDTO}
      *
      * @param conversation the conversation to use for this DTO
      * @return a Conversation DTO
@@ -36,11 +36,11 @@ public class ConversationDTO {
 
 
     /**
-     * Builds a conversation DTO and attach the last message as a MessageDTO
+     * Builds a {@link ConversationDTO} and attach the last message as a {@code MessageDTO}
      *
      * @param conversation the conversation to use for this DTO
      * @param message      the last message to include in the conversation.
-     * @return a Conversation DTO
+     * @return a {@code ConversationDTO}
      */
     public static ConversationDTO buildFromConversation(Conversation conversation, Message message) {
         ConversationDTO convDto = buildFromConversation(conversation);
@@ -48,7 +48,9 @@ public class ConversationDTO {
         return convDto;
     }
 
-    
+    /**
+     * These variables holds the same data as the {@link Conversation} class
+     */
     long id;
     long lastMessageId;
     long createdDate;

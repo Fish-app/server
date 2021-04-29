@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The entity for a Conversation. Stored in the SQL database.
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -121,17 +124,25 @@ public class Conversation {
     }
 
     /**
-     * Output the **first** {@link Message}
-     * @return
+     * Return the last {@link Message} inside an {@code Optional}
+     * from this conversation. If no messages exist we return
+     * an empty {@code Optional}
+     * @return The {@code Optional} with an {@link Message}.
      */
-    public Optional<Message> getFirstMessage() {
+    public Optional<Message> getLastMessage() {
         if (this.messages.size() > 0) {
-            return Optional.of(messages.get(0));
+            return Optional.of(messages.get(messages.size()-1));
         } else {
             return Optional.empty();
         }
     }
 
+    /**
+     * Used as a security measure to verify if the {@code User} asking
+     * for the information is related to this conversation.
+     * @param id The ID of the {@code User}.
+     * @return A {@code Boolean} that the {@code User} is part of the conversation.
+     */
     public boolean isUserInConv(long id) {
         return id == conversationStarterUserId || id == listingCreatorUserId;
     }

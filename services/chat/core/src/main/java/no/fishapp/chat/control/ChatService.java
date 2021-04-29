@@ -112,7 +112,7 @@ public class ChatService {
         List<Conversation> userConvs     = this.getUserConversations(currentUserId);
 
         return userConvs.stream().map(conversation -> (includeLastMsg) ?
-                ConversationDTO.buildFromConversation(conversation, conversation.getFirstMessage().orElse(null)) :
+                ConversationDTO.buildFromConversation(conversation, conversation.getLastMessage().orElse(null)) :
                 ConversationDTO.buildFromConversation(conversation)).collect(Collectors.toList());
     }
 
@@ -128,7 +128,9 @@ public class ChatService {
      * a Chat is always started from a context where the listing is known.
      *
      * @param listingId The identifier that selects the {@link no.fishapp.store.model.listing.Listing}
-     * @return The already existing or newly created {@link Conversation}.
+     * @return The already existing or newly created {@link Conversation} inside an {@code Optional}.
+     *         If user is not authenticated or the conversation does not exsist an empty {@code Optional}
+     *         is returned.
      */
     public Optional<Conversation> newListingConversation(long listingId) {
         long userId;
@@ -171,6 +173,12 @@ public class ChatService {
     }
 
 
+    /**
+     * Finds a {@link Conversation} stored in the database.
+     * @param convId The ID of the {@code Conversation} to return
+     * @return An {@link Optional} holding the @{code Conversation}
+     *         or an empty {@code Optional} if no conversation exist.
+     */
     public Optional<Conversation> getConversation(long convId) {
         Conversation conv = entityManager.find(Conversation.class, convId);
         if (conv == null) {
@@ -180,6 +188,13 @@ public class ChatService {
         }
     }
 
+    /**
+     * Receives a sent {@link Message} and adds it to the {@code Conversation}
+     * @param messageBody The {@code MessageBody} sent by a client from the API.
+     * @param conversationId The ID of the {@code Conversation} to send the {@code Message} to.
+     * @return The updated {@link Conversation} inside an {@code Optional}. If no conversation
+     *         or the user is not authenticated, an empty {@code Optional}.
+     */
     public Optional<Conversation> sendMessage(String messageBody, long conversationId) {
         long userId;
         if (jwtSubject.get().isPresent()) {
@@ -191,6 +206,9 @@ public class ChatService {
 
         Optional<Conversation> conversation = this.getConversation(conversationId);
 
+        /**
+         * Check if the {@code User} asking for messages is a member of the conversation.
+         */
         if (conversation.map(cnv -> cnv.isUserInConv(userId)).orElse(false) && !messageBody.isEmpty()) {
 
             Message message = new Message();
@@ -210,11 +228,12 @@ public class ChatService {
     }
 
     /**
-     * Returns all messages newer than the message with the provided id.
-     *
-     * @param convId        the id of the concversation wo chek
+     * Returns a range of {@link Message}s, newer than the {@code Message} with the provided ID.
+     * @param convId        the ID of the {@link Conversation} to read the messages from.
      * @param fromMessageId (exclusive) return messages newer than the message with this id
-     * @return a list with the messages
+     * @return A list holding the {@code Message}s encapsualted with an {@link Optional}.
+     *          The {@code Optional} is empty if the user is not authenticated, or
+     *          the user is not a part of the conversation.
      */
     public Optional<List<Message>> getMessagesTo(long convId, long fromMessageId) {
         if (jwtSubject.get().isEmpty()) {
@@ -225,6 +244,9 @@ public class ChatService {
        long userId = Long.parseLong(jwtSubject.get().get());
         Optional<Conversation> conversation = this.getConversation(convId);
 
+        /**
+         * Check if the {@code User} asking for messages is a member of the conversation.
+         */
         if (conversation.map(cnv -> cnv.isUserInConv(userId)).orElse(false)) {
             return Optional.of(conversation.get().getMessages()
                                            .stream()
