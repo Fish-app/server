@@ -10,9 +10,10 @@ docker run  \
   -e USER_USERNAME='fishmarket' \
   -e USER_PASSWORD='lkjfdsblkdfjglksjdfhglkdjf' \
   -v $PWD/.script_files/_init-user-db.sh:/docker-entrypoint-initdb.d/_init-user-db.sh \
-  --expose 5432 \
+  --ip="192.168.0.123" \
   --hostname=fishapp_db \
-  --network=$NETWORK \
   --name=fishapp_db \
   --rm \
   postgres
+#  --network=$NETWORK \
+#   --network="host" \

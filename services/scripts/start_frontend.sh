@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-
 mvn -f ./../frontend/pom.xml package && \
 docker build ./../frontend/ -t fishapp_frontend:latest && \
 docker run  \

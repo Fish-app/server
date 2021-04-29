@@ -5,6 +5,7 @@ import no.fishapp.auth.model.Group;
 import no.fishapp.user.control.AdminUserInfoService;
 import no.fishapp.user.model.user.Buyer;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -33,6 +34,13 @@ public class AdminUserInfoResource {
     public Response getAllUsers() {
         var users = adminUserInfoService.getAllUsers();
         return Response.ok(users).build();
+    }
+
+    @GET
+    @Path("ready")
+    @PermitAll
+    public Response readynessResp() {
+        return Response.ok().build();
     }
 
 
