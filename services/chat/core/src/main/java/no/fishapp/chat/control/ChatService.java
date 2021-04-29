@@ -27,10 +27,11 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
- *  This is the Service class for the Chat-component in the
- *  microservice-arhitecture. This class follows the
- *  responsibilites of the Control-definition for the
- *  Entity Controller Boundary-methodology.
+ * Control-part of the Chat-microservice
+ * Manages sending and receiving {@link Message}s and {@link Conversation}s,
+ * and storage towards the database.
+ * Uses {@link EntityManager} for communicating with the database.
+ * Uses {@link StoreClient} to communicate with the Store-microservice
  */
 @Log
 @Transactional
@@ -179,17 +180,6 @@ public class ChatService {
         }
     }
 
-    /**
-     * Return the {@link Message} with the provided ID. Used in app to get last message preview
-     *
-     * @param messageId the message id
-     * @return the conversation, null if not found
-     */
-    public Optional<Message> getMessage(long messageId) {
-        return Optional.ofNullable(entityManager.find(Message.class, messageId));
-    }
-
-
     public Optional<Conversation> sendMessage(String messageBody, long conversationId) {
         long userId;
         if (jwtSubject.get().isPresent()) {
@@ -226,16 +216,13 @@ public class ChatService {
      * @param fromMessageId (exclusive) return messages newer than the message with this id
      * @return a list with the messages
      */
-
-
     public Optional<List<Message>> getMessagesTo(long convId, long fromMessageId) {
-        long userId;
         if (jwtSubject.get().isEmpty()) {
             log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
             return Optional.empty();
         }
 
-        userId = Long.parseLong(jwtSubject.get().get());
+       long userId = Long.parseLong(jwtSubject.get().get());
         Optional<Conversation> conversation = this.getConversation(convId);
 
         if (conversation.map(cnv -> cnv.isUserInConv(userId)).orElse(false)) {
