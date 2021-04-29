@@ -8,6 +8,7 @@ import no.fishapp.store.listing.control.ListingService;
 import no.fishapp.store.model.listing.Listing;
 import no.fishapp.store.model.transaction.DTO.StartTransactionData;
 import no.fishapp.store.model.transaction.Transaction;
+import no.fishapp.user.model.user.User;
 import org.eclipse.microprofile.jwt.Claim;
 
 import javax.enterprise.inject.Instance;
@@ -21,7 +22,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 
-
+/**
+ *Manages adding and getting {@link Transaction}.
+ * Uses {@link EntityManager} to communicate with the database.
+ */
 @Log
 public class TransactionService {
 
@@ -39,9 +43,17 @@ public class TransactionService {
     @Claim("groups")
     Instance<Optional<HashSet<String>>> jwtGroups;
 
+    /**
+     * Returns {@link Transaction} where {@code sellerId} equals 'uid' or {@code buyerId} equals 'uid'
+     */
     private static final String RATING_EXISTS_QUERY = "select ts from Transaction ts where ts.sellerId = :uid or ts.buyerId = :uid";
 
 
+    /**
+     * Returns a {@link List} containing all {@link Transaction} for the currently logged inn {@link User}.
+     * @return a {@code List} containing all {@code Transaction} for the currently logged inn {@code User} if successful
+     * or an empty list if not
+     */
     public List<Transaction> getUserTransactions() {
         if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
             log.log(Level.SEVERE, "Error reading jwt token");
@@ -61,11 +73,21 @@ public class TransactionService {
         return new ArrayList<>();
     }
 
-
+    /**
+     * Returns an {@link Optional} containing the {@link Transaction} with the id that matches the id argument.
+     * @param id the id of the {@code Transaction} to be found
+     * @return an {@code Optional} containing the {@code Transaction} if found or {@code empty} if not
+     */
     public Optional<Transaction> getTransaction(long id) {
         return Optional.ofNullable(entityManager.find(Transaction.class, id));
     }
 
+    /**
+     * Creates a new {@link Transaction} with the proived {@link StartTransactionData} and returns an {@link Optional}
+     * containing the resulting {@code Transaction}.
+     * @param transactionData the {@code StartTransactionData} containing the new transaction data
+     * @return an {@code Optional} containing the new {@code Transaction} if successful or {@code empty} if not
+     */
     public Optional<Transaction> newTransaction(StartTransactionData transactionData) {
         if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
             log.log(Level.SEVERE, "Error reading jwt token");

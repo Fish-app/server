@@ -192,7 +192,7 @@ public class AuthenticationService {
      * the request is asumed to be erroneous and an empty {@code Optional} is returned.
      *
      * @param newAuthUserData the {@code NewAuthUserData} containing the new user data.
-     * @return An {@code Optional} the new {@code AuthenticatedUser} if sucsessfull or {@code empty} if not.
+     * @return An {@code Optional} containing the new {@code AuthenticatedUser} if successful or {@code empty} if not.
      */
     public Optional<AuthenticatedUser> createUser(NewAuthUserData newAuthUserData) {
         if (!isPrincipalInUse(newAuthUserData.getUserName()) && !newAuthUserData.getGroups().isEmpty()) {

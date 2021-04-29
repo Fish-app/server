@@ -15,16 +15,28 @@ import java.util.List;
 @NoArgsConstructor
 public class Commodity implements Serializable {
 
+    /**
+     * Unique id for each Commodity
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    /**
+     * The name of the Commodity
+     */
     @Column(nullable = false, columnDefinition = "TEXT")
     String name;
 
+    /**
+     * The image of the Commodity
+     */
     @OneToOne
     Image commodityImage;
 
+    /**
+     * The listings a commodity is associated with
+     */
     @OneToMany
     @JsonbTransient
     List<Listing> listings;

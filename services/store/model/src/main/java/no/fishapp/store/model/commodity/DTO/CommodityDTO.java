@@ -5,7 +5,9 @@ import no.fishapp.store.model.commodity.Commodity;
 
 import javax.validation.constraints.NotNull;
 
-
+/**
+ * DTO used to send {@link Commodity} data.
+ */
 @Data
 public class CommodityDTO extends Commodity {
 

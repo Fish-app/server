@@ -7,6 +7,7 @@ import no.fishapp.auth.model.Group;
 import no.fishapp.store.model.rating.Rating;
 import no.fishapp.store.model.transaction.Transaction;
 import no.fishapp.store.transaction.control.TransactionService;
+import no.fishapp.user.model.user.User;
 import org.eclipse.microprofile.jwt.Claim;
 
 import javax.enterprise.inject.Instance;
@@ -21,15 +22,16 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 
+/**
+ * Manages adding and getting {@link Rating} .
+ * Uses {@link EntityManager} to communicate with the database.
+ */
 @Log
 public class RatingService {
 
 
     @Inject
     TransactionService transactionService;
-
-    //@Inject
-    //UserService userService;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -38,19 +40,35 @@ public class RatingService {
     @Claim(Claims.SUBJECT)
     Instance<Optional<String>> jwtSubject;
 
-
     @Inject
     @Claim("groups")
     Instance<Optional<HashSet<String>>> jwtGroups;
 
-
+    /**
+     * Returns the amount of {@link Rating} that exists with {@code issuerId} equals 'isu_id', {@code userRatedId}
+     * equals 'rtd_id', and {@code ratedTransactionsId} equals 't_id'.
+     */
     private static final String RATING_EXISTS_QUERY = "select count (rt) from Rating rt where  rt.issuerId = :isu_id and  rt.userRatedId = :rtd_id and rt.ratedTransactions.id = :t_id";
 
+    /**
+     * Returns the {@link Rating} where {@code issuerId} equals 'isu_id', {@code userRatedId} equals 'rtd_id',
+     * and {@code ratedTransactionsId} equals 't_id'.
+     */
     private static final String GET_TRANSACT_RATING_QUERY = "select rt from Rating rt where  rt.issuerId = :isu_id and  rt.userRatedId = :rtd_id and rt.ratedTransactions.id = :t_id";
 
+    /**
+     * Returns the average {@link Rating} where {@code userRatedId} equals 'rtd_id'.
+     */
     private static final String USER_RATING = "select avg (rt.stars) from Rating rt where rt.userRatedId = :rtd_id";
 
-
+    /**
+     * Creates a new {@link Rating} connected to the {@link Transaction} matching the transactionId argument.
+     * The {@code Rating} get the value from the ratingValue argument. Returns an {@link Optional} containing the
+     * resulting {@code Rating}.
+     * @param transactionId the id of the {@code Transaction} to connect the {@code Rating} to
+     * @param ratingValue the value of the {@code Rating}
+     * @return an {@code Optional} containing the created {@code Rating} if successful or {@code empty} if not
+     */
     public Optional<Rating> newRating(long transactionId, int ratingValue) {
         if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
             log.log(Level.SEVERE, "Error reading jwt token");
@@ -85,6 +103,12 @@ public class RatingService {
 
     }
 
+    /**
+     * Returns an {@link Optional} containing the {@link Rating} of the {@link Transaction} with an id matching the
+     * transactionId argument.
+     * @param transactionId the id of the {@code Transaction} to get the {@code Rating} of
+     * @return an {@code Optional} containing the {@code Rating} if one is found or {@code empty} if not
+     */
     public Optional<Rating> getTransactionRating(long transactionId) {
         if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
             log.log(Level.SEVERE, "Error reading jwt token");
@@ -109,6 +133,13 @@ public class RatingService {
         return Optional.empty();
     }
 
+    /**
+     * Returns an {@link Optional} containing the {@link Rating} matching the arguments transId, issuId, and ratedId.
+     * @param transId the transactionId of the {@code Rating} to get
+     * @param issuId the issuerId of the {@code Rating} to get
+     * @param ratedId the userRatedId of the {@code Rating} to get
+     * @return an {@code Optional} containing the {@code Rating} if found or {@code empty} if not
+     */
     Optional<Rating> getRating(long transId, long issuId, long ratedId) {
         var query = entityManager.createQuery(GET_TRANSACT_RATING_QUERY, Rating.class);
 
@@ -123,7 +154,13 @@ public class RatingService {
         return Optional.empty();
     }
 
-
+    /**
+     * Checks if a {@link Rating} matching the arguments transactionId, issuId, and ratedId exists.
+     * @param transactionId the transactionId of the {@code Rating} to find
+     * @param issuId the issuerId of the {@code Rating} to find
+     * @param ratedId the userRatedId of the {@code Rating} to find
+     * @return true of a {@code Rating} with the given arguments exists or false if not
+     */
     boolean doRatingExists(long transactionId, long issuId, long ratedId) {
         Query query = entityManager.createQuery(RATING_EXISTS_QUERY);
         query.setParameter("isu_id", issuId);
@@ -139,7 +176,12 @@ public class RatingService {
         return true;
     }
 
-
+    /**
+     * Returns an {@link Optional} containing the average {@link Rating} for a {@link User} with an id matching
+     * the userId argument.
+     * @param userId the id of the {@code User} to get the {@code Rating} of
+     * @return an {@code Optional} containing the average {@code Rating} if found or {@code empty} if not
+     */
     public Optional<Float> getUserRating(long userId) {
         Query query = entityManager.createQuery(USER_RATING);
         query.setParameter("rtd_id", userId);
@@ -147,14 +189,7 @@ public class RatingService {
             return Optional.ofNullable((Float) query.getSingleResult());
 
         } catch (NoResultException e) {
-
-//            //TODO: make return zero before prod
-//            Random r = new Random();
-//            return r.nextFloat() * 5;
         }
         return Optional.empty();
-
-        ///return 0F;
-
     }
 }

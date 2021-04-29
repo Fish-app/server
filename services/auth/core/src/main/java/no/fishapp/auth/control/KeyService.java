@@ -24,9 +24,9 @@ import java.util.logging.Level;
 
 
 /**
- * Manages the jwt key and tokens for the aplication.
+ * Manages the jwt key and tokens for the application.
  * this is done by offering tokens from {@link KeyService#generateNewJwtToken(String, long, Set)} and
- * signed by the {@link PrivateKey} paired with the {@link PublicKey} provided as a object or b64 encoded fron {@link KeyService#getPublicKey()}
+ * signed by the {@link PrivateKey} paired with the {@link PublicKey} provided as a object or b64 encoded from {@link KeyService#getPublicKey()}
  */
 @Log
 @ApplicationScoped

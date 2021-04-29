@@ -14,27 +14,29 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Listing {
 
-    //protected String listingType;
-
+    //Id of the listing
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+    //Time the listing was created
     @Column(nullable = false, name = "created")
     long created;
 
-    //    @ManyToOne
+    //Id of the user that create the listing
     long creatorId;
 
     public abstract String getListingType();
 
+    //End date of a listing
     @Column(nullable = false, name = "end_date")
     long endDate;
 
-
+    //Price of the listing
     @Column(nullable = false)
     double price;
 
+    //Status if the listing is open or closed
     @Column(name = "is_open")
     Boolean isOpen;
 
