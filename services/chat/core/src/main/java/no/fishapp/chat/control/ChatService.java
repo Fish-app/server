@@ -244,7 +244,7 @@ public class ChatService {
        long userId = Long.parseLong(jwtSubject.get().get());
         Optional<Conversation> conversation = this.getConversation(convId);
 
-        /**
+        /*
          * Check if the {@code User} asking for messages is a member of the conversation.
          */
         if (conversation.map(cnv -> cnv.isUserInConv(userId)).orElse(false)) {

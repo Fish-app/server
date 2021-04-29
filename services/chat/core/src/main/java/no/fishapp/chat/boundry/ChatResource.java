@@ -29,7 +29,9 @@ import java.util.stream.Collectors;
 @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
 public class ChatResource {
 
-    // Used to declare UTF-8 in the header; used by clients when decoding data
+    /**
+     * Used to declare UTF-8 in the header; used by clients when decoding data
+     */
     public static final String UTF8_CHARSET = "; charset=utf-8";
 
     @Inject
