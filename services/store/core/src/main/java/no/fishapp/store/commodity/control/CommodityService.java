@@ -83,9 +83,7 @@ public class CommodityService {
             throw new MultipartReadException("error saving image", "image");
         } else {
             entityManager.persist(image);
-            //commodity.setCommodityImage(image);
             commodity.setCommodityImage(image);
-            //commodity.setImageId(image);
 
             entityManager.persist(commodity);
             return commodity;

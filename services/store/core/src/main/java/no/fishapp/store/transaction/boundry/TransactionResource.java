@@ -2,7 +2,6 @@ package no.fishapp.store.transaction.boundry;
 
 
 import no.fishapp.auth.model.Group;
-import no.fishapp.store.model.commodity.Commodity;
 import no.fishapp.store.model.transaction.DTO.StartTransactionData;
 import no.fishapp.store.model.transaction.Transaction;
 import no.fishapp.store.transaction.control.TransactionService;

@@ -4,7 +4,6 @@ package no.fishapp.store.commodity.boundary;
 import com.ibm.websphere.jaxrs20.multipart.IMultipartBody;
 import no.fishapp.store.commodity.control.CommodityService;
 import no.fishapp.store.model.commodity.Commodity;
-import no.fishapp.store.model.commodity.DTO.CommodityDTO;
 import no.fishapp.store.model.listing.Listing;
 import no.fishapp.util.multipartHandler.MultipartNameNotFoundException;
 import no.fishapp.util.multipartHandler.MultipartReadException;
@@ -15,9 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Manages all HTTP requests that are about {@link Commodity}.

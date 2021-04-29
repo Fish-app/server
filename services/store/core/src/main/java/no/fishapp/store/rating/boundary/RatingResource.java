@@ -9,7 +9,6 @@ import no.fishapp.user.model.user.User;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;

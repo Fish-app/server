@@ -146,7 +146,6 @@ public class ListingService {
         try {
             return Optional.ofNullable(entityManager.find(Listing.class, requestId));
         } catch (PersistenceException pe) {
-            System.err.print("\n\n\nERR-JPA: Persistence exception:\n\n\n");
             return Optional.empty();
         }
     }

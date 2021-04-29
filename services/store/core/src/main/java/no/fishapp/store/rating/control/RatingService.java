@@ -17,9 +17,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.logging.Level;
 
 /**
@@ -120,7 +118,6 @@ public class RatingService {
         HashSet<String> groups = jwtGroups.get().get();
 
 
-        Rating                rating              = new Rating();
         Optional<Transaction> transactionOptional = transactionService.getTransaction(transactionId);
         boolean               isSeller            = groups.contains(Group.SELLER_GROUP_NAME);
 
