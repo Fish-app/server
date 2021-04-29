@@ -24,11 +24,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+/**
+ * Manages adding and getting {@link Commodity}.
+ * Uses {@link EntityManager} to communicate with the database.
+ */
 @ApplicationScoped
 public class CommodityService {
 
+    /**
+     * Returns all the commodities.
+     */
     private static final String GET_ALL_COMMODITIES = "SELECT c from Commodity c";
+
+    /**
+     * Returns a single instance of each of the commodities that has an active listing.
+     */
     private static final String GET_DISPLAY_COMMODITIES = "SELECT DISTINCT c FROM Commodity c INNER JOIN Listing l ON l.commodity.id = c.id WHERE l.isOpen = true";
 
 
@@ -41,6 +51,14 @@ public class CommodityService {
     ImageClient imageClient;
 
 
+    /**
+     * Creates a new {@link Commodity} with data from the provided {@link IMultipartBody}.
+     * @param multipartBody the {@code IMultipartBody} containing the data for the new {@code Commodity}
+     * @return the created {@code Commodity}
+     * @throws IOException if an I/O error occurs with the {@link java.io.InputStream}
+     * @throws MultipartReadException if an error occurs with the {@link MultipartHandler} while reading a string
+     * @throws MultipartNameNotFoundException if {@link MultipartHandler} can't find a field with specified name
+     */
     public Commodity addNewCommodity(
             IMultipartBody multipartBody
     ) throws IOException, MultipartReadException, MultipartNameNotFoundException {
@@ -65,9 +83,7 @@ public class CommodityService {
             throw new MultipartReadException("error saving image", "image");
         } else {
             entityManager.persist(image);
-            //commodity.setCommodityImage(image);
             commodity.setCommodityImage(image);
-            //commodity.setImageId(image);
 
             entityManager.persist(commodity);
             return commodity;
@@ -75,11 +91,19 @@ public class CommodityService {
 
     }
 
-
+    /**
+     * Returns a {@link List} containing all {@link Commodity}.
+     * @return a {@code List} containing all the {@code Commodities}
+     */
     public List<Commodity> getAllCommodities() {
         return entityManager.createQuery(GET_ALL_COMMODITIES, Commodity.class).getResultList();
     }
 
+    /**
+     * Gets a {@link List} with a single instance of each {@link Commodity} with an active listing.
+     * List of Commodities gets turned into list of {@link CommodityDTO} and is then returned.
+     * @return a {@code List} containing a single instance of each {@code CommodityDTO} with an active listing
+     */
     public List<CommodityDTO> getAllDisplayCommodities() {
 
         List<Commodity> commodities = entityManager.createQuery(GET_DISPLAY_COMMODITIES, Commodity.class).getResultList();
@@ -98,9 +122,14 @@ public class CommodityService {
                           .collect(Collectors.toList());
     }
 
+    /**
+     * Returns an {@link Optional} containing the {@link Commodity} with an id matching the id argument.
+     * If no {@code Commodity} with the provided id is found an empty {@code Optional} is returned.
+     * @param id the id of the commodity to find
+     * @return an {@code Optional} containing the {@code Commodity} with the provided id
+     */
     public Optional<Commodity> getCommodity(long id) {
         return Optional.ofNullable(entityManager.find(Commodity.class, id));
     }
-
 
 }
