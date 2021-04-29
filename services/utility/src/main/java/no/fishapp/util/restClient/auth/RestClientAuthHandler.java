@@ -16,9 +16,14 @@ import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Stateful;
 import javax.enterprise.concurrent.ManagedScheduledExecutorService;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
+import java.net.MalformedURLException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -72,6 +77,10 @@ public class RestClientAuthHandler {
 
     private PublicKey jwtPubKey;
     private boolean isKeyValid = false;
+
+    public boolean isReady() {
+        return isKeyValid && tokenString != null;
+    }
 
     @PostConstruct
     public void startup() {
@@ -129,7 +138,8 @@ public class RestClientAuthHandler {
 
     private PublicKey getTokenPubKey() throws RestClientHttpException {
         // todo: handle errors
-        var pkey = authClient.getPubKey();
+
+        String pkey = authClient.getPubKey();
         String publicKeyPEM = pkey
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replaceAll(System.lineSeparator(), "")

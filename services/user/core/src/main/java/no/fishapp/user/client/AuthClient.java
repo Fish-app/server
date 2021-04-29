@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 
 @RegisterRestClient(configKey = "authClient")
 @RegisterProvider(RestClientExceptionMapper.class)
-@Path("/authentication")
+@Path("/api/auth/authentication/")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface AuthClient extends AutoCloseable, AuthBaseClientInterface {
 

@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.concurrent.CompletionStage;
 
 @RegisterRestClient(configKey = "storeClient")
-@Path("/")
+@Path("/api/store/")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface StoreClient extends AutoCloseable, AuthBaseClientInterface {
 
