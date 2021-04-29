@@ -7,7 +7,6 @@ import no.fishapp.chat.model.Conversation;
 import no.fishapp.chat.model.ConversationDTO;
 import no.fishapp.chat.model.Message;
 import no.fishapp.store.model.listing.DTO.ChatListingInfo;
-import no.fishapp.store.model.listing.Listing;
 import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -18,16 +17,21 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+/**
+ *  This is the Service class for the Chat-component in the
+ *  microservice-arhitecture. This class follows the
+ *  responsibilites of the Control-definition for the
+ *  Entity Controller Boundary-methodology.
+ */
 @Log
 @Transactional
 @RequestScoped
@@ -45,10 +49,9 @@ public class ChatService {
     StoreClient storeClient;
 
 
+    private static final String ERR_MSG_JWT_TOKEN = "Error reading JWT token";
     private static final String DO_USER_HAVE_CONV = "select count (rt) from Rating rt where  rt.issuerId = :isu_id and  rt.userRatedId = :rtd_id and rt.ratedTransactions.id = :t_id";
-
     private static final String GET_USER_CONVS = "select cv from Conversation cv where  cv.conversationStarterUserId = :uid OR cv.listingCreatorUserId = :uid";
-
     private static final String GET_CONV = "select cv from Conversation cv where cv.listingId = :lid AND cv.conversationStarterUserId = :uid";
 
     /**
@@ -63,36 +66,48 @@ public class ChatService {
         try {
             return query.getResultList();
         } catch (NoResultException ignore) {
+            return new ArrayList<>();
         }
-        return null;
     }
 
     /**
-     * Retrieves a specific conversation
-     * @param uid
-     * @param listingId
+     * Retrieves a specific conversation between a user and a listing.
+     * @param uid The user involved with the conversation
+     * @param listingId - The listing the {@link Conversation }is related to
      * @return
      */
     private Optional<Conversation> getUserListingConversation(long uid, long listingId) {
-        var query = entityManager.createQuery(GET_CONV, Conversation.class);
+        TypedQuery<Conversation> query = entityManager.createQuery(GET_CONV, Conversation.class);
 
         query.setParameter("uid", uid);
         query.setParameter("lid", listingId);
         try {
             return Optional.of(query.getSingleResult());
         } catch (NoResultException ignore) {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
 
+    /**
+     * Build a list of all the current {@link Conversation }the {@link User} is associated with.
+     * Used in the app to display a list of conversations with previews of last sent message.
+     * @param includeLastMsg true/false to enable/disable the inclusion of the last message
+     * @return The list of all current {@link Conversation}.
+     */
     public List<ConversationDTO> getCurrentUserConversations(boolean includeLastMsg) {
-        if (jwtSubject.get().isEmpty()) {
-            log.log(Level.SEVERE, "Error reading jwt token");
-            return null;
-        }
+        long               currentUserId;
 
-        long               currentUserId = Long.parseLong(jwtSubject.get().get());
+        /**
+         *  Verifiy that a token exsists to find the user ID.
+         *  If the token is missing we cancel the operation and return an empty list.
+         */
+        if (jwtSubject.get().isPresent()) {
+            currentUserId = Long.parseLong(jwtSubject.get().get());
+        } else {
+            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
+            return new ArrayList<>();
+        }
         List<Conversation> userConvs     = this.getUserConversations(currentUserId);
 
         return userConvs.stream().map(conversation -> (includeLastMsg) ?
@@ -106,31 +121,37 @@ public class ChatService {
      */
 
     /**
-     * creates a new conversation between the current user and the owner of the listing with the provided id
+     * Create a new {@link Conversation} or finds the exsiting {@link Conversation}
+     * assocatied with an {@link no.fishapp.store.model.listing.Listing}. The function
+     * is executed when a user requests to start a Chat. The ID of the listing is known, as
+     * a Chat is always started from a context where the listing is known.
      *
-     * @param listingId the listing to hav conversation about
+     * @param listingId The identifier that selects the {@link no.fishapp.store.model.listing.Listing}
+     * @return The already existing or newly created {@link Conversation}.
      */
     public Optional<Conversation> newListingConversation(long listingId) {
-        if (jwtSubject.get().isEmpty()) {
-            log.log(Level.SEVERE, "Error reading jwt token");
+        long userId;
+
+        if(jwtSubject.get().isPresent()) {
+            userId = Long.parseLong(jwtSubject.get().get());
+        } else {
+            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
             return Optional.empty();
         }
-
-        long userId   = Long.parseLong(jwtSubject.get().get());
-        var  userConv = this.getUserListingConversation(userId, listingId);
+        Optional<Conversation> userConv = this.getUserListingConversation(userId, listingId);
 
         if (userConv.isPresent()) {
             return userConv;
-
         } else {
             try {
-                var          isValidFuture = storeClient.getListing(listingId).toCompletableFuture();
+                CompletableFuture<ChatListingInfo> isValidFuture = storeClient.getListing(listingId).toCompletableFuture();
                 Conversation conversation  = new Conversation();
 
                 conversation.setListingId(listingId);
                 conversation.setConversationStarterUserId(userId);
 
                 ChatListingInfo listing = isValidFuture.join();
+                // Check if the listing is enabled on the market (is open for sale)
                 if (!listing.getIsOpen()) {
                     return Optional.empty();
                 }
@@ -150,7 +171,7 @@ public class ChatService {
 
 
     public Optional<Conversation> getConversation(long convId) {
-        var conv = entityManager.find(Conversation.class, convId);
+        Conversation conv = entityManager.find(Conversation.class, convId);
         if (conv == null) {
             return Optional.empty();
         } else {
@@ -159,24 +180,26 @@ public class ChatService {
     }
 
     /**
-     * Return the message with the provided ID. Used in app to get last message preview
+     * Return the {@link Message} with the provided ID. Used in app to get last message preview
      *
      * @param messageId the message id
      * @return the conversation, null if not found
      */
-    public Message getMessage(long messageId) {
-        return entityManager.find(Message.class, messageId);
+    public Optional<Message> getMessage(long messageId) {
+        return Optional.ofNullable(entityManager.find(Message.class, messageId));
     }
 
 
     public Optional<Conversation> sendMessage(String messageBody, long conversationId) {
-        if (jwtSubject.get().isEmpty()) {
-            log.log(Level.SEVERE, "Error reading jwt token");
+        long userId;
+        if (jwtSubject.get().isPresent()) {
+            userId = Long.parseLong(jwtSubject.get().get());
+        } else {
+            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
             return Optional.empty();
         }
 
-        long userId       = Long.parseLong(jwtSubject.get().get());
-        var  conversation = this.getConversation(conversationId);
+        Optional<Conversation> conversation = this.getConversation(conversationId);
 
         if (conversation.map(cnv -> cnv.isUserInConv(userId)).orElse(false) && !messageBody.isEmpty()) {
 
@@ -185,7 +208,7 @@ public class ChatService {
             message.setSenderId(userId);
             entityManager.persist(message);
 
-            var updatedConv = conversation.get();
+            Conversation updatedConv = conversation.get();
             updatedConv.addMessage(message);
 
             entityManager.persist(conversation.get());
@@ -206,13 +229,14 @@ public class ChatService {
 
 
     public Optional<List<Message>> getMessagesTo(long convId, long fromMessageId) {
+        long userId;
         if (jwtSubject.get().isEmpty()) {
-            log.log(Level.SEVERE, "Error reading jwt token");
+            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
             return Optional.empty();
         }
 
-        long userId       = Long.parseLong(jwtSubject.get().get());
-        var  conversation = this.getConversation(convId);
+        userId = Long.parseLong(jwtSubject.get().get());
+        Optional<Conversation> conversation = this.getConversation(convId);
 
         if (conversation.map(cnv -> cnv.isUserInConv(userId)).orElse(false)) {
             return Optional.of(conversation.get().getMessages()
@@ -220,12 +244,8 @@ public class ChatService {
                                            .filter(message -> message.getId() > fromMessageId)
                                            .collect(
                                                    Collectors.toCollection(ArrayList::new)));
-
         } else {
             return Optional.empty();
         }
-
     }
-
-
 }
