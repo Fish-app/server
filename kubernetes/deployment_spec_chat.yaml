@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-service
+spec:
+  selector:
+    app: fishapp
+    service: chat
+  ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chat
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: chat
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat
+  labels:
+    app: fishapp
+spec:
+  selector:
+    matchLabels:
+      app: fishapp
+      service: chat
+  template:
+    metadata:
+      labels:
+        app: fishapp
+        service: chat
+    spec:
+      containers:
+        - name: auth-chat
+          imagePullPolicy: Never
+          image: fishapp-chat:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: AUTH_SERVICE_URL
+              value: "http://auth-service:80/"
+            - name: STORE_SERVICE_URL
+              value: "http://store-service:80/"
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 1
