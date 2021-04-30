@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: jwt-pubkey-pvc
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
@@ -16,7 +17,9 @@ metadata:
   name: jwt-pubkey-test-pv
   labels:
     volume-use: "jwt-storage"
+
 spec:
+  storageClassName: manual
   capacity:
     storage: 200Mi
   volumeMode: Filesystem
@@ -39,6 +42,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: image-storage-pvc
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
@@ -53,6 +57,7 @@ metadata:
   labels:
     volume-use: "image-storage"
 spec:
+  storageClassName: manual
   capacity:
     storage: 200Mi
   volumeMode: Filesystem

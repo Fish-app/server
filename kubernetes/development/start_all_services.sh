@@ -1,4 +1,4 @@
 #!/bin/bash
 
-kubectl apply -f .
+kubectl apply -f ./dev-db-deploy.yaml
 kubectl apply -f ./..
