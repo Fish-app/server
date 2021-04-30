@@ -14,7 +14,7 @@ import java.util.concurrent.CompletionStage;
  * This client is used to send a HTTP request to the media microservices-component to process an image and save it.
  */
 @RegisterRestClient(configKey = "imageClient")
-@Path("image")
+@Path("/api/media/image/")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface ImageClient extends AutoCloseable, AuthBaseClientInterface {
 

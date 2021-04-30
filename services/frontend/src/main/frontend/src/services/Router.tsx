@@ -15,24 +15,15 @@ import {MainPage} from "../pages/MainPage";
 export function TopRouter(): ReactElement {
     return <Router>
         <Switch>
-            <Route exact path="/">
+            <Route exact path="/admin/">
                 <LoginPage/>
             </Route>
-
-            <Route path={[`/home/`]}>
+            <Route path={[`/admin/home/`]}>
                 <MainPage/>
             </Route>
-            {/*<Redirect from="/home/" to="/home/commodity" />*/}
-            <Route path={`/home/user/:userID`}>
+            <Route path={`/admin/home/user/:userID`}>
                 <MainPage/>
             </Route>
-            {/*<Redirect from="/users/:id" to="/users/profile/:id" />*/}
-            {/*<Route path={`/commodity/:commodityid`}>*/}
-            {/*    <MainPage/>*/}
-            {/*</Route>*/}
-            {/*<Route path={`/user/:userid`}>*/}
-            {/*    <MainPage/>*/}
-            {/*</Route>*/}
         </Switch>
     </Router>
 

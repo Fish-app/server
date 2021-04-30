@@ -13,11 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
-@RegisterRestClient(configKey = "authClient")
+@RegisterRestClient(configKey = "interContainerAuthClient")
 @RegisterProvider(RestClientExceptionMapper.class)
-@Path("/")
-public interface ContainerAuthClient {
+@Path("/api/auth/")
+public interface ContainerAuthClient extends AutoCloseable {
 
 
     @POST

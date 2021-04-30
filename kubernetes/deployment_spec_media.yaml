@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: media-service
+spec:
+  selector:
+    app: fishapp
+    service: media
+  ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: media
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: media
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: media
+  labels:
+    app: fishapp
+spec:
+  selector:
+    matchLabels:
+      app: fishapp
+      service: media
+  template:
+    metadata:
+      labels:
+        app: fishapp
+        service: media
+    spec:
+      volumes:
+        - name: image-storage-volume
+          persistentVolumeClaim:
+            claimName: image-storage-pvc
+      containers:
+        - name: auth-media
+          volumeMounts:
+            - mountPath: /aplication_storage/images
+              name: image-storage-volume
+          imagePullPolicy: Never
+          image: fishapp-media:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: AUTH_SERVICE_URL
+              value: "http://auth-service:80/"
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 80
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 1

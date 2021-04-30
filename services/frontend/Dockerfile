@@ -27,10 +27,7 @@ LABEL name="Frontend"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.stripprefixregexFrontend.stripprefixregex.regex="\/admin\/"
-
 LABEL traefik.http.routers.frontend.rule="PathPrefix(`/admin/`)"
-LABEL traefik.http.routers.frontend.middlewares=stripprefixregexFrontend
 
 ENV fishapp_system_url=http://host.docker.internal/
 

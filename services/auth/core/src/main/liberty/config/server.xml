@@ -15,7 +15,7 @@
                   id="defaultHttpEndpoint"
                   host="*"/>
 
-    <application location="core-1.0.war" type="war" context-root="/">
+    <application location="core-1.0.war" type="war" context-root="/api/auth/">
     </application>
 
 

@@ -1,8 +1,8 @@
 import axios from "axios";
-import {Session} from "inspector";
-import {AppSession} from "./Session";
+import {AuthHandler} from "./AuthHandler";
 
-const BASE_URL = 'http://localhost:80/api';
+
+const BASE_URL = `http://fishapp.no/api`;
 
 const apiConfig = {
     // `url` is the server URL that will be used for the request
@@ -56,7 +56,7 @@ export function getCurrentUser() {
             ...apiConfig,
             url: '/user/seller/current',
             method: 'get',
-            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+            headers: {Authorization: AuthHandler.isLoggedIn() ? AuthHandler.getToken() : null}
         }
     )
 }
@@ -66,7 +66,7 @@ export function getAllAuthUsers() {
             ...apiConfig,
             url: '/auth/admin/all',
             method: 'get',
-            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+            headers: {Authorization: AuthHandler.isLoggedIn() ? AuthHandler.getToken() : null}
         }
     ).then(value => value.data)
 }
@@ -77,7 +77,7 @@ export function getAllCommoditys() {
             ...apiConfig,
             url: '/store/commodity/all',
             method: 'get',
-            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+            headers: {Authorization: AuthHandler.isLoggedIn() ? AuthHandler.getToken() : null}
         }
     ).then(value => value.data)
 }
@@ -87,7 +87,7 @@ export function getSeller() {
             ...apiConfig,
             url: '/store/commodity/all',
             method: 'get',
-            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+            headers: {Authorization: AuthHandler.isLoggedIn() ? AuthHandler.getToken() : null}
         }
     ).then(value => value.data)
 }
@@ -97,7 +97,7 @@ export function getBuyer() {
             ...apiConfig,
             url: '/store/commodity/all',
             method: 'get',
-            headers: {authorization: AppSession.isLoggedIn() ? AppSession.getToken() : null}
+            headers: {Authorization: AuthHandler.isLoggedIn() ? AuthHandler.getToken() : null}
         }
     ).then(value => value.data)
 }
