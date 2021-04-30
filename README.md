@@ -4,7 +4,7 @@
 
 ## Requierments
 
-----
+
 to build the services'
 maven ([linux](https://packages.debian.org/search?keywords=maven) [win](https://letmegooglethat.com/?q=How+to+install+maven+on+windows) [osx](https://formulae.brew.sh/formula/maven))
 is used. [Docker](https://docs.docker.com/engine/install/) is used as the kubernetes container runtime, remember
@@ -15,7 +15,6 @@ cluster to run on, if you are only testing locally [minikube](https://minikube.s
 
 ## Running locally
 
----
 
 If the requermentes over are satesfied you can start the cluster (i.e the kub cluster not anything in it) and install
 the cluster addons with the  ``kubernetes/development/minikube_setup.sh`` script. You can now run ``minikube dashboard``
@@ -37,7 +36,7 @@ located at: https://github.com/Fish-app/mobile-app.
 
 ## Deployment
 
-----
+
 The server is ment to run on a kubernets cluster in production. Given the nature of kubernetes a single readme is not
 going to suffice. But the key things to change is:
 
