@@ -19,12 +19,17 @@ cluster to run on, if you are only testing locally [minikube](https://minikube.s
 
 If the requermentes over are satesfied you can start the cluster (i.e the kub cluster not anything in it) and install
 the cluster addons with the  ``kubernetes/development/minikube_setup.sh`` script. You can now run ``minikube dashboard``
-to see the cluster dashboard. To build everything run the ``build_to_kubernetes.sh`` script, this wil build all the
+to see the cluster dashboard. To build the temporary dev db, use the ``kubernetes/development/build_dev_containers.sh``
+.  
+To build everything else run the ``kubernetes/development/build_to_kubernetes.sh`` script, this will build all the
 images in the local minikube environment. To start upp all kubernetes stuff run
 the ``kubernetes/development/start_all_services.sh`` script.
 
+If you did any of the steps out of order or have made the system fubar you can use
+the ``` kubernetes/development/i_messed_up_reset_everything.sh``` to reset the minikube env.
+
 Because your local kubernestes ingess pont probably does not resolve to fishapp.no you have to manually enter this in to
-your hosts. On systems where it works you can use ```echo fishapp.no $(minikube ip) >> /etc/hosts ```.
+your hosts. On systems where it works you can use ```sudo echo fishapp.no $(minikube ip) >> /etc/hosts ```.
 
 you can now use the fishapp if you did not do something wrong. There are test query's that can be imported in
 to [insomnia api test thingy](https://insomnia.rest/download) from ```doc/api-requests.yaml```. The accompanying app is
