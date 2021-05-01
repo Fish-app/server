@@ -4,7 +4,6 @@ package no.fishapp.util.restClient.auth;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
 import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
@@ -16,24 +15,17 @@ import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.Stateful;
 import javax.enterprise.concurrent.ManagedScheduledExecutorService;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
-import java.net.MalformedURLException;
+import java.net.ConnectException;
 import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -99,7 +91,7 @@ public class RestClientAuthHandler {
 
         try {
 
-            if (! isKeyValid) {
+            if (!isKeyValid) {
                 log.finer("fetching signing key");
                 this.jwtPubKey = getTokenPubKey();
                 this.jwtParser = buildJwtParser();
@@ -116,14 +108,15 @@ public class RestClientAuthHandler {
         } catch (RestClientHttpException e) {
             log.log(Level.WARNING,
                     String.format("Conection http %s error geting inter container login token. Retrying in 10s",
-                                  e.getHttpStatusCode()
-                    )
-            );
+                                  e.getHttpStatusCode()));
             refreshTime = Instant.now().plus(10, ChronoUnit.SECONDS);
         } catch (SignatureException e) {
-            log.log(Level.WARNING, "Error validating inter container login token. refreshing private key");
-            isKeyValid  = false;
+            log.log(Level.WARNING, "Error validating inter container login token. refreshing pub key");
+            isKeyValid = false;
             refreshTime = Instant.now().plus(1, ChronoUnit.SECONDS);
+        } catch (ConnectException e) {
+            log.log(Level.WARNING, "Error fetching key. retying in 5 sec");
+            refreshTime = Instant.now().plus(5, ChronoUnit.SECONDS);
         }
 
         Duration waitTime = Duration.between(Instant.now(), refreshTime);
@@ -136,14 +129,12 @@ public class RestClientAuthHandler {
         return tokenString;
     }
 
-    private PublicKey getTokenPubKey() throws RestClientHttpException {
+    private PublicKey getTokenPubKey() throws RestClientHttpException, ConnectException {
         // todo: handle errors
 
         String pkey = authClient.getPubKey();
-        String publicKeyPEM = pkey
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replaceAll(System.lineSeparator(), "")
-                .replace("-----END PUBLIC KEY-----", "");
+        String publicKeyPEM = pkey.replace("-----BEGIN PUBLIC KEY-----", "").replaceAll(System.lineSeparator(), "")
+                                  .replace("-----END PUBLIC KEY-----", "");
 
         byte[] encoded = Base64.getDecoder().decode(publicKeyPEM.getBytes());
 

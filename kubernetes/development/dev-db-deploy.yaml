@@ -29,8 +29,8 @@ spec:
     spec:
       containers:
         - name: dev-db-container
-          imagePullPolicy: Never
-          image: fishapp-dev-db:latest
+          # imagePullPolicy: Never
+          image: localhost:32000/fishapp-dev-db:latest
           ports:
             - containerPort: 80
 ---

@@ -8,13 +8,13 @@ import org.eclipse.microprofile.health.Readiness;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
 @Readiness
 @ApplicationScoped
 public class StoreReadinessCheck implements HealthCheck {
+
     private static final String readinessCheck = "Store Service Readiness Check";
 
     @Inject
@@ -39,9 +39,7 @@ public class StoreReadinessCheck implements HealthCheck {
     private boolean requestOk() {
         try {
             Client client = ClientBuilder.newClient();
-            client.target("http://localhost:80/api/store/commodity/all")
-                  .request()
-                  .get();
+            client.target("http://localhost:9080/api/store/commodity/all").request().get();
 
             return true;
         } catch (Exception ex) {

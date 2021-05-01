@@ -7,8 +7,14 @@ spec:
     app: fishapp
     service: chat
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
+      targetPort: 9080
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 9443
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -42,28 +48,29 @@ spec:
     spec:
       containers:
         - name: auth-chat
-          imagePullPolicy: Never
-          image: fishapp-chat:latest
+          imagePullPolicy: Always
+          image: localhost:32000/fishapp-chat:latest
           ports:
-            - containerPort: 80
+            - containerPort: 9080
+            - containerPort: 9443
           env:
             - name: AUTH_SERVICE_URL
               value: "http://auth-service:80/"
             - name: STORE_SERVICE_URL
               value: "http://store-service:80/"
-          readinessProbe:
+          readinessProbe: # todo:change to prod values
             httpGet:
               path: /health/ready
-              port: 80
-            initialDelaySeconds: 30
-            periodSeconds: 10
+              port: 9080
+            initialDelaySeconds: 10
+            periodSeconds: 20
             timeoutSeconds: 3
-            failureThreshold: 1
-          livenessProbe:
+            failureThreshold: 5
+          livenessProbe: # todo:change to prod values
             httpGet:
               path: /health/live
-              port: 80
-            initialDelaySeconds: 60
-            periodSeconds: 10
+              port: 9080
+            initialDelaySeconds: 10
+            periodSeconds: 20
             timeoutSeconds: 3
-            failureThreshold: 1
+            failureThreshold: 5

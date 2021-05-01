@@ -1,7 +1,6 @@
 package no.fishapp.user.health;
 
 
-import no.fishapp.user.boundary.SellerResource;
 import no.fishapp.util.restClient.auth.RestClientAuthHandler;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -9,13 +8,13 @@ import org.eclipse.microprofile.health.Readiness;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
 @Readiness
 @ApplicationScoped
 public class UserReadinessCheck implements HealthCheck {
+
     private static final String readinessCheck = "User Service Readiness Check";
 
     @Inject
@@ -40,9 +39,7 @@ public class UserReadinessCheck implements HealthCheck {
     private boolean requestOk() {
         try {
             Client client = ClientBuilder.newClient();
-            client.target("http://localhost:80/api/user/admin/ready")
-                  .request()
-                  .get();
+            client.target("http://localhost:9080/api/user/admin/ready").request().get();
 
             return true;
         } catch (Exception ex) {
