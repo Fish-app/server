@@ -1,9 +1,8 @@
 # Fishapp server
 
--TODO: write an ok readme
+- TODO: write an ok readme
 
 ## Requierments
-
 
 to build the services'
 maven ([linux](https://packages.debian.org/search?keywords=maven) [win](https://letmegooglethat.com/?q=How+to+install+maven+on+windows) [osx](https://formulae.brew.sh/formula/maven))
@@ -15,6 +14,15 @@ cluster to run on, if you are only testing locally [minikube](https://minikube.s
 
 ## Running locally
 
+currentlu using microk8s
+
+1. /kubernetes/development/MicroK8s/init_node.sh
+1. /kubernetes/development/MicroK8s/build_dev_db.sh
+1. /kubernetes/development/MicroK8s/build_containers.sh
+
+this is old -v
+
+```
 
 If the requermentes over are satesfied you can start the cluster (i.e the kub cluster not anything in it) and install
 the cluster addons with the  ``kubernetes/development/minikube_setup.sh`` script. You can now run ``minikube dashboard``
@@ -33,9 +41,9 @@ your hosts. On systems where it works you can use ```sudo echo fishapp.no $(mini
 you can now use the fishapp if you did not do something wrong. There are test query's that can be imported in
 to [insomnia api test thingy](https://insomnia.rest/download) from ```doc/api-requests.yaml```. The accompanying app is
 located at: https://github.com/Fish-app/mobile-app.
+```
 
 ## Deployment
-
 
 The server is ment to run on a kubernets cluster in production. Given the nature of kubernetes a single readme is not
 going to suffice. But the key things to change is:
