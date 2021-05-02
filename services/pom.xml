@@ -17,5 +17,6 @@
         <module>store</module>
         <module>checkout</module>
         <module>chat</module>
+        <module>frontend</module>
     </modules>
 </project>

@@ -9,6 +9,7 @@ import no.fishapp.user.client.AuthClient;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
 import no.fishapp.user.model.user.Buyer;
 import no.fishapp.user.model.user.DTO.BuyerNewData;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -51,7 +52,7 @@ public class BuyerService {
     }
 
 
-    public Buyer createBuyer(BuyerNewData buyerNewData) throws UsernameAlreadyInUseException {
+    public Buyer createBuyer(BuyerNewData buyerNewData) throws UsernameAlreadyInUseException, RestClientHttpException {
         var newUserDto = new NewAuthUserData();
         newUserDto.setUserName(buyerNewData.getUserName());
         newUserDto.setPassword(buyerNewData.getPassword());
@@ -74,6 +75,7 @@ public class BuyerService {
      * Returns a buyer from the provided buyer id
      *
      * @param buyerId the buyer id to find the buyer from
+     *
      * @return the buyer if found null if not
      * @throws NoResultException
      */

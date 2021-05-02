@@ -28,6 +28,9 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Manages all HTTP request that are about {@link Image}.
+ */
 @Path("image")
 @Transactional
 
@@ -44,12 +47,14 @@ public class ImageResource {
     ImageService imageService;
 
     /**
-     * Returns the image with the given id. If the width parameter is set, it will
-     * scale the image width/height to the specified witdth.
+     * Server endpoint for getting an {@link Image}
+     * Returns the {@code Image} with the given id. If the width parameter is set, it will
+     * scale the image width/height to the specified width.
      *
-     * @param id    id of the image
+     * @param id    id of the image to be found
      * @param width desired return width
-     * @return image or 404
+     *
+     * @return a {@link Response} containing the {@code Image} if found or {@link Response.Status#NOT_FOUND} if not
      */
     @GET
     @Path("{id}")
@@ -65,7 +70,7 @@ public class ImageResource {
                 } else {
                     Thumbnails.of(image.toFile())
                               .size(width, width)
-                              .outputFormat(imageObject.getMimeType())
+                              .useOriginalFormat()
                               .toOutputStream(outputStream);
                 }
             };
@@ -80,14 +85,22 @@ public class ImageResource {
         }
     }
 
-
+    /**
+     * Server endpoint for saving an {@link Image}.
+     * @param filename the filename of the {@code Image}
+     * @param mimetype the mimetype of the {@code Image}
+     * @param inputStream the {@link InputStream} containing the {@code Image}
+     * @return a {@link Response} containing the saved {@code Image} if successful or
+     * {@link Response.Status#INTERNAL_SERVER_ERROR} if not
+     */
     @PUT
     @Path("new")
     @RolesAllowed(Group.CONTAINER_GROUP_NAME)
     public Response saveImage(
             @HeaderParam("name") String filename,
             @HeaderParam("mimetype") String mimetype,
-            InputStream inputStream) {
+            InputStream inputStream
+    ) {
         Response response;
         try {
             NewImageDto imageDto = new NewImageDto();

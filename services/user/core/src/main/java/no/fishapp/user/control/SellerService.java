@@ -11,6 +11,7 @@ import no.fishapp.user.model.user.Buyer;
 import no.fishapp.user.model.user.DTO.SellerNewData;
 import no.fishapp.user.model.user.Seller;
 import no.fishapp.user.model.user.User;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -49,7 +50,7 @@ public class SellerService {
         }
     }
 
-    public Seller createSeller(SellerNewData sellerNewData) throws UsernameAlreadyInUseException {
+    public Seller createSeller(SellerNewData sellerNewData) throws UsernameAlreadyInUseException, RestClientHttpException {
         var newUserDto = new NewAuthUserData();
         newUserDto.setUserName(sellerNewData.getUserName());
         newUserDto.setPassword(sellerNewData.getPassword());

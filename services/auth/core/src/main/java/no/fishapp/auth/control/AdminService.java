@@ -6,14 +6,23 @@ import no.fishapp.auth.model.AuthenticatedUser;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
 @RequestScoped
 public class AdminService {
+
+    /**
+     * Returns all users
+     */
+    private static final String ALL_USERS = "select us from AuthenticatedUser us";
+
     @Inject
     AuthenticationService authenticationService;
     @PersistenceContext
@@ -39,5 +48,22 @@ public class AdminService {
         }
         return suc;
     }
+
+
+    /**
+     * Returns all current auth users
+     *
+     * @return all auth users
+     */
+    public List<AuthenticatedUser> getAllAuthUsers() {
+        var query = entityManager.createQuery(ALL_USERS, AuthenticatedUser.class);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException ignore) {
+        }
+        return new ArrayList<>();
+    }
+
 
 }

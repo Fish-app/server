@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 public class RestClientExceptionMapper implements ResponseExceptionMapper<RestClientHttpException> {
     @Override
     public RestClientHttpException toThrowable(Response response) {
+        System.out.println("\n\n EXEPTION REST HTTP: " + response.getStatus());
         return new RestClientHttpException(response.getStatus());
     }
 

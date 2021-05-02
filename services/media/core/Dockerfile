@@ -27,10 +27,7 @@ LABEL name="MEDIA"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
-
 LABEL traefik.http.routers.media.rule="PathPrefix(`/api/media/`)"
-LABEL traefik.http.routers.media.middlewares=stripprefixregex
 
 USER root
 RUN mkdir -p -m 777  /aplication_storage/images

@@ -7,16 +7,19 @@ import no.fishapp.user.control.BuyerService;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
 import no.fishapp.user.model.user.Buyer;
 import no.fishapp.user.model.user.DTO.BuyerNewData;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
+import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,18 +59,20 @@ public class BuyerResource {
     @Path("create")
     @PermitAll
     public Response createBuyer(
-            BuyerNewData buyerNewData
+            @NotNull BuyerNewData buyerNewData
     ) {
         Response.ResponseBuilder resp;
         try {
             var newBuyer = buyerService.createBuyer(buyerNewData);
             resp = Response.ok(newBuyer);
 
-        } catch (PersistenceException e) {
-            resp = Response.ok("Unexpected error creating the user").status(Response.Status.INTERNAL_SERVER_ERROR);
         } catch (UsernameAlreadyInUseException e) {
             resp = Response.ok(
                     "User already exist").status(Response.Status.CONFLICT);
+        } catch (RestClientHttpException e) {
+            //todo: use an jaxrs exeption mapper insted
+            log.severe("HTTP " + e.getHttpStatusCode() + " error from inter container rest client");
+            resp = Response.serverError();
         }
         return resp.build();
 

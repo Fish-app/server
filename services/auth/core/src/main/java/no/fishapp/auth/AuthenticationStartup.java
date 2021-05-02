@@ -18,35 +18,61 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Startup actions for authentication that are executed on server start.
+ * Manages the startup actions for the Authentication service.
+ * This manly includes generating the different admin and management user needed for the cluser to work
  */
 @Singleton
 @Startup
 public class AuthenticationStartup {
+
     @PersistenceContext
     EntityManager entityManager;
 
     @Inject
     AuthenticationService authenticationService;
 
+    /**
+     * The inter container communication username
+     */
     @Inject
     @ConfigProperty(name = "fishapp.service.username", defaultValue = "fishapp")
     private String username;
 
+    /**
+     * The inter container communication password
+     */
     @Inject
     @ConfigProperty(name = "fishapp.service.password", defaultValue = "fishapp")
     private String password;
 
+    /**
+     * The admin user username
+     */
+    @Inject
+    @ConfigProperty(name = "fishapp.service.adminUsername", defaultValue = "fishapp")
+    private String adminUsername;
+
+    /**
+     * The admi user password
+     */
+    @Inject
+    @ConfigProperty(name = "fishapp.service.adminPassword", defaultValue = "fishapp")
+    private String adminPassword;
+
+    /**
+     * starts the async tasks generate the users and groups.
+     */
     @PostConstruct
     @Asynchronous
     public void initialize() {
         this.persistUserGroups();
         this.createContainerJwtUser();
+        this.createAdminUser();
 
     }
 
     /**
-     * Makes sure that our user grous are added to the database.
+     * Validates that the database contains all the {@link Group} names. If not, any missing name is added.
      */
     public void persistUserGroups() {
         long groups = (long) entityManager.createQuery("SELECT count(g.name) from Group g").getSingleResult();
@@ -57,6 +83,10 @@ public class AuthenticationStartup {
         }
     }
 
+    /**
+     * Checks if the {@link AuthenticatedUser} used to for inter container communication in the cluster exists,
+     * and creates it if it does not
+     */
     public void createContainerJwtUser() {
         Optional<AuthenticatedUser> user = authenticationService.getUserFromPrincipal(username);
 
@@ -65,6 +95,23 @@ public class AuthenticationStartup {
             newAuthUserData.setUserName(username);
             newAuthUserData.setPassword(password);
             newAuthUserData.setGroups(List.of(Group.CONTAINER_GROUP_NAME));
+            var authUser = authenticationService.createUser(newAuthUserData);
+            //todo: chek if this has sucseded
+        }
+    }
+
+    /**
+     * Checks if the admin {@link AuthenticatedUser} exists,
+     * and creates it if it does not
+     */
+    public void createAdminUser() {
+        Optional<AuthenticatedUser> user = authenticationService.getUserFromPrincipal(adminUsername);
+
+        if (user.isEmpty()) {
+            var newAuthUserData = new NewAuthUserData();
+            newAuthUserData.setUserName(adminUsername);
+            newAuthUserData.setPassword(adminPassword);
+            newAuthUserData.setGroups(List.of(Group.ADMIN_GROUP_NAME));
             var authUser = authenticationService.createUser(newAuthUserData);
             //todo: chek if this has sucseded
         }

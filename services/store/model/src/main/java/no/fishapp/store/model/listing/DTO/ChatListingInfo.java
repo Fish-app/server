@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.fishapp.store.model.listing.Listing;
 
+/**
+ * {@code ChatListingInfo} is a DTO used for communicating with the chat microservice-component
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

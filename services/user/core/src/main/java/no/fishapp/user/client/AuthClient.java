@@ -5,6 +5,7 @@ import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
 import no.fishapp.util.restClient.exceptionHandlers.RestClientExceptionMapper;
 import no.fishapp.util.restClient.auth.AuthBaseClientInterface;
+import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
 import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -17,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 
 @RegisterRestClient(configKey = "authClient")
 @RegisterProvider(RestClientExceptionMapper.class)
-@Path("/authentication")
+@Path("/api/auth/authentication/")
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface AuthClient extends AutoCloseable, AuthBaseClientInterface {
 
@@ -25,5 +26,5 @@ public interface AuthClient extends AutoCloseable, AuthBaseClientInterface {
     @POST
     @Path("newuser")
     @Produces(MediaType.APPLICATION_JSON)
-    public CompletionStage<AuthenticatedUser> addAuthUser(NewAuthUserData newAuthUserData);
+    CompletionStage<AuthenticatedUser> addAuthUser(NewAuthUserData newAuthUserData) throws RestClientHttpException;
 }
