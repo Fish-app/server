@@ -72,7 +72,7 @@ public class CheckoutStartup {
             entityManager.persist(item);
         }
     }
-    
+
 
     @SneakyThrows
     @Schedules({@Schedule(dayOfMonth = "1", hour = "3", persistent = false),})
@@ -86,9 +86,14 @@ public class CheckoutStartup {
         // takes responsibility and handles the refreshing.
         //
         // But time is fleeting and life is short so this shitty wait solution got to be good enough
-        Random random    = new Random();
-        int    sleeptime = random.nextInt(3000);
-        Thread.sleep(sleeptime);
+        // CORRECTION i have made i teeny bit better solution, namely a shitty db polling solution. it is better than
+        // the shitty wait solution but still not grate, the actually implementing a solution using a messenger service
+        // is really recommended.
+
+
+        //        Random random    = new Random();
+        //        int    sleeptime = random.nextInt(3000);
+        //        Thread.sleep(sleeptime);
 
         checkoutService.chargeSubscriptions();
 
