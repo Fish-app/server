@@ -35,7 +35,7 @@ public class AuthenticationStartup {
      * The inter container communication username
      */
     @Inject
-    @ConfigProperty(name = "fishapp.service.username", defaultValue = "fishapp")
+    @ConfigProperty(name = "fishapp.service.username", defaultValue = "container_default")
     private String username;
 
     /**
@@ -49,15 +49,30 @@ public class AuthenticationStartup {
      * The admin user username
      */
     @Inject
-    @ConfigProperty(name = "fishapp.service.adminUsername", defaultValue = "fishapp")
+    @ConfigProperty(name = "fishapp.service.adminUsername", defaultValue = "admin_default")
     private String adminUsername;
 
     /**
-     * The admi user password
+     * The admin user password
      */
     @Inject
     @ConfigProperty(name = "fishapp.service.adminPassword", defaultValue = "fishapp")
     private String adminPassword;
+
+
+    /**
+     * The dibs api webhook callback username
+     */
+    @Inject
+    @ConfigProperty(name = "fishapp.service.dibsapi.username", defaultValue = "webhook_default")
+    private String dibsApiUserUsername;
+
+    /**
+     * The dibs api webhook callback password
+     */
+    @Inject
+    @ConfigProperty(name = "fishapp.service.dibsapi.password", defaultValue = "fishapp")
+    private String dibsApiUserPassword;
 
     /**
      * starts the async tasks generate the users and groups.
@@ -66,8 +81,10 @@ public class AuthenticationStartup {
     @Asynchronous
     public void initialize() {
         this.persistUserGroups();
-        this.createContainerJwtUser();
-        this.createAdminUser();
+        this.createIfAbsent(username, password, List.of(Group.CONTAINER_GROUP_NAME));
+        this.createIfAbsent(adminUsername, adminPassword, List.of(Group.ADMIN_GROUP_NAME));
+        this.createIfAbsent(dibsApiUserUsername, dibsApiUserPassword, List.of(Group.API_CALLBACK_GROUP_NAME));
+
 
     }
 
@@ -116,4 +133,19 @@ public class AuthenticationStartup {
             //todo: chek if this has sucseded
         }
     }
+
+    public void createIfAbsent(String username, String password, List<String> groops) {
+        Optional<AuthenticatedUser> user = authenticationService.getUserFromPrincipal(username);
+
+        if (user.isEmpty()) {
+            var newAuthUserData = new NewAuthUserData();
+            newAuthUserData.setUserName(username);
+            newAuthUserData.setPassword(password);
+            newAuthUserData.setGroups(groops);
+            var authUser = authenticationService.createUser(newAuthUserData);
+            //todo: chek if this has sucseded
+        }
+    }
+
+
 }

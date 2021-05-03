@@ -8,4 +8,5 @@ public class NewSubscription {
     private DibsOrder order;
     private Checkout checkout;
     private SubscriptionInfo subscription;
+    private Notifications notifications;
 }

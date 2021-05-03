@@ -4,14 +4,11 @@ package no.fishapp.user.control;
 import io.jsonwebtoken.Claims;
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
-import no.fishapp.auth.model.Group;
 import no.fishapp.user.client.AuthClient;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
-import no.fishapp.user.model.user.Buyer;
 import no.fishapp.user.model.user.DTO.SellerNewData;
 import no.fishapp.user.model.user.Seller;
-import no.fishapp.user.model.user.User;
-import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
+import no.fishapp.util.exceptionmappers.RestClientHttpException;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -55,8 +52,7 @@ public class SellerService {
         newUserDto.setUserName(sellerNewData.getUserName());
         newUserDto.setPassword(sellerNewData.getPassword());
         newUserDto.setGroups(List.of(no.fishapp.auth.model.Group.USER_GROUP_NAME,
-                                     no.fishapp.auth.model.Group.SELLER_GROUP_NAME
-        ));
+                                     no.fishapp.auth.model.Group.SELLER_GROUP_NAME));
         var addAuth = authClient.addAuthUser(newUserDto);
 
         AuthenticatedUser authenticatedUser = addAuth.toCompletableFuture().join();
@@ -67,8 +63,7 @@ public class SellerService {
         Seller newSeller = new Seller(authenticatedUser.getId(),
                                       sellerNewData.getUserName(),
                                       sellerNewData.getName(),
-                                      sellerNewData.getRegNumber()
-        );
+                                      sellerNewData.getRegNumber());
         entityManager.persist(newSeller);
 
         return newSeller;

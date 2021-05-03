@@ -32,7 +32,7 @@ public class FrontendReadinessCheck implements HealthCheck {
     private boolean requestOk() {
         try {
             Client client = ClientBuilder.newClient();
-            client.target("http://localhost:9080/admin/test").request().get();
+            client.target("http://localhost:9080/admin").request().get();
 
             return true;
         } catch (Exception ex) {
