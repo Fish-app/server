@@ -5,10 +5,9 @@ import no.fishapp.auth.model.Group;
 import no.fishapp.chat.control.ChatService;
 import no.fishapp.chat.model.*;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -19,10 +18,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- *
  * Boundary-part of the Chat-microservice
  * Implementes the REST HTTP API for the Chat-component of the Microservice
- *
+ * <p>
  * Uses {@link ChatService} to process the requests.
  */
 @Path("/")
@@ -51,8 +49,7 @@ public class ChatResource {
     @Path("conversations")
     @Valid
     public Response getCurrentUserConversationsRequest(
-            @QueryParam("include-lastmessage") Boolean includeLastMsg
-    ) {
+            @QueryParam("include-lastmessage") Boolean includeLastMsg) {
         if (includeLastMsg == null) {
             includeLastMsg = false;
         }
@@ -64,6 +61,7 @@ public class ChatResource {
         }
 
     }
+
     /**
      * Used to start a new {@link Conversation} and associate it with a {@link no.fishapp.store.model.listing.Listing}
      * If {@code Conversation} already is present, we return the existing {@code Conversation}.
@@ -77,11 +75,9 @@ public class ChatResource {
     @Produces(MediaType.APPLICATION_JSON + UTF8_CHARSET)
     @Path("new/{id}")
     public Response startConversationRequest(
-            @NotNull @PathParam("id") long listingId
-    ) {
+            @NotNull @PathParam("id") long listingId) {
         Optional<Conversation> userConv = chatService.newListingConversation(listingId);
-        return userConv.map(Response::ok)
-                       .orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR)).build();
+        return userConv.map(Response::ok).orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR)).build();
 
     }
 
@@ -100,13 +96,10 @@ public class ChatResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON + UTF8_CHARSET})
     public Response sendMessageRequest(
-            @NotNull @PathParam("id") long conversationId,
-            MessageBody newMessageBody
-    ) {
+            @NotNull @PathParam("id") long conversationId, MessageBody newMessageBody) {
         Optional<Conversation> userConv = chatService.sendMessage(newMessageBody.getMessageText(), conversationId);
 
-        return userConv.map(Response::ok)
-                       .orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR)).build();
+        return userConv.map(Response::ok).orElse(Response.ok().status(Response.Status.INTERNAL_SERVER_ERROR)).build();
     }
 
     /**
@@ -123,19 +116,24 @@ public class ChatResource {
     @Path("{id}/updates")
     @Produces({MediaType.APPLICATION_JSON + UTF8_CHARSET})
     public Response updatesQuery(
-            @NotNull @PathParam("id") long conversationId,
-            @NotNull @QueryParam("last-id") long lastId
-    ) {
+            @NotNull @PathParam("id") long conversationId, @NotNull @QueryParam("last-id") long lastId) {
         Optional<List<Message>> messages = chatService.getMessagesTo(conversationId, lastId);
 
         if (messages.isPresent()) {
-            List<MessageDTO> messageDTOS = messages.get().stream()
-                                                   .map(MessageDTO::buildFromMessage)
+            List<MessageDTO> messageDTOS = messages.get().stream().map(MessageDTO::buildFromMessage)
                                                    .collect(Collectors.toList());
             return Response.ok(messageDTOS).build();
         } else {
             return Response.ok().status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+
+    @GET
+    @Path("ready")
+    @PermitAll
+    public Response readynessResp() {
+        return Response.ok().build();
     }
 
 }

@@ -4,9 +4,17 @@ metadata:
   name: fishapp-ingress
   labels:
     app: fishapp
+  annotations:
+    cert-manager.io/issuer: "letsencrypt-staging"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    acme.cert-manager.io/http01-edit-in-place: "true"
 spec:
+  tls:
+    - secretName: fishapp-tls-cert
+      hosts:
+        - pc-1.uials.no
   rules:
-    - host: fishapp.no
+    - host: pc-1.uials.no
       http:
         paths:
           - path: /api/auth
