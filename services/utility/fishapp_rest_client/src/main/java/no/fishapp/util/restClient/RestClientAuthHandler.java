@@ -1,4 +1,4 @@
-package no.fishapp.util.restClient.auth;
+package no.fishapp.util.restClient;
 
 
 import io.jsonwebtoken.JwtParser;
@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.java.Log;
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
-import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
+import no.fishapp.util.exceptionmappers.RestClientHttpException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -108,7 +108,7 @@ public class RestClientAuthHandler {
         } catch (RestClientHttpException e) {
             log.log(Level.WARNING,
                     String.format("Conection http %s error geting inter container login token. Retrying in 10s",
-                                  e.getHttpStatusCode()));
+                                  e.getResponse().getStatus()));
             refreshTime = Instant.now().plus(10, ChronoUnit.SECONDS);
         } catch (SignatureException e) {
             log.log(Level.WARNING, "Error validating inter container login token. refreshing pub key");

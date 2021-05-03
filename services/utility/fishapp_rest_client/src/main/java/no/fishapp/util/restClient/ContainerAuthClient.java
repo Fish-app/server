@@ -1,8 +1,8 @@
-package no.fishapp.util.restClient.auth;
+package no.fishapp.util.restClient;
 
 import no.fishapp.auth.model.DTO.UsernamePasswordData;
-import no.fishapp.util.restClient.exceptionHandlers.RestClientExceptionMapper;
-import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
+import no.fishapp.util.exceptionmappers.RestClientExceptionMapper;
+import no.fishapp.util.exceptionmappers.RestClientHttpException;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 

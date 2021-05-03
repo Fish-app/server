@@ -1,4 +1,4 @@
-package no.fishapp.checkout.client.exceptionHandlers;
+package no.fishapp.util.exceptionmappers;
 
 import lombok.extern.java.Log;
 import org.eclipse.microprofile.rest.client.ext.ResponseExceptionMapper;
@@ -8,9 +8,9 @@ import javax.ws.rs.core.Response;
 
 @Log
 public class RestClientExceptionMapper implements ResponseExceptionMapper<RestClientHttpException> {
+
     @Override
     public RestClientHttpException toThrowable(Response response) {
-
         return new RestClientHttpException(response);
     }
 

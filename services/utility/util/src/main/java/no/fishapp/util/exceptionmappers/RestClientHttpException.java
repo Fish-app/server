@@ -1,4 +1,4 @@
-package no.fishapp.checkout.client.exceptionHandlers;
+package no.fishapp.util.exceptionmappers;
 
 import lombok.Data;
 
@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 public class RestClientHttpException extends Exception {
 
     Response response;
+
 
     public RestClientHttpException(Response response) {
         this.response = response;

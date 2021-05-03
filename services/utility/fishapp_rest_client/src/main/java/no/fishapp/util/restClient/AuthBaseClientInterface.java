@@ -1,4 +1,4 @@
-package no.fishapp.util.restClient.auth;
+package no.fishapp.util.restClient;
 
 
 public interface AuthBaseClientInterface {
