@@ -44,10 +44,12 @@ public class AuthenticationServiceTest {
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(WeldInitiator.createWeld().addExtensions(ConfigExtension.class)
                                                                 .addBeanClasses(AuthenticationServiceTest.class,
-                                                                                AuthenticationService.class)).addBeans(
+                                                                                AuthenticationService.class
+                                                                )).addBeans(
             createKeyServiceBean(),
             createIdentetyStoreHandlerBean(),
-            createHasherBean()).activate(RequestScoped.class).build();
+            createHasherBean()
+    ).activate(RequestScoped.class).build();
 
     @BeforeAll
     static void setEnv() {
@@ -139,7 +141,7 @@ public class AuthenticationServiceTest {
             String groupName = invocation.getArgument(1, String.class);
             return new Group(groupName);
         });
-        
+
 
         Mockito.when(entityManagerMock.find(Mockito.eq(AuthenticatedUser.class), Mockito.eq(USER_ID)))
                .thenReturn(defaultAuthUser);
@@ -250,14 +252,16 @@ public class AuthenticationServiceTest {
         assertTrue(negativeTest.isEmpty());
     }
 
-    private void setJwtValue(Optional<String> newVal) {
+    private void setJwtValue(String newVal) {
         weld.select(AuthenticationService.class).get()
-            .setJwtSubject(Mockito.when(Mockito.mock(Instance.class).get()).thenReturn(newVal).getMock());
+            .setJwtSubject(Mockito.when(Mockito.mock(Instance.class).get())
+                                  .thenReturn(Optional.ofNullable(newVal))
+                                  .getMock());
     }
 
     @Test
     void getCurrentAuthUser() {
-        setJwtValue(Optional.of(String.valueOf(USER_ID)));
+        setJwtValue(String.valueOf(USER_ID));
 
         Optional<AuthenticatedUser> authenticatedUser = weld.select(AuthenticationService.class).get()
                                                             .getCurrentAuthUser();
@@ -265,7 +269,7 @@ public class AuthenticationServiceTest {
         assertTrue(authenticatedUser.isPresent());
         assertEquals(authenticatedUser.get().getId(), USER_ID);
 
-        setJwtValue(Optional.empty());
+        setJwtValue(null);
         Optional<AuthenticatedUser> negativeTest = weld.select(AuthenticationService.class).get().getCurrentAuthUser();
 
         assertTrue(negativeTest.isEmpty());
@@ -339,7 +343,7 @@ public class AuthenticationServiceTest {
 
     @Test
     void changePassword() {
-        setJwtValue(Optional.of(String.valueOf(USER_ID)));
+        setJwtValue(String.valueOf(USER_ID));
 
         defaultAuthUser.setPassword("NOT hashed");
 

@@ -103,7 +103,6 @@
                             <directory>${basedir}/src/main/webapp</directory>
                             <includes>
                                 <include>**</include>
-                                <!--                                <include>**/*.log</include>-->
                             </includes>
                             <excludes>
                                 <exclude>**/WEB-INF</exclude>
