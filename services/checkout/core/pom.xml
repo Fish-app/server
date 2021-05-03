@@ -27,6 +27,13 @@
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
             <version>${jakartaee.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -72,21 +79,26 @@
             <groupId>no.fishapp.checkout</groupId>
             <artifactId>model</artifactId>
             <version>1.0</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>no.fishapp.auth</groupId>
             <artifactId>model</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>no.fishapp.util</groupId>
+            <artifactId>general-util</artifactId>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>no.fishapp</groupId>-->
-<!--            <artifactId>util</artifactId>-->
-<!--            <version>1.0</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>config-api</artifactId>
+            <version>1.6.1</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>

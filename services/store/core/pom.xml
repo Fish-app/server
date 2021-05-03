@@ -87,12 +87,6 @@
         </dependency>
 
         <dependency>
-            <groupId>no.fishapp</groupId>
-            <artifactId>util</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>no.fishapp.media</groupId>
             <artifactId>model</artifactId>
             <version>1.0</version>
@@ -102,6 +96,20 @@
             <groupId>no.fishapp.store</groupId>
             <artifactId>model</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>no.fishapp.util</groupId>
+            <artifactId>rest-client</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>no.fishapp.util</groupId>
+            <artifactId>general-util</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
