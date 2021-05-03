@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-04-12T17:00:55.315Z
+__export_date: 2021-05-03T15:36:59.946Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_5fa81cb820784975ad5283bccc017b7b
@@ -109,6 +109,108 @@ resources:
         id: pair_1ca8152a96b741ecb9f062ce5ab78f05
     authentication: {}
     metaSortKey: -1613712643568.25
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_9f8ecccfcfb549b794230a9f65ee4c0a
+    parentId: fld_9f7206b4417a4b00a691f8838449e948
+    modified: 1620051727967
+    created: 1619015204406
+    url: "{{ _.baseURL }}/checkout/new-sub"
+    name: new sub
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_7d16a6b66f4544f1b5b5e079b9eeae2d
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_f2e50e7789524569a33863570b5f69c6
+    authentication: {}
+    metaSortKey: -1619015204445
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_9f7206b4417a4b00a691f8838449e948
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1619015190267
+    created: 1619015190267
+    name: chekout
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1619015190267
+    _type: request_group
+  - _id: req_93d49e7085d040c289073010536d2090
+    parentId: fld_9f7206b4417a4b00a691f8838449e948
+    modified: 1620052389521
+    created: 1619617665132
+    url: "{{ _.baseURL }}/checkout/subscription/valid/5"
+    name: is valid
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_40551ebe962a4bb2bc2769b2a7461dc9
+        disabled: true
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_eda3e5e159d34b5784550f1f3f594b9a
+    authentication: {}
+    metaSortKey: -1619617665132
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_96af46ba87ca4e2e862e847081e06375
+    parentId: fld_9f7206b4417a4b00a691f8838449e948
+    modified: 1620052382392
+    created: 1620052253690
+    url: "{{ _.baseURL }}/checkout/subscription/status/5"
+    name: get status
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_40551ebe962a4bb2bc2769b2a7461dc9
+        disabled: true
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_eda3e5e159d34b5784550f1f3f594b9a
+    authentication: {}
+    metaSortKey: -1619316434788.5
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -891,7 +993,7 @@ resources:
     _type: request_group
   - _id: req_905f7d77994046feafce8ef5becf08f2
     parentId: fld_1623d93b11cf43b08a6b900a5f88bb54
-    modified: 1617790477066
+    modified: 1620052348757
     created: 1617786211729
     url: "{{ _.baseURL }}/auth/authentication/login"
     name: default seller login
@@ -901,7 +1003,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"userName": "tests@example.com",
+        	"userName": "testss@example.com",
           "password" : "12345678"
         }
     parameters: []
@@ -1033,7 +1135,7 @@ resources:
     _type: request_group
   - _id: req_c03126a970a2473cb927235fb435eabe
     parentId: fld_428ed833825a402fb7c7bede7527f842
-    modified: 1617786127013
+    modified: 1619966812927
     created: 1611780826271
     url: "{{ _.baseURL }}/user/buyer/current"
     name: get current
@@ -1063,7 +1165,7 @@ resources:
     _type: request
   - _id: req_3d5675bb75f2486d872d6db9d2352a0c
     parentId: fld_c87d75353aef4f068e12e7412fc5a674
-    modified: 1617790000920
+    modified: 1620052341155
     created: 1617786109138
     url: "{{ _.baseURL }}/user/seller/create"
     name: create new
@@ -1074,7 +1176,7 @@ resources:
       text: |-
         {
         	"name" : "tests@example.com",
-        	"userName" : "tests@example.com",
+        	"userName" : "testss@example.com",
         	"password" : "12345678",
         	"regNumber" : "test12345678"
         }
@@ -1150,9 +1252,9 @@ resources:
     _type: request
   - _id: req_be5f0bd8de35407488cb70ea89be653f
     parentId: fld_bf7b15059ebe474ab24998c95365db6c
-    modified: 1618238862104
+    modified: 1618923426252
     created: 1617878534375
-    url: "{{ _.baseURL }}/media/image/7"
+    url: "{{ _.baseURL }}/media/image/1"
     name: getImage
     description: ""
     method: GET
@@ -1762,7 +1864,7 @@ resources:
     _type: request_group
   - _id: req_5c0ac1122eff4d7e9311f15ef5f1d5a0
     parentId: fld_e03efd22f10448329f2008eb330be4be
-    modified: 1618237287398
+    modified: 1618922688568
     created: 1614773916253
     url: "{{ _.baseURL }}/store/commodity/new"
     name: create-commodity-2
@@ -1781,7 +1883,7 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Downloads/pexels-tranmautritam-69433.jpg
+          fileName: /home/trygve/Downloads/pexels-pixabay-37401.jpg
     parameters: []
     headers: []
     authentication: {}
@@ -1796,7 +1898,7 @@ resources:
     _type: request
   - _id: req_04adfd59b1354474b465278e752e3be7
     parentId: fld_e03efd22f10448329f2008eb330be4be
-    modified: 1618237312894
+    modified: 1618922713196
     created: 1614773921857
     url: "{{ _.baseURL }}/store/commodity/new"
     name: create-commodity-3
@@ -1815,7 +1917,7 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Downloads/pexels-david-abbram-3640451.jpg
+          fileName: /home/trygve/Downloads/pexels-tranmautritam-69433.jpg
     parameters: []
     headers: []
     authentication: {}
@@ -1830,7 +1932,7 @@ resources:
     _type: request
   - _id: req_e6c3b39850794631b28ae8c1e3e97b24
     parentId: fld_e03efd22f10448329f2008eb330be4be
-    modified: 1618237306958
+    modified: 1618922699339
     created: 1615888011674
     url: "{{ _.baseURL }}/store/commodity/new"
     name: create-commodity-4
@@ -1849,7 +1951,7 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Downloads/pexels-dana-tentis-725992.jpg
+          fileName: /home/trygve/Downloads/pexels-caio-69372.jpg
     parameters: []
     headers: []
     authentication: {}
@@ -1875,7 +1977,7 @@ resources:
     _type: environment
   - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1618232130512
+    modified: 1619618492882
     created: 1611756889289
     name: Default Jar
     cookies:
@@ -1887,7 +1989,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.749Z
         lastAccessed: 2021-02-08T14:21:10.749Z
-        id: "8985261954841277"
+        id: "1946557555777293"
       - key: Currency
         value: USD
         domain: domain.com
@@ -1896,7 +1998,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.753Z
         lastAccessed: 2021-02-08T14:21:10.753Z
-        id: "5877892349760543"
+        id: "38007440062717635"
       - key: Currency_Symbol
         value: "%24"
         domain: domain.com
@@ -1905,7 +2007,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.755Z
         lastAccessed: 2021-02-08T14:21:10.755Z
-        id: "9805132800217529"
+        id: "11142340866795442"
       - key: eigi-geolocated-country-code
         value: no
         expires: 2022-02-08T14:21:10.000Z
@@ -1915,7 +2017,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.756Z
         lastAccessed: 2021-02-08T14:21:10.756Z
-        id: "3042720708167588"
+        id: "5263466813851909"
       - key: host
         value: U2FsdGVkX1%2B15LaP5qxYVyZq%2FcVllQ0XY2CKmMa6WN9mFNJ7diFetHndWeFrJRAEGFP3XEajS%2BYO92dXqg8X7ODZMgDwHs5wnZo%2F5ljMTf0%3D
         domain: domain.com
@@ -1923,7 +2025,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-03-08T11:34:04.262Z
-        id: "3664815329099005"
+        id: "8537950816872013"
       - key: session_id
         value: 4ec600152db7bb3e5c806f685866d2397
         domain: domain.com
@@ -1932,17 +2034,35 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "32776883424569614"
+        id: "5860965001169429"
       - key: customerpixel
-        value: "%7B%22visits%22%3A7%2C%22current_visit%22%3A%222021-04-12%2012%3A55%3A3\
-          0%22%2C%22last_visit%22%3A%222021-03-11%2010%3A07%3A58%22%2C%22first_\
+        value: "%7B%22visits%22%3A9%2C%22current_visit%22%3A%222021-04-28%2014%3A01%3A3\
+          2%22%2C%22last_visit%22%3A%222021-04-28%2014%3A01%3A27%22%2C%22first_\
           visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22login%22%3A0%7D"
         domain: domain.com
         path: /
         hostOnly: false
         creation: 2021-02-08T14:21:10.758Z
-        lastAccessed: 2021-04-12T12:55:30.502Z
-        id: "8767323411458641"
+        lastAccessed: 2021-04-28T14:01:32.882Z
+        id: "8188777702050931"
+      - key: visid_incap_1967659
+        value: DWgEbXcFRr2aFB6Tkj1fg21qiWAAAAAAQUIPAAAAAACud/OXqAYd5U3Lma0huSlP
+        expires: 2022-04-27T14:25:06.000Z
+        domain: api.dibspayment.eu
+        path: /
+        httpOnly: true
+        hostOnly: false
+        creation: 2021-04-28T14:00:14.139Z
+        lastAccessed: 2021-04-28T14:00:14.139Z
+        id: "7535826597622464"
+      - key: incap_ses_373_1967659
+        value: kMWWau+zTDxCpCBH1SktBbJqiWAAAAAAwGms2W3L4ZDkfe0yz2/NBg==
+        domain: api.dibspayment.eu
+        path: /
+        hostOnly: false
+        creation: 2021-04-28T14:00:14.139Z
+        lastAccessed: 2021-04-28T14:01:22.497Z
+        id: "8443311198737944"
     _type: cookie_jar
   - _id: spc_360be69129b747259668373eeced49e6
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
@@ -1954,13 +2074,15 @@ resources:
     _type: api_spec
   - _id: env_0ad3b1e7fd714bcba278ee5675765f45
     parentId: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
-    modified: 1617785090286
+    modified: 1619957555642
     created: 1611779980099
     name: Development
     data:
-      baseURL: http://localhost:80/api
+      DIBS_TEST_URL: https://test.api.dibspayment.eu/
+      baseURL: https://pc-1.uials.no/api
     dataPropertyOrder:
       "&":
+        - DIBS_TEST_URL
         - baseURL
     color: "#ff0000"
     isPrivate: false
@@ -1968,7 +2090,7 @@ resources:
     _type: environment
   - _id: env_55c845e445e6491bb74296b3d5176804
     parentId: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
-    modified: 1611780553415
+    modified: 1619618657863
     created: 1611780153750
     name: Production
     data:
