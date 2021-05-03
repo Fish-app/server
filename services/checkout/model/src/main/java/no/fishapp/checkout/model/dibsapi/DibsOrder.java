@@ -12,10 +12,13 @@ import java.util.List;
 @Entity
 public class DibsOrder {
 
-    @Id
+
+    /**
+     * The order id provided by dibs
+     */
     @JsonbTransient
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Id
+    private String id;
 
     /**
      * The items to charge for in the order.

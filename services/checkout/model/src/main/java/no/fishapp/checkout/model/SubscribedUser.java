@@ -37,4 +37,6 @@ public class SubscribedUser {
         this.subscriptionDibsOrders.add(dibsOrder);
 
     }
+
+
 }
