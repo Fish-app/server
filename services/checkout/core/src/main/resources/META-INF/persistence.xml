@@ -10,7 +10,7 @@
         <class>no.fishapp.checkout.model.SubscribedUser</class>
         <class>no.fishapp.checkout.model.dibsapi.Item</class>
         <class>no.fishapp.checkout.model.dibsapi.DibsOrder</class>
-
+        <class>no.fishapp.checkout.model.notGreatSolutions.SimpleDbUpdatePollTicket</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>

@@ -23,8 +23,9 @@ public class Group implements Serializable {
     public static final String SELLER_GROUP_NAME = "seller";
     public static final String ADMIN_GROUP_NAME = "admin";
     public static final String CONTAINER_GROUP_NAME = "container";
+    public static final String API_CALLBACK_GROUP_NAME = "apicalback";
 
-    public static final String[] GROUPS = {CONTAINER_GROUP_NAME, USER_GROUP_NAME, BUYER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME};
+    public static final String[] GROUPS = {CONTAINER_GROUP_NAME, USER_GROUP_NAME, BUYER_GROUP_NAME, SELLER_GROUP_NAME, ADMIN_GROUP_NAME, API_CALLBACK_GROUP_NAME};
 
     /**
      * The group name.

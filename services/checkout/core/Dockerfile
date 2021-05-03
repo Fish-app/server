@@ -27,10 +27,7 @@ LABEL name="checkout"
 LABEL version="$VERSION-$REVISION"
 
 LABEL traefik.docker.network=fishapp_network
-LABEL traefik.http.middlewares.stripprefixregex.stripprefixregex.regex="\/api\/[a-z0-9]+\/"
-
 LABEL traefik.http.routers.checkout.rule="PathPrefix(`/api/checkout/`)"
-LABEL traefik.http.routers.checkout.middlewares=stripprefixregex
 
 #ENV fishapp_system_url=http://host.docker.internal/
 ENV fishapp_system_url=http://remote-run.uials.no/

@@ -72,6 +72,7 @@ public class CheckoutStartup {
             entityManager.persist(item);
         }
     }
+    
 
     @SneakyThrows
     @Schedules({@Schedule(dayOfMonth = "1", hour = "3", persistent = false),})
