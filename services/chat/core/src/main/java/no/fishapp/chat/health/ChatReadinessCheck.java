@@ -1,7 +1,7 @@
 package no.fishapp.chat.health;
 
 
-import no.fishapp.util.restClient.auth.RestClientAuthHandler;
+import no.fishapp.util.restClient.RestClientAuthHandler;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;

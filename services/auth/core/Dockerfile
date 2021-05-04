@@ -29,7 +29,8 @@ LABEL version="$VERSION-$REVISION"
 LABEL traefik.docker.network=fishapp_network
 LABEL traefik.http.routers.auth.rule="PathPrefix(`/api/auth/`)"
 
-ENV fishapp_system_url=http://host.docker.internal/
+#ENV fishapp_system_url=http://host.docker.internal/
+ENV fishapp_system_url=http://remote-run.uials.no/
 
 ENV http_admin_username="a"
 ENV http_admin_password="a"

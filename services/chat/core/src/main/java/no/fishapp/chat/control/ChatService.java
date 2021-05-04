@@ -7,7 +7,7 @@ import no.fishapp.chat.model.Conversation;
 import no.fishapp.chat.model.ConversationDTO;
 import no.fishapp.chat.model.Message;
 import no.fishapp.store.model.listing.DTO.ChatListingInfo;
-import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
+import no.fishapp.util.exceptionmappers.RestClientHttpException;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 

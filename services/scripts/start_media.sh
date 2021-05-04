@@ -7,6 +7,7 @@ docker run  \
   --mount type=volume,source=image_volume,target=/aplication_storage/images \
   --network=fishapp_network \
   --rm \
+  --mount source=imageVolume,target=/aplication_storage/images \
   --add-host host.docker.internal:host-gateway \
   --name  fishapp_media \
   fishapp-media:latest

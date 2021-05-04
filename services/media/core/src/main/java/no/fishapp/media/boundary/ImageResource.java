@@ -32,6 +32,7 @@ import java.nio.file.Paths;
  */
 @Path("image")
 @Transactional
+
 public class ImageResource {
 
     @Inject
@@ -51,13 +52,11 @@ public class ImageResource {
      *
      * @param id    id of the image to be found
      * @param width desired return width
-     *
      * @return a {@link Response} containing the {@code Image} if found or {@link Response.Status#NOT_FOUND} if not
      */
     @GET
     @Path("{id}")
     @Produces(MediaType.WILDCARD)
-    // @RolesAllowed(Group.BUYER_GROUP_NAME)
     public Response getPhoto(@Positive @PathParam("id") int id, @QueryParam("width") int width) {
         Image imageObject = entityManager.find(Image.class, BigInteger.valueOf(id));
         if (imageObject != null) {
@@ -67,10 +66,7 @@ public class ImageResource {
                     Files.copy(image, outputStream);
                     outputStream.flush();
                 } else {
-                    Thumbnails.of(image.toFile())
-                              .size(width, width)
-                              .useOriginalFormat()
-                              .toOutputStream(outputStream);
+                    Thumbnails.of(image.toFile()).size(width, width).useOriginalFormat().toOutputStream(outputStream);
                 }
             };
 
@@ -86,8 +82,9 @@ public class ImageResource {
 
     /**
      * Server endpoint for saving an {@link Image}.
-     * @param filename the filename of the {@code Image}
-     * @param mimetype the mimetype of the {@code Image}
+     *
+     * @param filename    the filename of the {@code Image}
+     * @param mimetype    the mimetype of the {@code Image}
      * @param inputStream the {@link InputStream} containing the {@code Image}
      * @return a {@link Response} containing the saved {@code Image} if successful or
      * {@link Response.Status#INTERNAL_SERVER_ERROR} if not
@@ -96,10 +93,7 @@ public class ImageResource {
     @Path("new")
     @RolesAllowed(Group.CONTAINER_GROUP_NAME)
     public Response saveImage(
-            @HeaderParam("name") String filename,
-            @HeaderParam("mimetype") String mimetype,
-            InputStream inputStream
-    ) {
+            @HeaderParam("name") String filename, @HeaderParam("mimetype") String mimetype, InputStream inputStream) {
         Response response;
         try {
             NewImageDto imageDto = new NewImageDto();

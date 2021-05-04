@@ -6,7 +6,7 @@ import no.fishapp.user.control.SellerService;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
 import no.fishapp.user.model.user.DTO.SellerNewData;
 import no.fishapp.user.model.user.Seller;
-import no.fishapp.util.restClient.exceptionHandlers.RestClientHttpException;
+import no.fishapp.util.exceptionmappers.RestClientHttpException;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -52,8 +52,7 @@ public class SellerResource {
     @Path("create")
     @PermitAll
     public Response createSeller(
-            SellerNewData sellerNewData
-    ) {
+            SellerNewData sellerNewData) {
         Response.ResponseBuilder resp;
         try {
             var newSeller = sellerService.createSeller(sellerNewData);
@@ -62,8 +61,7 @@ public class SellerResource {
         } catch (PersistenceException e) {
             resp = Response.ok("Unexpected error creating the user").status(500);
         } catch (UsernameAlreadyInUseException e) {
-            resp = Response.ok(
-                    "User already exist").status(Response.Status.CONFLICT);
+            resp = Response.ok("User already exist").status(Response.Status.CONFLICT);
         } catch (RestClientHttpException e) {
             //todo: use an jaxrs exeption mapper insted
             resp = Response.serverError();

@@ -53,11 +53,16 @@ spec:
           ports:
             - containerPort: 9080
             - containerPort: 9443
+          envFrom:
+            - secretRef:
+                name: inter-container-logins-secrets
           env:
             - name: AUTH_SERVICE_URL
               value: "http://auth-service:80/"
             - name: MEDIA_SERVICE_URL
               value: "http://media-service:80/"
+            - name: CHECKOUT_SERVICE_URL
+              value: "http://checkout-service:80/"
           readinessProbe: # todo:change to prod values
             httpGet:
               path: /health/ready

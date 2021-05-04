@@ -29,7 +29,8 @@ LABEL version="$VERSION-$REVISION"
 LABEL traefik.docker.network=fishapp_network
 LABEL traefik.http.routers.store.rule="PathPrefix(`/api/store/`)"
 
-ENV fishapp_system_url=http://host.docker.internal/
+#ENV fishapp_system_url=http://host.docker.internal/
+ENV fishapp_system_url=http://remote-run.uials.no/
 
 # todo:remove inject when starting container
 ENV http_client_username="fishapp"

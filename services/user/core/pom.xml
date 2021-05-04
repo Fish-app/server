@@ -88,9 +88,17 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
-            <groupId>no.fishapp</groupId>
-            <artifactId>util</artifactId>
+            <groupId>no.fishapp.util</groupId>
+            <artifactId>general-util</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>no.fishapp.util</groupId>
+            <artifactId>rest-client</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
@@ -143,7 +151,8 @@
                 <configuration>
                     <container>true</container>
                     <skipDefaultPorts>true</skipDefaultPorts>
-                    <dockerRunOpts>--network fishapp_network --add-host host.docker.internal:host-gateway</dockerRunOpts>
+                    <dockerRunOpts>--network fishapp_network --add-host host.docker.internal:host-gateway
+                    </dockerRunOpts>
                 </configuration>
             </plugin>
 

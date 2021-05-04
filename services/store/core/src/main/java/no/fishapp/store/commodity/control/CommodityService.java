@@ -106,7 +106,7 @@ public class CommodityService {
      */
     public List<CommodityDTO> getAllDisplayCommodities() {
 
-        List<Commodity> commodities = entityManager.createQuery(GET_DISPLAY_COMMODITIES, Commodity.class).getResultList();
+        List<Commodity> commodities = entityManager.createQuery(GET_ALL_COMMODITIES, Commodity.class).getResultList();
 
 
         return commodities.stream()
