@@ -9,8 +9,8 @@ maven ([linux](https://packages.debian.org/search?keywords=maven) [win](https://
 is used. [Docker](https://docs.docker.com/engine/install/) is used as the kubernetes container runtime, remember
 the [post installation steps](https://docs.docker.com/engine/install/linux-postinstall/) (I always forget).
 
-For controlling the cluster [kubectl](https://kubernetes.io/docs/tasks/tools/) is needed. You will need a kubernetes
-cluster to run on, if you are only testing locally [minikube](https://minikube.sigs.k8s.io/docs/start/) can be used but i wold recomend using [Microk8s](https://microk8s.io/) given that mikrokube does not have all the features requierd.
+For controlling the cluster [kubectl](https://kubernetes.io/docs/tasks/tools/) is needed (if you user microk8s(which you should) than it's not needed because it is bundeled with the install ``microk8s kubectl``). 
+You will need a kubernetes cluster to run on, if you are only testing locally [minikube](https://minikube.sigs.k8s.io/docs/start/) can be used but i wold recomend using [Microk8s](https://microk8s.io/) given that mikrokube does not have all the features requierd.
 
 ## Running locally
 
