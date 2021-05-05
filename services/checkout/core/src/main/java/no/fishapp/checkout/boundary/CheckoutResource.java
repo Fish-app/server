@@ -42,7 +42,7 @@ public class CheckoutResource {
     }
 
     @GET
-    @Path("subscription/cansle")
+    @Path("subscription/cancel")
     public Response cancelSubscription() {
         return Response.ok().build();
     }
