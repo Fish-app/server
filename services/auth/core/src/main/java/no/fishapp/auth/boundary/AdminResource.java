@@ -9,6 +9,7 @@ import no.fishapp.auth.model.Group;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -46,7 +47,7 @@ public class AdminResource {
     @PATCH
     @Path("changepassword")
     public Response changePassword(
-            AdminChangePasswordData adminChangePasswordData) {
+            @Valid AdminChangePasswordData adminChangePasswordData) {
         Response.ResponseBuilder resp;
         boolean sucsess = adminService
                 .changeUserPassword(adminChangePasswordData.getUserId(), adminChangePasswordData.getNewPassword());

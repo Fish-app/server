@@ -3,13 +3,12 @@ package no.fishapp.auth.model.DTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Locale;
 
 
 /**
- * Data transfer objet used to provide loggin data.
+ * Data transfer objet used to provide loggin data. The user name is set to lower case
  * Used to facilitate Http POST payload usage for increased security.
  */
 @Data
@@ -26,7 +25,6 @@ public class UsernamePasswordData {
      * The users login user name
      */
     @NotNull
-    @Email
     private String userName;
 
     /**
@@ -37,7 +35,7 @@ public class UsernamePasswordData {
      * @param userName The users username
      */
     public UsernamePasswordData(
-            @NotNull String password, @NotNull @Email String userName) {
+            @NotNull String password, @NotNull String userName) {
         this.password = password;
         this.userName = userName.toLowerCase(Locale.ROOT);
     }

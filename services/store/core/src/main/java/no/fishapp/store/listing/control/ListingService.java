@@ -70,7 +70,7 @@ public class ListingService {
 
     /**
      * Creates a new {@link OfferListing} with the {@code listing} argument and returns an {@link Optional}
-     * containing the resulting {@code OfferListing}.
+     * containing the resulting {@code OfferListing}. If the provided {@code OfferListing} is invalid, an empty {@link Optional} is returned.
      *
      * @param listing the {@code OfferListing} to be added
      * @return an {@code Optional} containing the created {@code OfferListing} if successful or {@code empty} if not
@@ -80,6 +80,8 @@ public class ListingService {
         if (jwtSubject.get().isEmpty()) {
             throw new NoJwtTokenException();
         }
+
+        
         var userId = Long.parseLong(jwtSubject.get().get());
 
 

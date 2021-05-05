@@ -26,7 +26,7 @@ public interface StoreClient extends AutoCloseable, AuthBaseClientInterface {
      * @throws RestClientHttpException A exception that catches any HTTP failure codes if present
      */
     @GET
-    @Path("listing/listing/{id}")
+    @Path("listing/listing/cli/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     CompletionStage<ChatListingInfo> getListing(@PathParam("id") long listingId) throws RestClientHttpException;

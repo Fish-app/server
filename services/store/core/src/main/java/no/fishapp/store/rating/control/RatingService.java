@@ -8,6 +8,7 @@ import no.fishapp.store.model.rating.Rating;
 import no.fishapp.store.model.transaction.Transaction;
 import no.fishapp.store.transaction.control.TransactionService;
 import no.fishapp.user.model.user.User;
+import no.fishapp.util.exceptionmappers.NoJwtTokenException;
 import org.eclipse.microprofile.jwt.Claim;
 
 import javax.enterprise.inject.Instance;
@@ -63,14 +64,17 @@ public class RatingService {
      * Creates a new {@link Rating} connected to the {@link Transaction} matching the transactionId argument.
      * The {@code Rating} get the value from the ratingValue argument. Returns an {@link Optional} containing the
      * resulting {@code Rating}.
+     * <p>
+     * If the user tries to rate a transaction (s)he is not a member of a {@code empty} Optional is returned
+     *
      * @param transactionId the id of the {@code Transaction} to connect the {@code Rating} to
-     * @param ratingValue the value of the {@code Rating}
+     * @param ratingValue   the value of the {@code Rating}
      * @return an {@code Optional} containing the created {@code Rating} if successful or {@code empty} if not
      */
     public Optional<Rating> newRating(long transactionId, int ratingValue) {
         if (jwtSubject.get().isEmpty() || jwtGroups.get().isEmpty()) {
             log.log(Level.SEVERE, "Error reading jwt token");
-            return Optional.empty();
+            throw new NoJwtTokenException();
         }
 
         long currentUserId = Long.parseLong(jwtSubject.get().get());
@@ -83,8 +87,7 @@ public class RatingService {
         boolean               isSeller            = groups.contains(Group.SELLER_GROUP_NAME);
 
 
-        if (transactionOptional.map(transaction -> transaction.isUserInTransaction(currentUserId))
-                               .orElse(false)) {
+        if (transactionOptional.map(transaction -> transaction.isUserInTransaction(currentUserId)).orElse(false)) {
             Transaction transaction      = transactionOptional.get();
             long        ratingReceiverId = isSeller ? transaction.getBuyerId() : transaction.getSellerId();
 
@@ -104,6 +107,7 @@ public class RatingService {
     /**
      * Returns an {@link Optional} containing the {@link Rating} of the {@link Transaction} with an id matching the
      * transactionId argument.
+     *
      * @param transactionId the id of the {@code Transaction} to get the {@code Rating} of
      * @return an {@code Optional} containing the {@code Rating} if one is found or {@code empty} if not
      */
@@ -121,8 +125,7 @@ public class RatingService {
         Optional<Transaction> transactionOptional = transactionService.getTransaction(transactionId);
         boolean               isSeller            = groups.contains(Group.SELLER_GROUP_NAME);
 
-        if (transactionOptional.map(transaction -> transaction.isUserInTransaction(currentUserId))
-                               .orElse(false)) {
+        if (transactionOptional.map(transaction -> transaction.isUserInTransaction(currentUserId)).orElse(false)) {
             Transaction transaction      = transactionOptional.get();
             long        ratingReceiverId = isSeller ? transaction.getBuyerId() : transaction.getSellerId();
             return getRating(transactionId, currentUserId, ratingReceiverId);
@@ -132,8 +135,9 @@ public class RatingService {
 
     /**
      * Returns an {@link Optional} containing the {@link Rating} matching the arguments transId, issuId, and ratedId.
+     *
      * @param transId the transactionId of the {@code Rating} to get
-     * @param issuId the issuerId of the {@code Rating} to get
+     * @param issuId  the issuerId of the {@code Rating} to get
      * @param ratedId the userRatedId of the {@code Rating} to get
      * @return an {@code Optional} containing the {@code Rating} if found or {@code empty} if not
      */
@@ -153,9 +157,10 @@ public class RatingService {
 
     /**
      * Checks if a {@link Rating} matching the arguments transactionId, issuId, and ratedId exists.
+     *
      * @param transactionId the transactionId of the {@code Rating} to find
-     * @param issuId the issuerId of the {@code Rating} to find
-     * @param ratedId the userRatedId of the {@code Rating} to find
+     * @param issuId        the issuerId of the {@code Rating} to find
+     * @param ratedId       the userRatedId of the {@code Rating} to find
      * @return true of a {@code Rating} with the given arguments exists or false if not
      */
     boolean doRatingExists(long transactionId, long issuId, long ratedId) {
@@ -176,6 +181,7 @@ public class RatingService {
     /**
      * Returns an {@link Optional} containing the average {@link Rating} for a {@link User} with an id matching
      * the userId argument.
+     *
      * @param userId the id of the {@code User} to get the {@code Rating} of
      * @return an {@code Optional} containing the average {@code Rating} if found or {@code empty} if not
      */

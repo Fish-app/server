@@ -15,11 +15,13 @@ public class UserChangePasswordData {
     /**
      * The old password
      */
-    @NotNull String oldPassword;
+    @NotNull
+    private String oldPassword;
 
     /**
      * The new password
      */
-    @NotNull String newPassword;
+    @NotNull
+    private String newPassword;
 
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.fishapp.auth.model.Group;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -17,15 +18,18 @@ public class NewAuthUserData {
     /**
      * The new users username
      */
-    String userName;
+    @NotNull
+    private String userName;
 
     /**
      * the new users password
      */
-    String password;
+    @NotNull
+    private String password;
 
     /**
      * A list of the names of the {@link Group} the user should be a member of.
      */
-    List<String> groups;
+    @NotNull
+    private List<String> groups;
 }
