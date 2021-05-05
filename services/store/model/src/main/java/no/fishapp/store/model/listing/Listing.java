@@ -4,8 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.fishapp.store.model.commodity.Commodity;
+import no.fishapp.store.model.validators.HasValidId;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Data
 @Entity
@@ -19,32 +22,35 @@ public abstract class Listing {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private Long id;
 
     /**
      * Time the listing was created
      */
     @Column(nullable = false, name = "created")
-    long created;
+    private Long created;
 
     /**
      * Id of the user that create the listing
      */
-    long creatorId;
+    private long creatorId;
 
     public abstract String getListingType();
 
     /**
      * End date of a listing
      */
+    @NotNull
     @Column(nullable = false, name = "end_date")
     long endDate;
 
     /**
      * Price of the listing
      */
+    @NotNull(message = "Price can not be null")
+    @Positive
     @Column(nullable = false)
-    double price;
+    private Double price;
 
     /**
      * Status if the listing is open or closed
@@ -60,6 +66,8 @@ public abstract class Listing {
     @Column(nullable = false, name = "longitude")
     double longitude;
 
+    @NotNull()
+    @HasValidId
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Commodity commodity;

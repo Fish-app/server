@@ -13,6 +13,7 @@ import no.fishapp.store.model.listing.OfferListing;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -37,19 +38,18 @@ public class ListingResource {
      * Server endpoint for creating a new {@link OfferListing}.
      *
      * @param newOfferListing the {@code OfferListing} to be added
-     * @return {@link Response} containing the new {@code OfferListing} if successful or {@link Response.Status#INTERNAL_SERVER_ERROR} if not
+     * @return {@link Response} containing the new {@code OfferListing}
      */
     @POST
     @Path("offer/new")
     @RolesAllowed(value = {Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newOfferListing(
-            OfferListing newOfferListing) {
+            @Valid OfferListing newOfferListing) {
         Response response;
         try {
             Optional<OfferListing> offerListing = listingService.newOfferListing(newOfferListing);
-            response = offerListing.map(Response::ok).orElse(Response.ok("Unexpected error creating the offer listing")
-                                                                     .status(Response.Status.INTERNAL_SERVER_ERROR))
-                                   .build();
+            response = offerListing.map(Response::ok).orElse(Response.ok("Invalid offer listing provided")
+                                                                     .status(Response.Status.BAD_REQUEST)).build();
         } catch (ExecutionException | InterruptedException e) {
             response = Response.serverError().build();
         } catch (UserNotSubscribedException e) {
@@ -64,17 +64,18 @@ public class ListingResource {
      * Server endpoint for creating a new {@link BuyRequest}.
      *
      * @param newBuyRequest the {@code BuyRequest} to be added
-     * @return {@link Response} containing the new {@code BuyRequest} if successful or {@link Response.Status#INTERNAL_SERVER_ERROR} if not
+     * @return {@link Response} containing the new {@code BuyRequest}
      */
     @POST
     @Path("buy/new")
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newBuyRequest(
-            BuyRequest newBuyRequest) {
+            @Valid BuyRequest newBuyRequest) {
         Optional<BuyRequest> buyRequest = listingService.newBuyRequest(newBuyRequest);
 
-        return buyRequest.map(Response::ok).orElse(Response.ok("Unexpected error creating the buy request")
-                                                           .status(Response.Status.INTERNAL_SERVER_ERROR)).build();
+        return buyRequest.map(Response::ok)
+                         .orElse(Response.ok("Invalid buy request provided").status(Response.Status.BAD_REQUEST))
+                         .build();
     }
 
     /**
@@ -121,21 +122,19 @@ public class ListingResource {
     }
 
     /**
-     * Server endpoint for getting a single {@link Listing} with an id matching the id argument .
+     * Inter container communication endpoint used to chek if a listing exists and are open and active.
+     * Returns the {@link ChatListingInfo} for provided {@link Listing} id
      *
      * @param id the id of the {@code Listing} to be found
-     * @return {@link Response} containing the {@code Listing} if one is found or {@link Response.Status#NOT_FOUND} if not
+     * @return {@link Response} containing the {@link ChatListingInfo} if the {@code Listing} found or {@link Response.Status#NOT_FOUND} if not
      */
     @GET
-    @Path("listing/{id}")
+    @Path("listing/cli/{id}")
     @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
-    public Response getListingById(
+    public Response getChatListingInfo(
             @PathParam("id") Long id) {
-        var listing = listingService.findListingById(id).map(ChatListingInfo::new);
-        if (listing.isPresent()) {
-            return Response.ok(listing.get()).build();
-        } else {
-            return Response.ok().status(Response.Status.NOT_FOUND).build();
-        }
+        return listingService.findListingById(id).map(ChatListingInfo::new).map(Response::ok)
+                             .orElse(Response.ok().status(Response.Status.NOT_FOUND)).build();
+
     }
 }

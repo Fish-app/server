@@ -11,7 +11,6 @@ import no.fishapp.auth.model.Group;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -39,7 +38,7 @@ public class AuthResource {
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(
-            @NotNull UsernamePasswordData usernamePasswordData) {
+            @Valid UsernamePasswordData usernamePasswordData) {
         Optional<String> loginToken = authService.getToken(usernamePasswordData);
 
         return loginToken.map(s -> Response.ok().header(HttpHeaders.AUTHORIZATION, "Bearer " + s))
@@ -58,7 +57,7 @@ public class AuthResource {
     @Path("changepass")
     @Valid
     public Response changePassword(
-            UserChangePasswordData changPasswordData) {
+            @Valid UserChangePasswordData changPasswordData) {
         if (authService.changePassword(changPasswordData.getNewPassword(), changPasswordData.getOldPassword())) {
             return Response.ok().build();
         } else {

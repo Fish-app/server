@@ -10,6 +10,7 @@ import no.fishapp.util.multipartHandler.MultipartReadException;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Positive;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,9 +30,10 @@ public class CommodityResource {
     CommodityService commodityService;
 
     /**
-     *  Add a new {@link Commodity} from the provided {@link IMultipartBody}.
+     * Add a new {@link Commodity} from the provided {@link IMultipartBody}.
+     *
      * @param multipartBody the {@link IMultipartBody} containing the information about the {@code Commodity}
-     * that is to be created
+     *                      that is to be created
      * @return a {@link Response} containing the new {@code Commodity} if successful, {@link Response.Status#BAD_REQUEST} if not
      */
     @POST
@@ -39,8 +41,7 @@ public class CommodityResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     //@RolesAllowed({Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response addNewCommodity(
-            IMultipartBody multipartBody
-    ) {
+            IMultipartBody multipartBody) {
         Response response = null;
         try {
             Commodity commodity = commodityService.addNewCommodity(multipartBody);
@@ -54,6 +55,7 @@ public class CommodityResource {
 
     /**
      * Return all {@link Commodity}.
+     *
      * @return a {@link Response} with all the commodities
      */
     @GET
@@ -64,6 +66,7 @@ public class CommodityResource {
 
     /**
      * Return a single instance of each {@link Commodity} with an active {@link Listing}.
+     *
      * @return a {@link Response} with all the commodities
      */
     @GET
@@ -74,18 +77,18 @@ public class CommodityResource {
 
     /**
      * Return a single {@link Commodity} with an id matching the id argument.
+     *
      * @param id the id of the {@code Commodity} to be found
      * @return a {@link Response} with the {@code Commodity} if one is found, {@link Response.Status#BAD_REQUEST} if not
      */
     @GET
     @Path("{id}")
     public Response getSingleCommodities(
-            @PathParam("id") long id
-    ) {
+            @Positive @PathParam("id") long id) {
         Optional<Commodity> commodity = commodityService.getCommodity(id);
 
         return commodity.map(Response::ok)
-                        .orElse(Response.ok().status(Response.Status.BAD_REQUEST))// todo: kansje bedre med 404
+                        .orElse(Response.ok().status(Response.Status.NOT_FOUND))// todo: kansje bedre med 404
                         .build();
 
     }

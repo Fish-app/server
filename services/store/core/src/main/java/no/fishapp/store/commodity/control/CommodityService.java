@@ -53,15 +53,15 @@ public class CommodityService {
 
     /**
      * Creates a new {@link Commodity} with data from the provided {@link IMultipartBody}.
+     *
      * @param multipartBody the {@code IMultipartBody} containing the data for the new {@code Commodity}
      * @return the created {@code Commodity}
-     * @throws IOException if an I/O error occurs with the {@link java.io.InputStream}
-     * @throws MultipartReadException if an error occurs with the {@link MultipartHandler} while reading a string
+     * @throws IOException                    if an I/O error occurs with the {@link java.io.InputStream}
+     * @throws MultipartReadException         if an error occurs with the {@link MultipartHandler} while reading a string
      * @throws MultipartNameNotFoundException if {@link MultipartHandler} can't find a field with specified name
      */
     public Commodity addNewCommodity(
-            IMultipartBody multipartBody
-    ) throws IOException, MultipartReadException, MultipartNameNotFoundException {
+            IMultipartBody multipartBody) throws IOException, MultipartReadException, MultipartNameNotFoundException {
         MultipartHandler multipartHandler = new MultipartHandler(multipartBody);
 
         String      commodityName = multipartHandler.getFieldAsString("name");
@@ -93,6 +93,7 @@ public class CommodityService {
 
     /**
      * Returns a {@link List} containing all {@link Commodity}.
+     *
      * @return a {@code List} containing all the {@code Commodities}
      */
     public List<Commodity> getAllCommodities() {
@@ -102,6 +103,7 @@ public class CommodityService {
     /**
      * Gets a {@link List} with a single instance of each {@link Commodity} with an active listing.
      * List of Commodities gets turned into list of {@link CommodityDTO} and is then returned.
+     *
      * @return a {@code List} containing a single instance of each {@code CommodityDTO} with an active listing
      */
     public List<CommodityDTO> getAllDisplayCommodities() {
@@ -109,22 +111,19 @@ public class CommodityService {
         List<Commodity> commodities = entityManager.createQuery(GET_ALL_COMMODITIES, Commodity.class).getResultList();
 
 
-        return commodities.stream()
-                          .parallel()
-                          .map(commodity -> new CommodityDTO(commodity,
-                                                             commodity.getListings()
-                                                                      .stream()
-                                                                      .filter(listing -> listing instanceof OfferListing)
-                                                                      .map(Listing::getPrice)
-                                                                      .min((o1, o2) -> (int) (o1 - o2))
-                                                                      .orElse(- 1D)
-                          ))
+        return commodities.stream().map(commodity -> new CommodityDTO(commodity,
+                                                                      commodity.getListings().stream()
+                                                                               .filter(listing -> listing instanceof OfferListing)
+                                                                               .map(Listing::getPrice)
+                                                                               .min((o1, o2) -> (int) (o1 - o2))
+                                                                               .orElse(-1D)))
                           .collect(Collectors.toList());
     }
 
     /**
      * Returns an {@link Optional} containing the {@link Commodity} with an id matching the id argument.
      * If no {@code Commodity} with the provided id is found an empty {@code Optional} is returned.
+     *
      * @param id the id of the commodity to find
      * @return an {@code Optional} containing the {@code Commodity} with the provided id
      */
