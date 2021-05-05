@@ -9,8 +9,8 @@ maven ([linux](https://packages.debian.org/search?keywords=maven) [win](https://
 is used. [Docker](https://docs.docker.com/engine/install/) is used as the kubernetes container runtime, remember
 the [post installation steps](https://docs.docker.com/engine/install/linux-postinstall/) (I always forget).
 
-For controlling the cluster [kubectl](https://kubernetes.io/docs/tasks/tools/) is needed. You will need a kubernetes
-cluster to run on, if you are only testing locally [minikube](https://minikube.sigs.k8s.io/docs/start/) can be used
+For controlling the cluster [kubectl](https://kubernetes.io/docs/tasks/tools/) is needed (if you user microk8s(which you should) than it's not needed because it is bundeled with the install ``microk8s kubectl``). 
+You will need a kubernetes cluster to run on, if you are only testing locally [minikube](https://minikube.sigs.k8s.io/docs/start/) can be used but i wold recomend using [Microk8s](https://microk8s.io/) given that mikrokube does not have all the features requierd.
 
 ## Running locally
 
@@ -19,29 +19,7 @@ currentlu using microk8s
 1. /kubernetes/development/MicroK8s/init_node.sh
 1. /kubernetes/development/MicroK8s/build_dev_db.sh
 1. /kubernetes/development/MicroK8s/build_containers.sh
-
-this is old -v
-
-```
-
-If the requermentes over are satesfied you can start the cluster (i.e the kub cluster not anything in it) and install
-the cluster addons with the  ``kubernetes/development/minikube_setup.sh`` script. You can now run ``minikube dashboard``
-to see the cluster dashboard. To build the temporary dev db, use the ``kubernetes/development/build_dev_containers.sh``
-.  
-To build everything else run the ``kubernetes/development/build_to_kubernetes.sh`` script, this will build all the
-images in the local minikube environment. To start upp all kubernetes stuff run
-the ``kubernetes/development/start_all_services.sh`` script.
-
-If you did any of the steps out of order or have made the system fubar you can use
-the ``` kubernetes/development/i_messed_up_reset_everything.sh``` to reset the minikube env.
-
-Because your local kubernestes ingess pont probably does not resolve to fishapp.no you have to manually enter this in to
-your hosts. On systems where it works you can use ```sudo echo fishapp.no $(minikube ip) >> /etc/hosts ```.
-
-you can now use the fishapp if you did not do something wrong. There are test query's that can be imported in
-to [insomnia api test thingy](https://insomnia.rest/download) from ```doc/api-requests.yaml```. The accompanying app is
-located at: https://github.com/Fish-app/mobile-app.
-```
+1. The all the ``*.env.example`` files in the ``kubernetes/secrets`` needs to have the ``.example`` suffix removed. the default values shold work for dev with the exeption of the api key for the chrkout module. you can still run the cluster but most calls to the chekout modul will return ``500 -  somthing somthing server error`` a free test acount can be created [here](https://portal.dibspayment.eu/registration).
 
 ## Deployment
 
@@ -56,3 +34,4 @@ going to suffice. But the key things to change is:
   overwriting the variables when running the image, whichever is more convenient. (the latter can be done with
   kubernetes secrets)
 - the service images are currently fetched locally if you have the images hosted elswhere this has to change
+- The all the ``*.env.example`` files in the ``kubernetes/secrets`` has to be filled in and had the ``.example`` suffix removed. 
