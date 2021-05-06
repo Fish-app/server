@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -48,7 +49,7 @@ public class ListingResource {
         Response response;
         try {
             Optional<OfferListing> offerListing = listingService.newOfferListing(newOfferListing);
-            response = offerListing.map(Response::ok).orElse(Response.ok("Invalid offer listing provided")
+            response = offerListing.map(Response::ok).orElse(Response.ok("Invalid_offer_listing_provided")
                                                                      .status(Response.Status.BAD_REQUEST)).build();
         } catch (ExecutionException | InterruptedException e) {
             response = Response.serverError().build();
@@ -118,7 +119,14 @@ public class ListingResource {
     @Path("commodity/{id}")
     public Response getCommodityOfferListings(
             @PathParam("id") long id) {
-        return Response.ok(listingService.getCommodityOfferListings(id)).build();
+        List<OfferListing> a = new ArrayList<>();
+        try {
+            a = listingService.getCommodityOfferListings(id);
+        } catch (Throwable l) {
+            System.out.println(l.getMessage());
+            l.printStackTrace();
+        }
+        return Response.ok(a).build();
     }
 
     /**
@@ -132,9 +140,11 @@ public class ListingResource {
     @Path("listing/cli/{id}")
     @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
     public Response getChatListingInfo(
-            @PathParam("id") Long id) {
+            @PathParam("id") long id) {
         return listingService.findListingById(id).map(ChatListingInfo::new).map(Response::ok)
                              .orElse(Response.ok().status(Response.Status.NOT_FOUND)).build();
 
     }
 }
+
+

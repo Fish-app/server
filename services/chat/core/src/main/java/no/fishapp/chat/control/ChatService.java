@@ -57,6 +57,7 @@ public class ChatService {
 
     /**
      * Retrieves a list of the conversations belonging to a user of the specified ID.
+     *
      * @param id of the user
      * @return A list holding the conversations. If none was found, we return NULL
      */
@@ -73,7 +74,8 @@ public class ChatService {
 
     /**
      * Retrieves a specific conversation between a user and a listing.
-     * @param uid The user involved with the conversation
+     *
+     * @param uid       The user involved with the conversation
      * @param listingId - The listing the {@link Conversation }is related to
      * @return
      */
@@ -93,11 +95,12 @@ public class ChatService {
     /**
      * Build a list of all the current {@link Conversation }the {@link User} is associated with.
      * Used in the app to display a list of conversations with previews of last sent message.
+     *
      * @param includeLastMsg true/false to enable/disable the inclusion of the last message
      * @return The list of all current {@link Conversation}.
      */
     public List<ConversationDTO> getCurrentUserConversations(boolean includeLastMsg) {
-        long               currentUserId;
+        long currentUserId;
 
         /**
          *  Verifiy that a token exsists to find the user ID.
@@ -106,14 +109,14 @@ public class ChatService {
         if (jwtSubject.get().isPresent()) {
             currentUserId = Long.parseLong(jwtSubject.get().get());
         } else {
-            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
+            log.log(Level.SEVERE, ERR_MSG_JWT_TOKEN);
             return new ArrayList<>();
         }
-        List<Conversation> userConvs     = this.getUserConversations(currentUserId);
+        List<Conversation> userConvs = this.getUserConversations(currentUserId);
 
-        return userConvs.stream().map(conversation -> (includeLastMsg) ?
-                ConversationDTO.buildFromConversation(conversation, conversation.getLastMessage().orElse(null)) :
-                ConversationDTO.buildFromConversation(conversation)).collect(Collectors.toList());
+        return userConvs.stream().map(conversation -> (includeLastMsg) ? ConversationDTO
+                .buildFromConversation(conversation, conversation.getLastMessage().orElse(null)) : ConversationDTO
+                .buildFromConversation(conversation)).collect(Collectors.toList());
     }
 
     /**
@@ -129,16 +132,16 @@ public class ChatService {
      *
      * @param listingId The identifier that selects the {@link no.fishapp.store.model.listing.Listing}
      * @return The already existing or newly created {@link Conversation} inside an {@code Optional}.
-     *         If user is not authenticated or the conversation does not exsist an empty {@code Optional}
-     *         is returned.
+     * If user is not authenticated or the conversation does not exsist an empty {@code Optional}
+     * is returned.
      */
     public Optional<Conversation> newListingConversation(long listingId) {
         long userId;
 
-        if(jwtSubject.get().isPresent()) {
+        if (jwtSubject.get().isPresent()) {
             userId = Long.parseLong(jwtSubject.get().get());
         } else {
-            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
+            log.log(Level.SEVERE, ERR_MSG_JWT_TOKEN);
             return Optional.empty();
         }
         Optional<Conversation> userConv = this.getUserListingConversation(userId, listingId);
@@ -147,8 +150,9 @@ public class ChatService {
             return userConv;
         } else {
             try {
-                CompletableFuture<ChatListingInfo> isValidFuture = storeClient.getListing(listingId).toCompletableFuture();
-                Conversation conversation  = new Conversation();
+                CompletableFuture<ChatListingInfo> isValidFuture = storeClient.getListing(listingId)
+                                                                              .toCompletableFuture();
+                Conversation conversation = new Conversation();
 
                 conversation.setListingId(listingId);
                 conversation.setConversationStarterUserId(userId);
@@ -175,9 +179,10 @@ public class ChatService {
 
     /**
      * Finds a {@link Conversation} stored in the database.
+     *
      * @param convId The ID of the {@code Conversation} to return
      * @return An {@link Optional} holding the @{code Conversation}
-     *         or an empty {@code Optional} if no conversation exist.
+     * or an empty {@code Optional} if no conversation exist.
      */
     public Optional<Conversation> getConversation(long convId) {
         Conversation conv = entityManager.find(Conversation.class, convId);
@@ -190,17 +195,18 @@ public class ChatService {
 
     /**
      * Receives a sent {@link Message} and adds it to the {@code Conversation}
-     * @param messageBody The {@code MessageBody} sent by a client from the API.
+     *
+     * @param messageBody    The {@code MessageBody} sent by a client from the API.
      * @param conversationId The ID of the {@code Conversation} to send the {@code Message} to.
      * @return The updated {@link Conversation} inside an {@code Optional}. If no conversation
-     *         or the user is not authenticated, an empty {@code Optional}.
+     * or the user is not authenticated, an empty {@code Optional}.
      */
     public Optional<Conversation> sendMessage(String messageBody, long conversationId) {
         long userId;
         if (jwtSubject.get().isPresent()) {
             userId = Long.parseLong(jwtSubject.get().get());
         } else {
-            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
+            log.log(Level.SEVERE, ERR_MSG_JWT_TOKEN);
             return Optional.empty();
         }
 
@@ -229,30 +235,29 @@ public class ChatService {
 
     /**
      * Returns a range of {@link Message}s, newer than the {@code Message} with the provided ID.
+     *
      * @param convId        the ID of the {@link Conversation} to read the messages from.
      * @param fromMessageId (exclusive) return messages newer than the message with this id
      * @return A list holding the {@code Message}s encapsualted with an {@link Optional}.
-     *          The {@code Optional} is empty if the user is not authenticated, or
-     *          the user is not a part of the conversation.
+     * The {@code Optional} is empty if the user is not authenticated, or
+     * the user is not a part of the conversation.
      */
     public Optional<List<Message>> getMessagesTo(long convId, long fromMessageId) {
         if (jwtSubject.get().isEmpty()) {
-            log.log(Level.SEVERE,ERR_MSG_JWT_TOKEN);
+            log.log(Level.SEVERE, ERR_MSG_JWT_TOKEN);
             return Optional.empty();
         }
 
-       long userId = Long.parseLong(jwtSubject.get().get());
+        long                   userId       = Long.parseLong(jwtSubject.get().get());
         Optional<Conversation> conversation = this.getConversation(convId);
 
         /*
          * Check if the {@code User} asking for messages is a member of the conversation.
          */
         if (conversation.map(cnv -> cnv.isUserInConv(userId)).orElse(false)) {
-            return Optional.of(conversation.get().getMessages()
-                                           .stream()
-                                           .filter(message -> message.getId() > fromMessageId)
-                                           .collect(
-                                                   Collectors.toCollection(ArrayList::new)));
+            return Optional
+                    .of(conversation.get().getMessages().stream().filter(message -> message.getId() > fromMessageId)
+                                    .collect(Collectors.toCollection(ArrayList::new)));
         } else {
             return Optional.empty();
         }

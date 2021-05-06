@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.identitystore.PasswordHash;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,19 @@ public class SellerService {
     @Inject
     @RestClient
     AuthClient authClient;
+
+
+    private static final String GET_SELLERS_FROM_ID_LIST = "select sl from Seller sl where  sl.id in :ids";
+
+    public List<Seller> getSellersFromIdList(List<Long> idList) {
+        if (idList != null && idList.size() > 0) {
+            var query = entityManager.createQuery(GET_SELLERS_FROM_ID_LIST, Seller.class);
+            query.setParameter("ids", idList);
+            return query.getResultList();
+        } else {
+            return new ArrayList<>();
+        }
+    }
 
     public Optional<Seller> getLoggedInSeller() {
         if (jwtSubject.get().isPresent()) {
