@@ -2,7 +2,7 @@ import axios from "axios";
 import {AuthHandler} from "./AuthHandler";
 
 
-const BASE_URL = `https://fishapp.no/api`;
+const BASE_URL = `https://pc-1.uials.no/api`;
 
 const apiConfig = {
     // `url` is the server URL that will be used for the request
