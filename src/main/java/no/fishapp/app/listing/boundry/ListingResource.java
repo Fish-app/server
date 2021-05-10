@@ -101,7 +101,7 @@ public class ListingResource {
 
 
     @GET
-    @Path("comodity/{id}")
+    @Path("commodity/{id}")
     public Response getCommodityOfferListings(
             @PathParam("id") long id
     ) {
