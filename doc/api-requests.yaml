@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-05-10T14:04:00.491Z
+__export_date: 2021-05-10T14:26:54.513Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_7a13436205fe4d2f8705a57ed85e2764
@@ -111,7 +111,7 @@ resources:
     _type: request_group
   - _id: req_3d5675bb75f2486d872d6db9d2352a0c
     parentId: fld_c87d75353aef4f068e12e7412fc5a674
-    modified: 1617790000920
+    modified: 1620656783655
     created: 1617786109138
     url: "{{ _.baseURL }}/user/seller/create"
     name: create new
@@ -121,7 +121,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"name" : "tests@example.com",
+        	"name" : "Ola Nordmann",
         	"userName" : "tests@example.com",
         	"password" : "12345678",
         	"regNumber" : "test12345678"
@@ -208,7 +208,7 @@ resources:
     _type: request
   - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
     parentId: fld_428ed833825a402fb7c7bede7527f842
-    modified: 1617791873301
+    modified: 1620656791499
     created: 1611758246180
     url: "{{ _.baseURL }}/user/buyer/create"
     name: create new
@@ -218,7 +218,7 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"name" : "testb@example.com",
+        	"name" : "Kari Nordmann",
         	"userName" : "testb@example.com",
         	"password" : "12345678"
         }
