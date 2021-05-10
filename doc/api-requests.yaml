@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2021-05-10T14:26:54.513Z
+__export_date: 2021-05-10T17:05:35.170Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
   - _id: req_7a13436205fe4d2f8705a57ed85e2764
@@ -178,7 +178,7 @@ resources:
     _type: request_group
   - _id: req_5aa7fd878cfe46778260a5a8145da6f0
     parentId: fld_c87d75353aef4f068e12e7412fc5a674
-    modified: 1618238000703
+    modified: 1620660480660
     created: 1617786132643
     url: "{{ _.baseURL }}/user/seller/current"
     name: get current
@@ -189,7 +189,7 @@ resources:
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'always', 60 %}"
         description: ""
         id: pair_cbd0e651f9dd48d0896e53b06a478922
       - name: ""
@@ -264,7 +264,7 @@ resources:
     _type: request_group
   - _id: req_c03126a970a2473cb927235fb435eabe
     parentId: fld_428ed833825a402fb7c7bede7527f842
-    modified: 1617786127013
+    modified: 1620660474389
     created: 1611780826271
     url: "{{ _.baseURL }}/user/buyer/current"
     name: get current
@@ -275,7 +275,7 @@ resources:
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'always', 60 %}"
         description: ""
         id: pair_cbd0e651f9dd48d0896e53b06a478922
       - name: ""
@@ -642,7 +642,7 @@ resources:
     _type: request_group
   - _id: req_bd1566f0d17f48b0ae5128df61bff656
     parentId: fld_e03efd22f10448329f2008eb330be4be
-    modified: 1618236793378
+    modified: 1620661866101
     created: 1613564457560
     url: "{{ _.baseURL }}/store/commodity/new"
     name: create-commodity-1
@@ -661,7 +661,7 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Downloads/the-mandalorian-baby-yoda.jpeg
+          fileName: /home/nils/Pictures/laks.png
     parameters: []
     headers: []
     authentication: {}
@@ -993,7 +993,7 @@ resources:
     _type: request
   - _id: req_899db9df5e0748229641d75c02153276
     parentId: fld_bb89a28b0e2f4cff9b2f4e0bd598344a
-    modified: 1618238699765
+    modified: 1620660632974
     created: 1613564225883
     url: "{{ _.baseURL }}/store/listing/offer/new"
     name: create-offer-listing
@@ -1007,11 +1007,11 @@ resources:
         	"commodity": {
         		"id": 1
         	},
-        	"price": 15.0,
-        	"latitude": 37.42658100018834,
-        	"longitude": -122.0842410216257,
+        	"price": 72.0,
+        	"latitude": 62.4756,
+        	"longitude": 6.1525,
         	"maxAmount": 980,
-        	"additionalInfo": "oio"
+        	"additionalInfo": "Mye flott fangst i dag"
         }
     parameters: []
     headers:
@@ -1020,7 +1020,7 @@ resources:
         id: pair_ab61d8a67b29421bad19c33b5653022a
       - name: Authorization
         value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'always', 60 %}"
         description: ""
         id: pair_3e23634e7bdc4e5a9c32baa7abd81518
     authentication: {}
@@ -1712,7 +1712,7 @@ resources:
     _type: request_group
   - _id: req_9ff995a63d734115aa06b4af03ef2e81
     parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614955898673
+    modified: 1620660279916
     created: 1614249621110
     url: "{{ _.baseURL }}/chat/{% response 'body',
       'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
