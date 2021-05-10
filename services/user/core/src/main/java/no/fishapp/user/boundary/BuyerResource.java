@@ -35,6 +35,7 @@ public class BuyerResource {
 
     @POST
     @Path("id-list")
+    @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
     public Response getAllFromIds(List<Long> userIdList) {
         return Response.ok(buyerService.getBuyersFromIdList(userIdList)).build();
     }
