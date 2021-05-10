@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Path("listing")
+@Path("store/listing")
 public class ListingResource {
 
     @Inject
@@ -30,7 +30,7 @@ public class ListingResource {
      * @return return the offer listing if successful, error msg if not
      */
     @POST
-    @Path("newOfferListing")
+    @Path("offer/new")
     @RolesAllowed(value = {Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newOfferListing(OfferListing newOfferListing
     ) {
@@ -54,7 +54,7 @@ public class ListingResource {
      * @return the buy request object if successful, error msg if not
      */
     @POST
-    @Path("newBuyRequest")
+    @Path("buy/new")
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.SELLER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response newBuyRequest(
             BuyRequest newBuyRequest
@@ -74,7 +74,7 @@ public class ListingResource {
     }
 
     @GET
-    @Path("{id}")
+    @Path("offer/{id}")
     public Response getOfferListing(
             @NotNull @PathParam("id") Long id
     ) {
@@ -87,7 +87,7 @@ public class ListingResource {
     }
 
     @GET
-    @Path("buyrequest/{id}")
+    @Path("buy/{id}")
     public  Response getBuyRequest (
             @NotNull @PathParam("id") Long id
     ) {

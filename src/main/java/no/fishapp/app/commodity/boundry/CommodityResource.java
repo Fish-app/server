@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-@Path("commodity")
+@Path("store/commodity")
 @Stateless
 public class CommodityResource {
 

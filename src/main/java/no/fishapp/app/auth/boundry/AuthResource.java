@@ -19,7 +19,7 @@ import javax.ws.rs.core.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Path("authentication")
+@Path("auth/authentication")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {

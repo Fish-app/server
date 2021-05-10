@@ -42,7 +42,7 @@ public class ChatResource {
     @GET
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     @Produces(MediaType.APPLICATION_JSON + UTF8_CHARSET)
-    @Path("myconversations")
+    @Path("conversations")
     @Valid
     public Response getCurrentUserConversationsRequest(
             @QueryParam("include-lastmessage") Boolean includeLastMsg

@@ -18,7 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 
-@Path("seller")
+@Path("user/seller")
 @Transactional
 @RolesAllowed(value = {Group.SELLER_GROUP_NAME})
 public class SellerResource {
