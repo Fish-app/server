@@ -84,8 +84,8 @@ public class AuthResource {
     }
 
 
-    @PUT
-    @Path("changepassword")
+    @PATCH
+    @Path("changepass")
     @Valid
     @RolesAllowed(value = {Group.USER_GROUP_NAME, Group.ADMIN_GROUP_NAME})
     public Response changePassword(
