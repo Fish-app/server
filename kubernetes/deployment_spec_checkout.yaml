@@ -46,15 +46,8 @@ spec:
         app: fishapp
         service: checkout
     spec:
-      volumes:
-        - name: jwt-pubkey-volume
-          persistentVolumeClaim:
-            claimName: jwt-pubkey-pvc
       containers:
         - name: checkout-container
-          volumeMounts:
-            - mountPath: /aplication_storage/token_key
-              name: jwt-pubkey-volume
           imagePullPolicy: Always
           image: localhost:32000/fishapp-checkout:latest
           ports:
