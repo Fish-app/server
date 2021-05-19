@@ -26,11 +26,11 @@ public class ConversationDTO {
      */
     public static ConversationDTO buildFromConversation(Conversation conversation) {
         ConversationDTO conversationDTO = new ConversationDTO();
-        conversationDTO.id            = conversation.getId();
+        conversationDTO.id = conversation.getId();
         conversationDTO.lastMessageId = conversation.getLastMessageId();
-        conversationDTO.listingId     = conversation.getListingId();
+        conversationDTO.listingId = conversation.getListingId();
         conversationDTO.starterUserId = conversation.getConversationStarterUserId();
-        conversationDTO.createdDate   = conversation.getCreatedDate();
+        conversationDTO.createdDate = conversation.getCreatedDate();
         return conversationDTO;
     }
 
@@ -56,4 +56,6 @@ public class ConversationDTO {
     long starterUserId;
     long listingId;
     MessageDTO lastMessage;
+
+
 }

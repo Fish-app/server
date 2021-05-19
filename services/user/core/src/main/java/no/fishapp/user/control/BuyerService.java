@@ -9,6 +9,7 @@ import no.fishapp.user.client.AuthClient;
 import no.fishapp.user.exception.UsernameAlreadyInUseException;
 import no.fishapp.user.model.user.Buyer;
 import no.fishapp.user.model.user.DTO.BuyerNewData;
+import no.fishapp.user.model.user.Seller;
 import no.fishapp.util.exceptionmappers.RestClientHttpException;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,20 @@ public class BuyerService {
     @Inject
     @RestClient
     AuthClient authClient;
+
+
+    private static final String GET_BUYERS_FROM_ID_LIST = "select by from Buyer by where  by.id in :ids";
+
+    public List<Seller> getBuyersFromIdList(List<Long> idList) {
+        if (idList != null && idList.size() > 0) {
+            var query = entityManager.createQuery(GET_BUYERS_FROM_ID_LIST, Seller.class);
+            query.setParameter("ids", idList);
+            return query.getResultList();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
 
     /**
      * Returns the logged in buyer - if not logged in or error fetching buyer null is returned

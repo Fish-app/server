@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,6 +29,13 @@ public class SellerResource {
 
     @Inject
     SellerService sellerService;
+
+    @POST
+    @Path("id-list")
+    @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
+    public Response getAllFromIds(List<Long> userIdList) {
+        return Response.ok(sellerService.getSellersFromIdList(userIdList)).build();
+    }
 
     /**
      * Returns the currently logged in seller, if not a seller a error is returned.

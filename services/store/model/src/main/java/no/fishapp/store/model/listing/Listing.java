@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.fishapp.store.model.commodity.Commodity;
 import no.fishapp.store.model.validators.HasValidId;
+import no.fishapp.user.model.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,6 +35,18 @@ public abstract class Listing {
      * Id of the user that create the listing
      */
     private long creatorId;
+
+
+    /*
+     this is a consequence of not great app (as in the flutter app) design. The app should not bring data between pages
+     and should rather pass the id of the object to display. In doing so the app pages wold be independent and not have
+     to relay on a future fetched 3 screens back.
+
+     But there is not enough time for me to fix this as well so mimicking the previous destruct will have to work.
+     and yes, the User module should probably not have been separated out from the store module.
+     */
+    @Transient
+    private User creator;
 
     public abstract String getListingType();
 

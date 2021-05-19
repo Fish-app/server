@@ -4,12 +4,17 @@ package no.fishapp.store.listing.control;
 import io.jsonwebtoken.Claims;
 import no.fishapp.store.Exception.UserNotSubscribedException;
 import no.fishapp.store.client.CheckoutClient;
+import no.fishapp.store.client.UserClient;
 import no.fishapp.store.commodity.control.CommodityService;
 import no.fishapp.store.model.commodity.Commodity;
 import no.fishapp.store.model.listing.BuyRequest;
 import no.fishapp.store.model.listing.Listing;
 import no.fishapp.store.model.listing.OfferListing;
+import no.fishapp.user.model.user.Buyer;
+import no.fishapp.user.model.user.Seller;
+import no.fishapp.user.model.user.User;
 import no.fishapp.util.exceptionmappers.NoJwtTokenException;
+import no.fishapp.util.exceptionmappers.RestClientHttpException;
 import org.eclipse.microprofile.jwt.Claim;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -20,8 +25,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -45,6 +49,10 @@ public class ListingService {
     @Inject
     @RestClient
     CheckoutClient checkoutClient;
+
+    @Inject
+    @RestClient
+    UserClient userClient;
 
     private static final String COMMODITY_LISTINGS = "select ls from OfferListing ls where ls.commodity.id = :cid";
 
@@ -80,8 +88,10 @@ public class ListingService {
         if (jwtSubject.get().isEmpty()) {
             throw new NoJwtTokenException();
         }
+        System.out.println(listing);
+        System.out.println(listing.getCommodity());
 
-        
+
         var userId = Long.parseLong(jwtSubject.get().get());
 
 
@@ -138,11 +148,50 @@ public class ListingService {
      * @param id the id of the {@code Commodity} you want the connected {@code OfferListing} of
      * @return a {@code List} containing all of the found {@code OfferListing}
      */
-    public List<OfferListing> getCommodityOfferListings(long id) {
+    public List<OfferListing> getCommodityOfferListings(long id) throws RestClientHttpException {
         var query = entityManager.createQuery(COMMODITY_LISTINGS, OfferListing.class);
         query.setParameter("cid", id);
 
-        return query.getResultList();
+        List<OfferListing> offerListings = query.getResultList();
+
+
+        return populateUsersInListings(offerListings);
+    }
+
+    /*
+    well... i wrote a bit about why this is necessary in the listing class. I mean i cold just fetch the users one by
+    one from the app. Solving the problem is rarely an issue solving it in a good way often is
+     */
+    private List<OfferListing> populateUsersInListings(List<OfferListing> itemList) throws RestClientHttpException {
+        Set<Long> userIdToFetchSet = new HashSet<>();
+        itemList.forEach(listing -> userIdToFetchSet.add(listing.getCreatorId()));
+
+        List<Seller> sellers = userClient.getSellersFromIdList(userIdToFetchSet);
+
+        /*
+         this may be unnecessary but the comparative time differential of doing a get operation against searching
+         through the entire list should offset the creation time from creating the hashmap for large sets
+        */
+        HashMap<Long, User> quickFindByIdMap = new HashMap<>();
+        sellers.forEach(user -> quickFindByIdMap.put(user.getId(), user));
+
+        itemList.forEach(listing -> listing.setCreator(quickFindByIdMap.get(listing.getCreatorId())));
+
+        return itemList;
+    }
+
+    /*
+    for the record i had (quite elegantly) integrated this into the one over. but the micro prof rest-client do not
+    support generics for return params AFAIU. It sort of makes sense but annoying non the less. so Duplicate code
+     */
+    private List<OfferListing> populateUsersInOrderListings(List<OfferListing> itemList) throws RestClientHttpException {
+        Set<Long> userIdToFetchSet = new HashSet<>();
+        itemList.forEach(listing -> userIdToFetchSet.add(listing.getCreatorId()));
+        List<Buyer>         users            = userClient.getBuyersFromIdList(userIdToFetchSet);
+        HashMap<Long, User> quickFindByIdMap = new HashMap<>();
+        users.forEach(user -> quickFindByIdMap.put(user.getId(), user));
+        itemList.forEach(listing -> listing.setCreator(quickFindByIdMap.get(listing.getCreatorId())));
+        return itemList;
     }
 
     /**

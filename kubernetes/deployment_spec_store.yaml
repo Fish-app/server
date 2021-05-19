@@ -63,6 +63,8 @@ spec:
               value: "http://media-service:80/"
             - name: CHECKOUT_SERVICE_URL
               value: "http://checkout-service:80/"
+            - name: USER_SERVICE_URL
+              value: "http://user-service:80/"
           readinessProbe: # todo:change to prod values
             httpGet:
               path: /health/ready

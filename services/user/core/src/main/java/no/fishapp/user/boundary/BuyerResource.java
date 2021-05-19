@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 @Path("buyer")
@@ -31,6 +32,13 @@ public class BuyerResource {
     @Inject
     BuyerService buyerService;
 
+
+    @POST
+    @Path("id-list")
+    @RolesAllowed(value = {Group.CONTAINER_GROUP_NAME})
+    public Response getAllFromIds(List<Long> userIdList) {
+        return Response.ok(buyerService.getBuyersFromIdList(userIdList)).build();
+    }
 
     /**
      * Returns the current logged in buyer

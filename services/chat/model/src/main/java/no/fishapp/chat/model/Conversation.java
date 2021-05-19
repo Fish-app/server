@@ -3,7 +3,6 @@ package no.fishapp.chat.model;
 
 import lombok.*;
 
-
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -50,8 +49,7 @@ public class Conversation {
      * A list of the meessages
      * related to the conversation
      */
-    @OneToMany(cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonbTransient
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -83,6 +81,7 @@ public class Conversation {
      */
     long conversationStarterUserId;
 
+
     /**
      * A timestamp in UNIX Epoch when
      * the conversation was created
@@ -104,6 +103,7 @@ public class Conversation {
 
     /**
      * Adds a message to the conversation
+     *
      * @param message The {@link Message} to add
      */
     public void addMessage(Message message) {
@@ -114,6 +114,7 @@ public class Conversation {
     /**
      * Outputs the list of messages
      * related to this conversation
+     *
      * @return List holding {@link Message} objects
      */
     public List<Message> getMessages() {
@@ -127,11 +128,12 @@ public class Conversation {
      * Return the last {@link Message} inside an {@code Optional}
      * from this conversation. If no messages exist we return
      * an empty {@code Optional}
+     *
      * @return The {@code Optional} with an {@link Message}.
      */
     public Optional<Message> getLastMessage() {
         if (this.messages.size() > 0) {
-            return Optional.of(messages.get(messages.size()-1));
+            return Optional.of(messages.get(messages.size() - 1));
         } else {
             return Optional.empty();
         }
@@ -140,10 +142,12 @@ public class Conversation {
     /**
      * Used as a security measure to verify if the {@code User} asking
      * for the information is related to this conversation.
+     *
      * @param id The ID of the {@code User}.
      * @return A {@code Boolean} that the {@code User} is part of the conversation.
      */
     public boolean isUserInConv(long id) {
         return id == conversationStarterUserId || id == listingCreatorUserId;
     }
+
 }

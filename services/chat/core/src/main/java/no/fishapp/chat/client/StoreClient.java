@@ -13,6 +13,8 @@ import java.util.concurrent.CompletionStage;
 
 @RegisterRestClient(configKey = "storeClient")
 @Path("/api/store/")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @ClientHeaderParam(name = "Authorization", value = "{getAuthToken}")
 public interface StoreClient extends AutoCloseable, AuthBaseClientInterface {
 
@@ -27,7 +29,5 @@ public interface StoreClient extends AutoCloseable, AuthBaseClientInterface {
      */
     @GET
     @Path("listing/listing/cli/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     CompletionStage<ChatListingInfo> getListing(@PathParam("id") long listingId) throws RestClientHttpException;
 }
