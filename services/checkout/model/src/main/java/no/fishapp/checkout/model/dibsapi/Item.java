@@ -63,18 +63,3 @@ public class Item {
     private int netTotalAmount;
 }
 
-
-/*
-            "reference":"Reference3",
-            "name":"Test Subscription",
-            "quantity":1.0,
-            "unit":"unit",
-            "unitPrice":10000,
-            "taxRate":10,
-            "taxAmount":200,
-            "grossTotalAmount":10000,
-            "netTotalAmount":300
-
-
-
- */

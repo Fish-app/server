@@ -29,25 +29,3 @@ public class Checkout {
     private boolean charge;
 }
 
-
-/*
-   "checkout":{
-		  "integrationType":"hostedPaymentPage",
-      "returnUrl":"https://dev.epayment.nets.eu",
-      "termsUrl":"http://foo.bar",
-      "shippingCountries":null,
-      "shipping":{
-         "countries":[
-
-         ],
-         "merchantHandlesShippingCost":false
-      },
-      "consumerType":null,
-      "charge":false,
-      "appearance":{
-         "textOptions":{
-            "completePaymentButtonText":"Subscribe"
-         }
-      }
-   },
- */
