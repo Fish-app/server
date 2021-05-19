@@ -2,7 +2,7 @@
 
 ## Requierments
 
-So build the services,
+To build the services,
 maven ([linux](https://packages.debian.org/search?keywords=maven) [win](https://letmegooglethat.com/?q=How+to+install+maven+on+windows) [osx](https://formulae.brew.sh/formula/maven))
 is used. [Docker](https://docs.docker.com/engine/install/) is used as the kubernetes container runtime, remember
 the [post installation steps](https://docs.docker.com/engine/install/linux-postinstall/) (I always forget).
