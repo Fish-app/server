@@ -1,0 +1,31 @@
+<server description="Authentication server ">
+
+    <featureManager>
+        <feature>jndi-1.0</feature>
+        <feature>jpa-2.2</feature>
+        <feature>jdbc-4.2</feature>
+    </featureManager>
+
+
+    <variable name="DB_URL" defaultValue="localhost"/>
+    <variable name="DB_PORT" defaultValue="25432"/>
+    <variable name="DB_NAME" defaultValue="fishap_auth"/>
+    <variable name="DB_USER_NAME" defaultValue="fishap_auth"/>
+    <variable name="DB_USER_PASSWORD" defaultValue="aeshjfgeiuf"/>
+
+
+    <dataSource id="postg-datas"
+                jndiName="jdbc/auth-db" type="javax.sql.DataSource">
+        <jdbcDriver libraryRef="postgresql-library"/>
+        <properties.postgresql serverName="${DB_URL}"
+                               portNumber="${DB_PORT}"
+                               databaseName="${DB_NAME}"
+                               user="${DB_USER_NAME}"
+                               password="${DB_USER_PASSWORD}"/>
+    </dataSource>
+
+    <library id="postgresql-library">
+        <file name="${shared.resource.dir}/postgresql.jar"/>
+    </library>
+
+</server>

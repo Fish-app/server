@@ -1,38 +1,114 @@
 _type: export
 __export_format: 4
-__export_date: 2021-03-03T16:58:23.044Z
+__export_date: 2021-05-03T15:36:59.946Z
 __export_source: insomnia.desktop.app:v2020.5.2
 resources:
-  - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
-    parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1614770539011
-    created: 1611756927335
-    url: "{{ _.baseURL }}/authentication/login"
-    name: auth-login-buyer
-    description: ""
+  - _id: req_5fa81cb820784975ad5283bccc017b7b
+    parentId: fld_5c3104b631b343908926b1224f6e4262
+    modified: 1618246755108
+    created: 1613945171084
+    url: "{{ _.baseURL }}/chat/1/send"
+    name: buyer  send
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
     method: POST
     body:
       mimeType: application/json
       text: |-
         {
-        "userName" : "oluf@example.com",
-        "password" : "Passord123"
+        	"messageText": "Hei! Hva selger dere ?"
         }
     parameters: []
     headers:
-      - name: email
-        value: oluf@example.com
-        id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
-        disabled: true
-      - name: password
-        value: Passord123
-        id: pair_6a97a4b373e8418c9bf9e78a43a250cf
-        disabled: true
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
       - name: Content-Type
         value: application/json
-        id: pair_d6fda4628f7b48f7b88d4f81394e2819
+        id: pair_2f2bcb69947748ed9c1906eb7af2f274
     authentication: {}
-    metaSortKey: -1611756927322.5
+    metaSortKey: -1613712643518.25
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5c3104b631b343908926b1224f6e4262
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1618243786484
+    created: 1618242115735
+    name: chat container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1614671109385
+    _type: request_group
+  - _id: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    parentId: null
+    modified: 1611781677649
+    created: 1611756889251
+    name: App-API
+    description: ""
+    scope: design
+    _type: workspace
+  - _id: req_45bdadca83d241c2aa9010e34c724e75
+    parentId: fld_5c3104b631b343908926b1224f6e4262
+    modified: 1618246630221
+    created: 1614249526067
+    url: "{{ _.baseURL }}/chat/conversations"
+    name: my conversations
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613712643618.25
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_069beb9967fd4b449b09d508d7963575
+    parentId: fld_5c3104b631b343908926b1224f6e4262
+    modified: 1618243806085
+    created: 1618243803939
+    url: "{{ _.baseURL }}/chat/new/{% response 'body',
+      'req_899db9df5e0748229641d75c02153276', 'b64::JC5pZA==::46b', 'never', 60
+      %}"
+    name: buyer-start1
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613712643568.25
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -41,30 +117,726 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_5098519e12f6447683d056249f042c66
+  - _id: req_9f8ecccfcfb549b794230a9f65ee4c0a
+    parentId: fld_9f7206b4417a4b00a691f8838449e948
+    modified: 1620051727967
+    created: 1619015204406
+    url: "{{ _.baseURL }}/checkout/new-sub"
+    name: new sub
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_7d16a6b66f4544f1b5b5e079b9eeae2d
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_f2e50e7789524569a33863570b5f69c6
+    authentication: {}
+    metaSortKey: -1619015204445
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_9f7206b4417a4b00a691f8838449e948
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1611758253902
-    created: 1611758253902
-    name: auth
+    modified: 1619015190267
+    created: 1619015190267
+    name: chekout
     description: ""
     environment: {}
     environmentPropertyOrder: null
-    metaSortKey: -1611758253902
+    metaSortKey: -1619015190267
     _type: request_group
-  - _id: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    parentId: null
-    modified: 1611781677649
-    created: 1611756889251
-    name: App-API
+  - _id: req_93d49e7085d040c289073010536d2090
+    parentId: fld_9f7206b4417a4b00a691f8838449e948
+    modified: 1620052389521
+    created: 1619617665132
+    url: "{{ _.baseURL }}/checkout/subscription/valid/5"
+    name: is valid
     description: ""
-    scope: null
-    _type: workspace
+    method: GET
+    body: {}
+    parameters:
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_40551ebe962a4bb2bc2769b2a7461dc9
+        disabled: true
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_eda3e5e159d34b5784550f1f3f594b9a
+    authentication: {}
+    metaSortKey: -1619617665132
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_96af46ba87ca4e2e862e847081e06375
+    parentId: fld_9f7206b4417a4b00a691f8838449e948
+    modified: 1620052382392
+    created: 1620052253690
+    url: "{{ _.baseURL }}/checkout/subscription/status/5"
+    name: get status
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_40551ebe962a4bb2bc2769b2a7461dc9
+        disabled: true
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_eda3e5e159d34b5784550f1f3f594b9a
+    authentication: {}
+    metaSortKey: -1619316434788.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1614952059408
+    created: 1613759257836
+    url: "{{ _.baseURL }}/chat/new/{% response 'body',
+      'req_899db9df5e0748229641d75c02153276', 'b64::JC5pZA==::46b', 'never', 60
+      %}"
+    name: buyer-start1
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613759257836
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_a0f215bfba3344af929826d49b69f335
+    parentId: fld_62de4e7765d94a74b82ae3e38396d9ae
+    modified: 1614971136016
+    created: 1613759222876
+    name: chat-buyer -> offer_listing
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1613759222876
+    _type: request_group
+  - _id: fld_62de4e7765d94a74b82ae3e38396d9ae
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1614971141175
+    created: 1614971129793
+    name: chat
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1613564210530
+    _type: request_group
+  - _id: req_120528d30607470cbb19fbbe66daf83f
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1618246803569
+    created: 1614077415768
+    url: "{{ _.baseURL }}/chat/1/updates"
+    name: buyer-get-updates-messages
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters:
+      - name: last-id
+        value: "1"
+        description: ""
+        id: pair_3f285b8413a04635bea6f7a3658c3633
+        disabled: false
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_b15a1a298c62465cb9fff7dc3bc79685
+        disabled: true
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613642722166.625
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_2f5dbbe111944aa799290036143e3c00
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615031675436
+    created: 1614170160332
+    url: "{{ _.baseURL }}/chat/{% response 'body',
+      'req_7728f2793c7f48d8bf401e04d5c58d4b', 'b64::JC5pZA==::46b', 'never', 60
+      %}/send"
+    name: seller-send3
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Det tror jeg skal la seg gjøre ja."
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: Content-Type
+        value: application/json
+        id: pair_ce499cc084344c8eb5e07fe82a5646c8
+    authentication: {}
+    metaSortKey: -1613654375733.5625
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_d1b6803582014945ac961c0b523b37b9
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1614953139008
+    created: 1614266056949
+    url: "{{ _.baseURL }}/chat/{% response 'body',
+      'req_7728f2793c7f48d8bf401e04d5c58d4b', 'b64::JC5pZA==::46b', 'never', 60
+      %}/range"
+    name: buyer-get-range-messages
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters:
+      - name: from
+        value: "4"
+        description: ""
+        id: pair_12770aefeed0448dbf3c724b420e30e2
+      - name: offset
+        value: "0"
+        description: ""
+        id: pair_d2a73bb902b1425b85110093bc06aaf8
+        disabled: false
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613625241816.2188
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_3c888d5f6b89448795215ec02bc62da7
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615031644746
+    created: 1615031281606
+    url: "{{ _.baseURL }}/chat/1/send"
+    name: buyer-send2-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText": "Hei! Hva selger dere ?"
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: Content-Type
+        value: application/json
+        id: pair_2f2bcb69947748ed9c1906eb7af2f274
+    authentication: {}
+    metaSortKey: -1613660202517.0312
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_71def8a5e458460a84a125c545aea96d
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615031672428
+    created: 1615031636853
+    url: "{{ _.baseURL }}/chat/1/send"
+    name: seller-send3-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Det tror jeg skal la seg gjøre ja."
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: Content-Type
+        value: application/json
+        id: pair_ce499cc084344c8eb5e07fe82a5646c8
+    authentication: {}
+    metaSortKey: -1613648548950.0938
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4a486cd57e0b489c98c7d50832d4b5c0
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615038683983
+    created: 1615032705069
+    url: "{{ _.baseURL }}/chat/1/updates"
+    name: buyer-get-updates-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters:
+      - name: last-id
+        value: "40"
+        description: ""
+        id: pair_3f285b8413a04635bea6f7a3658c3633
+        disabled: false
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613633981991.4219
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_bd41c266b3f9473c8afd1652c60496e1
+    parentId: fld_a0f215bfba3344af929826d49b69f335
+    modified: 1615038706604
+    created: 1615038698907
+    url: "{{ _.baseURL }}/chat/1/latest"
+    name: buyer-get-latest-static1
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613629611903.8203
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_d6c62469430849b9af8366df92a78a61
+    parentId: fld_01285579e70a4420852b0560d574401f
+    modified: 1614952183941
+    created: 1614249621109
+    url: "{{ _.baseURL }}/chat/new/{% response 'body',
+      'req_51d1896e5df047b1814e6fc7419c440b', 'b64::JC5pZA==::46b', 'never', 60
+      %}"
+    name: seller-start1
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613759257836
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_01285579e70a4420852b0560d574401f
+    parentId: fld_62de4e7765d94a74b82ae3e38396d9ae
+    modified: 1614971137655
+    created: 1614249621108
+    name: chat-seller-> buy_request
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1613759222826
+    _type: request_group
+  - _id: req_9ff995a63d734115aa06b4af03ef2e81
+    parentId: fld_01285579e70a4420852b0560d574401f
+    modified: 1614955898673
+    created: 1614249621110
+    url: "{{ _.baseURL }}/chat/{% response 'body',
+      'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
+      %}/send"
+    name: seller-send2
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Hei! Jeg kan levere fisken du etterspurde"
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: conversation
+        value: "{% response 'body', 'req_d6c62469430849b9af8366df92a78a61',
+          'b64::JC5pZA==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_831eb4a28fbe47d7ae5a5d6f877572c6
+      - name: Content-Type
+        value: application/json
+        id: pair_bd9bca1c82574758bd1986e55167caae
+    authentication: {}
+    metaSortKey: -1613666029300.5
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_2bb32d389faf4ade96b85c906bfc438c
+    parentId: fld_01285579e70a4420852b0560d574401f
+    modified: 1615038690247
+    created: 1614249621111
+    url: "{{ _.baseURL }}/chat/{% response 'body',
+      'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
+      %}/updates"
+    name: seller-get-updates-messages
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters:
+      - name: last-id
+        value: "1"
+        description: ""
+        id: pair_a015ddf5dcdf4557a5fca0e573b2300e
+        disabled: false
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613642722166.625
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_7085d46309c446909cd7c910f55eb45a
+    parentId: fld_01285579e70a4420852b0560d574401f
+    modified: 1614955923881
+    created: 1614249621113
+    url: "{{ _.baseURL }}/chat/{% response 'body',
+      'req_d6c62469430849b9af8366df92a78a61', 'b64::JC5pZA==::46b', 'never', 60
+      %}/send"
+    name: buyer-send3
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"messageText" : "Så flott!"
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+      - name: Content-Type
+        value: application/json
+        id: pair_045451962cd541c7ba026fb84ac51ab1
+    authentication: {}
+    metaSortKey: -1613654375733.5625
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_86f07aa68135425aa9938bc5e4082e6b
+    parentId: fld_01285579e70a4420852b0560d574401f
+    modified: 1614953157174
+    created: 1614249621114
+    url: "{{ _.baseURL }}/chat/myconversations"
+    name: seller-my-conversations
+    description: |-
+      ### What
+      Adds a message to a conversation. //WIP add conv by listing
+      ### WHo
+      user object - the buyer of a listing
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    authentication: {}
+    metaSortKey: -1613607761465.8125
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: false
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_0ea9e4234a1f4f68a396b3da6bb4a1f6
+    parentId: fld_8a3e9f1a91f340b093245610ec86d97f
+    modified: 1617790201062
+    created: 1617785695398
+    url: "{{ _.baseURL }}/auth/authentication/newuser"
+    name: new user
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userName": "tests@example.com",
+          "password" : "12345678"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_0374150d4f4d4cdcae55e6b37962b2ea
+    authentication: {}
+    metaSortKey: -1617785010825
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_8a3e9f1a91f340b093245610ec86d97f
+    parentId: fld_d4b91b160a3f4333930311d6f32f7ef3
+    modified: 1617785010875
+    created: 1617785010875
+    name: inter-container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617785010875
+    _type: request_group
+  - _id: fld_d4b91b160a3f4333930311d6f32f7ef3
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1617785932883
+    created: 1617784965028
+    name: auth container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617784965028
+    _type: request_group
+  - _id: req_81cc17f59562493ca4b200bc877e7086
+    parentId: fld_5922ac15d0ac43479b7527bed35cba8e
+    modified: 1617785707581
+    created: 1614774988336
+    url: "{{ _.baseURL }}/auth/admin/changepassword"
+    name: change-password
+    description: Not tested, as admin role is not in use
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userId" : 1,
+        	"newPassword" : "Passord123"
+        }
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_990a4b0fce7e4642929990f60112f85e
+        disabled: false
+      - name: newpass
+        value: test123
+        description: ""
+        id: pair_7be50471c6ef4610ba035265a715f776
+        disabled: true
+      - name: Content-Type
+        value: application/json
+        id: pair_4850f04bd5534155aa31c4e4b555882f
+    authentication:
+      type: bearer
+      token: "
+        eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImFiYy0xMjM0NTY3ODkwIn0.eyJ\
+        zdWIiOiIxIiwianRpIjoiOGVmMDFmYTAtOTA5OS00ZDk2LWJmOTEtNjAzZjNlZmQ3ZjY4Ii\
+        wiaXNzIjoibWFveWkiLCJpYXQiOjE2MTE4NDI1ODUsImV4cCI6MTYxMTkyODk4NSwidXBuI\
+        joiMSIsImdyb3VwcyI6WyJ1c2VyIl0sImF1ZCI6ImF1ZCIsImF1dGhfdGltZSI6MTYxMTg0\
+        MjU4NTUyM30.Nhv6pJCZpx7VCvqIvyYnZ13iwD5BdrpHbOID_14CjxnEg5v8iMRxss1K3Lg\
+        fknTg9v9qGT_fCAy3cwYfuJMh7LdWbkfo6rW2CtQX5COWyU8xuAW9NJrbHPyhGmzRuL1pBD\
+        6ZsEoLpHbPmnJfQxeSqgkcwiH7MlHTMZ56pJHizILJKJ-SDy4oax2K5SDrLDW8JoskQpKay\
+        popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
+        EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
+    metaSortKey: -1611756927260
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5922ac15d0ac43479b7527bed35cba8e
+    parentId: fld_d4b91b160a3f4333930311d6f32f7ef3
+    modified: 1617785034273
+    created: 1617785034273
+    name: admin
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617785034273
+    _type: request_group
   - _id: req_8c31a970710d49779e06267fb97990fe
-    parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1614771612612
+    parentId: fld_e14a20b42c79453c893e139b67f40097
+    modified: 1617790223144
     created: 1611842274161
-    url: "{{ _.baseURL }}/admin/changepass"
-    name: auth-change-password
+    url: "{{ _.baseURL }}/auth/authentication/changepass"
+    name: change-password
     description: ""
     method: PATCH
     body: {}
@@ -91,7 +863,7 @@ resources:
         6ZsEoLpHbPmnJfQxeSqgkcwiH7MlHTMZ56pJHizILJKJ-SDy4oax2K5SDrLDW8JoskQpKay\
         popxaV2Em--la6G956TancnnpfEMOdtmVBjAusOeNHXWKJFN8n6m5ZjhjdTmPt73z79tJIx\
         EeQKdqejBafx6YT9cpE1XD_8l9Zqqkj8ZVJPs6uxpil3xwQniJ5Gt7skFgYSNKVkYjAoTg"
-    metaSortKey: -1611756927235
+    metaSortKey: -1617785040442
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -100,37 +872,193 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_a8138b132745479697ea49486bb87653
-    parentId: fld_5098519e12f6447683d056249f042c66
-    modified: 1614770648183
-    created: 1613746371970
-    url: "{{ _.baseURL }}/authentication/login"
-    name: auth-login-seller
+  - _id: fld_e14a20b42c79453c893e139b67f40097
+    parentId: fld_d4b91b160a3f4333930311d6f32f7ef3
+    modified: 1617785046511
+    created: 1617785046511
+    name: auth
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617785046511
+    _type: request_group
+  - _id: req_d8d6b3a07e4641f48fbc5fcbece19727
+    parentId: fld_e14a20b42c79453c893e139b67f40097
+    modified: 1617790231085
+    created: 1616333642778
+    url: "{{ _.baseURL }}/auth/authentication/login"
+    name: login
     description: ""
     method: POST
     body:
       mimeType: application/json
       text: |-
         {
-        	"userName": "testesen@example.com",
-          "password" : "test123"
+        	"userName": "tests@example.com",
+          "password" : "12345678"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_0374150d4f4d4cdcae55e6b37962b2ea
+    authentication: {}
+    metaSortKey: -1617785040392
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cde077476cd04eb9bcc69e98e2ecf84e
+    parentId: fld_30d81806e5f844ccbbd5231a03608d24
+    modified: 1617785869943
+    created: 1617785853380
+    url: http://localhost/api/auth/key.pem
+    name: get key
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1617144412397.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_30d81806e5f844ccbbd5231a03608d24
+    parentId: fld_d4b91b160a3f4333930311d6f32f7ef3
+    modified: 1617785833960
+    created: 1617785833960
+    name: key
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617785833961
+    _type: request_group
+  - _id: req_b3eda0c72d944d25bc7ae8d3e579e913
+    parentId: fld_1623d93b11cf43b08a6b900a5f88bb54
+    modified: 1617790472372
+    created: 1611756927335
+    url: "{{ _.baseURL }}/auth/authentication/login"
+    name: default buyer login
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        "userName" : "testb@example.com",
+        "password" : "12345678"
         }
     parameters: []
     headers:
       - name: email
-        value: testesen@example.com
+        value: oluf@example.com
         id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
         disabled: true
       - name: password
-        value: test123
+        value: Passord123
         id: pair_6a97a4b373e8418c9bf9e78a43a250cf
         disabled: true
       - name: Content-Type
         value: application/json
-        id: pair_b4196f767f8c43a49174c4a19407f9fb
-        disabled: false
+        id: pair_d6fda4628f7b48f7b88d4f81394e2819
     authentication: {}
-    metaSortKey: -1611756927285
+    metaSortKey: -1611756927435
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_1623d93b11cf43b08a6b900a5f88bb54
+    parentId: fld_d4b91b160a3f4333930311d6f32f7ef3
+    modified: 1617786178291
+    created: 1617786178291
+    name: qol
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617786178291
+    _type: request_group
+  - _id: req_905f7d77994046feafce8ef5becf08f2
+    parentId: fld_1623d93b11cf43b08a6b900a5f88bb54
+    modified: 1620052348757
+    created: 1617786211729
+    url: "{{ _.baseURL }}/auth/authentication/login"
+    name: default seller login
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userName": "testss@example.com",
+          "password" : "12345678"
+        }
+    parameters: []
+    headers:
+      - name: email
+        value: oluf@example.com
+        id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
+        disabled: true
+      - name: password
+        value: Passord123
+        id: pair_6a97a4b373e8418c9bf9e78a43a250cf
+        disabled: true
+      - name: Content-Type
+        value: application/json
+        id: pair_d6fda4628f7b48f7b88d4f81394e2819
+    authentication: {}
+    metaSortKey: -1611756927353.75
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cca0c1519e3340858e19a900afd2f220
+    parentId: fld_1623d93b11cf43b08a6b900a5f88bb54
+    modified: 1617806740703
+    created: 1617806721303
+    url: "{{ _.baseURL }}/auth/authentication/login"
+    name: default container login
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        "userName" : "fishapp",
+        "password" : "fishapp"
+        }
+    parameters: []
+    headers:
+      - name: email
+        value: oluf@example.com
+        id: pair_e7bb08dcc7914519be4c066f5c5c3a2a
+        disabled: true
+      - name: password
+        value: Passord123
+        id: pair_6a97a4b373e8418c9bf9e78a43a250cf
+        disabled: true
+      - name: Content-Type
+        value: application/json
+        id: pair_d6fda4628f7b48f7b88d4f81394e2819
+    authentication: {}
+    metaSortKey: -1611756927394.375
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -140,20 +1068,20 @@ resources:
     settingFollowRedirects: global
     _type: request
   - _id: req_2e550ebb260042b9a3ac5fd3fc06da34
-    parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    modified: 1614771453238
+    parentId: fld_428ed833825a402fb7c7bede7527f842
+    modified: 1617791873301
     created: 1611758246180
-    url: "{{ _.baseURL }}/buyer/create"
-    name: create-buyer
+    url: "{{ _.baseURL }}/user/buyer/create"
+    name: create new
     description: ""
     method: POST
     body:
       mimeType: application/json
       text: |-
         {
-        	"name" : "testesen@example.com",
-        	"userName" : "testesen@example.com",
-        	"password" : "test123"
+        	"name" : "testb@example.com",
+        	"userName" : "testb@example.com",
+        	"password" : "12345678"
         }
     parameters: []
     headers:
@@ -176,7 +1104,7 @@ resources:
         value: application/json
         id: pair_2d4a2ca3cdd3490abb8f1e8d42f04a7d
     authentication: {}
-    metaSortKey: -1611756927385
+    metaSortKey: -1617785967211
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -185,22 +1113,32 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1613748453898
-    created: 1612793924007
+  - _id: fld_428ed833825a402fb7c7bede7527f842
+    parentId: fld_7e3eb43a29d54e39b259a005034c9315
+    modified: 1617785964774
+    created: 1617785964774
     name: buyer
     description: ""
     environment: {}
     environmentPropertyOrder: null
-    metaSortKey: -1612793924007
+    metaSortKey: -1617785964774
+    _type: request_group
+  - _id: fld_7e3eb43a29d54e39b259a005034c9315
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1617785940843
+    created: 1617785922959
+    name: user container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617785922959
     _type: request_group
   - _id: req_c03126a970a2473cb927235fb435eabe
-    parentId: fld_3d88f0bd96bb4eeabd2226e4561a7444
-    modified: 1613748744438
+    parentId: fld_428ed833825a402fb7c7bede7527f842
+    modified: 1619966812927
     created: 1611780826271
-    url: "{{ _.baseURL }}/buyer/current"
-    name: current-buyer
+    url: "{{ _.baseURL }}/user/buyer/current"
+    name: get current
     description: ""
     method: GET
     body: {}
@@ -216,7 +1154,7 @@ resources:
         description: ""
         id: pair_42c601650036499eb672fbd3293e2f2e
     authentication: {}
-    metaSortKey: -1611756927285
+    metaSortKey: -1617785967161
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -225,56 +1163,45 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_ddb8c568a3344e5bb2eed2d0dc3fd79f
-    parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1614771490828
-    created: 1611840925356
-    url: "{{ _.baseURL }}/seller/create"
-    name: create-seller
+  - _id: req_3d5675bb75f2486d872d6db9d2352a0c
+    parentId: fld_c87d75353aef4f068e12e7412fc5a674
+    modified: 1620052341155
+    created: 1617786109138
+    url: "{{ _.baseURL }}/user/seller/create"
+    name: create new
     description: ""
     method: POST
     body:
       mimeType: application/json
       text: |-
         {
-        	"name" : "testesen@example.com",
-        	"userName" : "testesen@example.com",
-        	"password" : "test123",
+        	"name" : "tests@example.com",
+        	"userName" : "testss@example.com",
+        	"password" : "12345678",
         	"regNumber" : "test12345678"
         }
     parameters: []
     headers:
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
-        description: ""
-        id: pair_4e1a7af07981489f96399c0905e9fc66
-        disabled: true
       - name: name
-        value: test
+        value: Oluf
         description: ""
-        id: pair_d2f5a8219e874a06b328ce424eaabef6
+        id: pair_3735fecdc834458982814b3d9d2ae716
         disabled: true
       - name: email
-        value: testesen@example.com
+        value: oluf@example.com
         description: ""
-        id: pair_4bcc05044eb94b1fa85b221b3daeb3ef
+        id: pair_aee64b165237416285897a93fba5bf8c
         disabled: true
       - name: password
-        value: test123
+        value: Passord123
         description: ""
-        id: pair_c5e85dd592d744f188adbcd0a8036579
-        disabled: true
-      - name: regNumber
-        value: test12345678
-        description: ""
-        id: pair_3c8cfb770b9c471188e5eb50dbb62503
+        id: pair_a67f4b62939542fea88c57f3b3d6a801
         disabled: true
       - name: Content-Type
         value: application/json
-        id: pair_f83c57f56ac54e6da9523f8fde38cd69
+        id: pair_2d4a2ca3cdd3490abb8f1e8d42f04a7d
     authentication: {}
-    metaSortKey: -1611756927235
+    metaSortKey: -1617785967186
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -283,22 +1210,110 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1612793929559
-    created: 1612793929559
+  - _id: fld_c87d75353aef4f068e12e7412fc5a674
+    parentId: fld_7e3eb43a29d54e39b259a005034c9315
+    modified: 1617785969647
+    created: 1617785969647
     name: seller
     description: ""
     environment: {}
     environmentPropertyOrder: null
-    metaSortKey: -1612793929559
+    metaSortKey: -1617785969648
     _type: request_group
-  - _id: req_4fb46cb3fd6c43a2a346787ee4d8e960
-    parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1614077679153
-    created: 1611845697304
-    url: "{{ _.baseURL }}/seller/getseller"
-    name: get-seller
+  - _id: req_5aa7fd878cfe46778260a5a8145da6f0
+    parentId: fld_c87d75353aef4f068e12e7412fc5a674
+    modified: 1618238000703
+    created: 1617786132643
+    url: "{{ _.baseURL }}/user/seller/current"
+    name: get current
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+        description: ""
+        id: pair_cbd0e651f9dd48d0896e53b06a478922
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_42c601650036499eb672fbd3293e2f2e
+    authentication: {}
+    metaSortKey: -1617785967136
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_be5f0bd8de35407488cb70ea89be653f
+    parentId: fld_bf7b15059ebe474ab24998c95365db6c
+    modified: 1618923426252
+    created: 1617878534375
+    url: "{{ _.baseURL }}/media/image/1"
+    name: getImage
+    description: ""
+    method: GET
+    body:
+      mimeType: application/x-www-form-urlencoded
+      params: []
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/x-www-form-urlencoded
+        id: pair_29c850bcf8d04453982d40438e367aef
+        disabled: true
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_a4445d2325ae4adb948bff5ecdcbc577
+        disabled: false
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_0af7d42de734415d819d1ce7224e05f4
+        disabled: true
+    authentication: {}
+    metaSortKey: -1617878516307
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_bf7b15059ebe474ab24998c95365db6c
+    parentId: fld_c61bbb24178c408e826663eb26523524
+    modified: 1617878516357
+    created: 1617878516357
+    name: image
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617878516357
+    _type: request_group
+  - _id: fld_c61bbb24178c408e826663eb26523524
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1617878505867
+    created: 1617878505867
+    name: media container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617878505867
+    _type: request_group
+  - _id: req_7a13436205fe4d2f8705a57ed85e2764
+    parentId: fld_3c227f3540394c6ebcd0984f55917138
+    modified: 1617878579633
+    created: 1617878564545
+    url: "{{ _.baseURL }}/user/seller/current"
+    name: add image
     description: ""
     method: GET
     body: {}
@@ -308,13 +1323,13 @@ resources:
         value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
         description: ""
-        id: pair_626a85aa58624a03a20b479d96e0c035
-      - name: email
-        value: testesen@example.com
+        id: pair_cbd0e651f9dd48d0896e53b06a478922
+      - name: ""
+        value: ""
         description: ""
-        id: pair_16f18359360943cc98ae350322f96983
+        id: pair_42c601650036499eb672fbd3293e2f2e
     authentication: {}
-    metaSortKey: -1611756927185
+    metaSortKey: -1617878536208.5
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -323,24 +1338,29 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_e60bffa3973942da85ba359b5a5af70e
-    parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1613748694772
-    created: 1613040497755
-    url: "{{ _.baseURL }}/seller/current"
-    name: current-seller
-    description: seems to use the current user, so we need to login to get a token
+  - _id: fld_3c227f3540394c6ebcd0984f55917138
+    parentId: fld_c61bbb24178c408e826663eb26523524
+    modified: 1617878556060
+    created: 1617878556060
+    name: inter container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617878556060
+    _type: request_group
+  - _id: req_a9f21ccd4ade44cca47a873fbe3d2567
+    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    modified: 1618238713937
+    created: 1614780655000
+    url: "{{ _.baseURL }}/store/listing/comodity/1"
+    name: get-comodity-offer-listing
+    description: ""
     method: GET
     body: {}
     parameters: []
-    headers:
-      - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
-        description: ""
-        id: pair_626a85aa58624a03a20b479d96e0c035
+    headers: []
     authentication: {}
-    metaSortKey: -1611756927135
+    metaSortKey: -1618237404482
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -349,56 +1369,334 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_8417ab0e4f8a4efcbba74acb95c174a7
-    parentId: fld_d0e497bcf97b4704bf1cbdc80f52d8b4
-    modified: 1614777441414
-    created: 1614777385742
-    url: "{{ _.baseURL }}/seller/create"
-    name: create-seller-default-vals
+  - _id: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    parentId: fld_900e3b45c9694f0d9f14355983ae0d13
+    modified: 1618237374504
+    created: 1613564210580
+    name: Listing
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617880314884
+    _type: request_group
+  - _id: fld_900e3b45c9694f0d9f14355983ae0d13
+    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
+    modified: 1618236674115
+    created: 1617880278745
+    name: store container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1615778008240
+    _type: request_group
+  - _id: req_37592d0abb59468aa11b466bb9f650d2
+    parentId: fld_07b49efc12d5424f993011bd7d09939d
+    modified: 1618241692480
+    created: 1615202957029
+    url: "{{ _.baseURL }}/store/transaction"
+    name: create-transaction
     description: ""
     method: POST
     body:
       mimeType: application/json
       text: |-
         {
-        	"name" : "oluf@example.com",
-        	"userName" : "oluf@example.com",
-        	"password" : "Passord123",
-        	"regNumber" : "test12345678"
+        	"listingId": 1,
+        	"amount": 200
         }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_71cf054bfa4f48a7872a6c2bb1310ce3
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_7811fcc01f0a484abee3aa9ff012e665
+    authentication: {}
+    metaSortKey: -1615095245899.75
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_07b49efc12d5424f993011bd7d09939d
+    parentId: fld_900e3b45c9694f0d9f14355983ae0d13
+    modified: 1618241871944
+    created: 1615202931913
+    name: transaction
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617880314834
+    _type: request_group
+  - _id: req_b24f908df92044b8b045bf9c3c52f7c3
+    parentId: fld_07b49efc12d5424f993011bd7d09939d
+    modified: 1618241707391
+    created: 1615205319889
+    url: "{{ _.baseURL }}/store/transaction/1/"
+    name: get-transaction
+    description: ""
+    method: GET
+    body: {}
     parameters: []
     headers:
       - name: Authorization
         value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'no-history', 60 %}"
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
-        id: pair_4e1a7af07981489f96399c0905e9fc66
-        disabled: true
-      - name: name
-        value: test
+        id: pair_7811fcc01f0a484abee3aa9ff012e665
+    authentication: {}
+    metaSortKey: -1614982843813.875
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_c1387fe7165347fca0ce6247ee12b77a
+    parentId: fld_07b49efc12d5424f993011bd7d09939d
+    modified: 1618241725540
+    created: 1615207907456
+    url: "{{ _.baseURL }}/store/transaction/all"
+    name: get-all-user-transactions
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
-        id: pair_d2f5a8219e874a06b328ce424eaabef6
-        disabled: true
-      - name: email
-        value: testesen@example.com
+        id: pair_7811fcc01f0a484abee3aa9ff012e665
+    authentication: {}
+    metaSortKey: -1614926642770.9375
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_47fcd1bd615d49c388a23c5ce2a81e16
+    parentId: fld_5a8d973ad5564a61b314f8f5a08619e2
+    modified: 1618242010885
+    created: 1615222411299
+    url: "{{ _.baseURL }}/store/rating"
+    name: new-rating
+    description: ""
+    method: POST
+    body: {}
+    parameters:
+      - name: transactionid
+        value: "1"
         description: ""
-        id: pair_4bcc05044eb94b1fa85b221b3daeb3ef
-        disabled: true
-      - name: password
-        value: test123
+        id: pair_3632dbd2fb4c4c94bbc2f5af0a0f4498
+      - name: stars
+        value: "3"
         description: ""
-        id: pair_c5e85dd592d744f188adbcd0a8036579
-        disabled: true
-      - name: regNumber
-        value: test12345678
+        id: pair_0c522f64bb4145f6ba0f3619f2cdfae4
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
-        id: pair_3c8cfb770b9c471188e5eb50dbb62503
-        disabled: true
+        id: pair_9c4c362f5538459ea3461b58cbfdec86
+    authentication: {}
+    metaSortKey: -1615222411332
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5a8d973ad5564a61b314f8f5a08619e2
+    parentId: fld_900e3b45c9694f0d9f14355983ae0d13
+    modified: 1618242029174
+    created: 1615222377527
+    name: rating
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617880314859
+    _type: request_group
+  - _id: req_05bc7142c1714eb29ed429c1fd851939
+    parentId: fld_5a8d973ad5564a61b314f8f5a08619e2
+    modified: 1618241897138
+    created: 1615222443832
+    url: "{{ _.baseURL }}/store/rating/1"
+    name: get user rating
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_f872a2b4099c486b841fc72bef5e0639
+    authentication: {}
+    metaSortKey: -1615222443832
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_d28f6264d3de47b5b1c08d8cef83f11c
+    parentId: fld_5a8d973ad5564a61b314f8f5a08619e2
+    modified: 1618241887939
+    created: 1615222528413
+    url: "{{ _.baseURL }}/store/rating/transaction/1"
+    name: get transaction rating
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_8bda35d80db943c68f9f23d91f7aa7e6
+    authentication: {}
+    metaSortKey: -1615222528414
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_62ead9b59cd041d1ae5775317ea040a2
+    parentId: fld_a882bae5a46c40a890a63523f8ee0832
+    modified: 1618237337563
+    created: 1613566013534
+    url: "{{ _.baseURL }}/store/commodity/all"
+    name: get-all-commodity
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1613564457610
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_a882bae5a46c40a890a63523f8ee0832
+    parentId: fld_900e3b45c9694f0d9f14355983ae0d13
+    modified: 1617880314934
+    created: 1617880314934
+    name: Commodity
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1617880314934
+    _type: request_group
+  - _id: req_a9c4cea42d4241e2a74d84b279426b43
+    parentId: fld_a882bae5a46c40a890a63523f8ee0832
+    modified: 1618237320775
+    created: 1615461163154
+    url: "{{ _.baseURL }}/store/commodity/all-display"
+    name: get-all-display-commodity
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1613564457660
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_51d1896e5df047b1814e6fc7419c440b
+    parentId: fld_eebc427454e2422396a8cd2512e39657
+    modified: 1618238677733
+    created: 1613572800765
+    url: "{{ _.baseURL }}/store/listing/buy/new"
+    name: create_buy_request
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"endDate": 1616626800000,
+        	"commodity": {
+        		"id": 2
+        	},
+        	"price": 88.0,
+        	"amount": 980,
+        	"additionalInfo": "blablablabla",
+        	"maxDistance": 10.0
+        }
+    parameters: []
+    headers:
       - name: Content-Type
         value: application/json
-        id: pair_f83c57f56ac54e6da9523f8fde38cd69
+        id: pair_d051961362c54db2a3d330ffaf23533c
+      - name: Authorization
+        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
+          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
+        description: ""
+        id: pair_1e1b7a639b294887a05287805659434c
     authentication: {}
-    metaSortKey: -1611756927210
+    metaSortKey: -1614870441778
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_eebc427454e2422396a8cd2512e39657
+    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    modified: 1618237435656
+    created: 1618237386549
+    name: buy
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1618237402009.5
+    _type: request_group
+  - _id: req_092a0716e08f4da3ad2ea00a5ae154d1
+    parentId: fld_eebc427454e2422396a8cd2512e39657
+    modified: 1618238687695
+    created: 1614870441728
+    url: "{{ _.baseURL }}/store/listing/buy/1"
+    name: get-buy-request
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1614870441728
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -408,10 +1706,10 @@ resources:
     settingFollowRedirects: global
     _type: request
   - _id: req_899db9df5e0748229641d75c02153276
-    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    modified: 1614789073259
+    parentId: fld_bb89a28b0e2f4cff9b2f4e0bd598344a
+    modified: 1618238699765
     created: 1613564225883
-    url: "{{ _.baseURL }}/listing/newOfferListing"
+    url: "{{ _.baseURL }}/store/listing/offer/new"
     name: create-offer-listing
     description: ""
     method: POST
@@ -423,7 +1721,7 @@ resources:
         	"commodity": {
         		"id": 1
         	},
-        	"price": 980.0,
+        	"price": 15.0,
         	"latitude": 37.42658100018834,
         	"longitude": -122.0842410216257,
         	"maxAmount": 980,
@@ -435,12 +1733,12 @@ resources:
         value: application/json
         id: pair_ab61d8a67b29421bad19c33b5653022a
       - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+        value: "{% response 'header', 'req_905f7d77994046feafce8ef5becf08f2',
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
         id: pair_3e23634e7bdc4e5a9c32baa7abd81518
     authentication: {}
-    metaSortKey: -1613564225883
+    metaSortKey: -1613572800965
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -449,76 +1747,21 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1613564210580
-    created: 1613564210580
-    name: Listing
+  - _id: fld_bb89a28b0e2f4cff9b2f4e0bd598344a
+    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    modified: 1618237399587
+    created: 1618237399587
+    name: sell
     description: ""
     environment: {}
     environmentPropertyOrder: null
-    metaSortKey: -1613564210580
+    metaSortKey: -1618237399587
     _type: request_group
-  - _id: req_51d1896e5df047b1814e6fc7419c440b
-    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    modified: 1613750042773
-    created: 1613572800765
-    url: "{{ _.baseURL }}/listing/newBuyRequest"
-    name: create_buy_request
-    description: ""
-    method: POST
-    body:
-      mimeType: multipart/form-data
-      params:
-        - name: endDate
-          value: "12345678987654321"
-          description: ""
-          id: pair_65a2561f072d4dee9a640c9d73361323
-        - name: commodity
-          value: "1"
-          description: ""
-          id: pair_202f42b2fa224e6eb6044456bbaea833
-        - name: price
-          value: "88"
-          description: ""
-          id: pair_e61f202f7f744fc29dff056b43a4aba1
-        - name: amount
-          value: "20"
-          description: ""
-          id: pair_3db261bb17974328a8bee7a0b4f9d703
-        - name: info
-          value: blablablabla
-          description: ""
-          id: pair_6549537d2ed845698e2e3e04ce62a63e
-        - name: maxDistance
-          value: "10"
-          description: ""
-          id: pair_4de5b0af52e2473e98f49017fa22ac74
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: multipart/form-data
-        id: pair_d051961362c54db2a3d330ffaf23533c
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1e1b7a639b294887a05287805659434c
-    authentication: {}
-    metaSortKey: -1613572800765
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
   - _id: req_a3122e724f634c4b864bea1e81eb0279
-    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    modified: 1614783910430
+    parentId: fld_bb89a28b0e2f4cff9b2f4e0bd598344a
+    modified: 1618238777636
     created: 1614780198073
-    url: "{{ _.baseURL }}/listing/6"
+    url: "{{ _.baseURL }}/store/listing/offer/7"
     name: get-offer-listing
     description: ""
     method: GET
@@ -535,50 +1778,28 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_a9f21ccd4ade44cca47a873fbe3d2567
-    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    modified: 1614780666291
-    created: 1614780655000
-    url: "{{ _.baseURL }}/listing/comodity/1"
-    name: get-comodity-offer-listing
+  - _id: req_d9aa57763ca34c6ab2d0a81424c3d915
+    parentId: fld_6f6d394dda3a4445836fe7f791c6e634
+    modified: 1618245886333
+    created: 1618245680758
+    url: "{{ _.baseURL }}/store/listing/listing/1"
+    name: get listing
     description: ""
     method: GET
     body: {}
     parameters: []
-    headers: []
-    authentication: {}
-    metaSortKey: -1613572800790
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_9c653746d2204b99bb40e92ceadcf090
-    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
-    modified: 1614786993903
-    created: 1614786993903
-    url: "{{ _.baseURL }}/listing/newOfferListing"
-    name: aa
-    description: ""
-    method: POST
-    body:
-      mimeType: application/json
-      text: '{"endDate":1616626800000,"commodity":{"id":1,"name":"Laks","commodityImage":{"id":1,"name":"e863270a-eb31-4986-a1e3-f32484fc50ff.jpg","mimeType":"image/jpeg","size":514984.0}},"price":980.0,"latitude":37.42658100018834,"longitude":-122.0842410216257,"maxAmount":980,"additionalInfo":"oio"}'
-    parameters: []
     headers:
-      - name: Content-Type
-        value: application/json
-        id: pair_ab61d8a67b29421bad19c33b5653022a
       - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
+        value: "{% response 'header', 'req_cca0c1519e3340858e19a900afd2f220',
           'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
         description: ""
-        id: pair_3e23634e7bdc4e5a9c32baa7abd81518
+        id: pair_706fccafa82e4e7cacf87326ffbc63a9
+      - name: ""
+        value: ""
+        description: ""
+        id: pair_9be1b404df094f848416305dc0fde4d6
     authentication: {}
-    metaSortKey: -1612660576634
+    metaSortKey: -1614314849782
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -587,12 +1808,22 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: fld_6f6d394dda3a4445836fe7f791c6e634
+    parentId: fld_ddd7b8d8d6e74734986040c6e3a39f01
+    modified: 1618245664025
+    created: 1618245660080
+    name: inter-container
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1618237404457
+    _type: request_group
   - _id: req_bd1566f0d17f48b0ae5128df61bff656
-    parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1614774022674
+    parentId: fld_e03efd22f10448329f2008eb330be4be
+    modified: 1618236793378
     created: 1613564457560
-    url: "{{ _.baseURL }}/commodity/new"
-    name: create-commodity
+    url: "{{ _.baseURL }}/store/commodity/new"
+    name: create-commodity-1
     description: ""
     method: POST
     body:
@@ -608,11 +1839,11 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Media/Pictures/9ae13aef283383d738743dd32f86b657.jpg
+          fileName: /home/trygve/Downloads/the-mandalorian-baby-yoda.jpeg
     parameters: []
     headers: []
     authentication: {}
-    metaSortKey: -1613564457560
+    metaSortKey: -1613564399790.75
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -621,42 +1852,21 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_8f8a012370e44b2986940d66fb0bc34d
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1613564450158
-    created: 1613564450158
-    name: commodity
+  - _id: fld_e03efd22f10448329f2008eb330be4be
+    parentId: fld_a882bae5a46c40a890a63523f8ee0832
+    modified: 1618236758704
+    created: 1618236748438
+    name: qol
     description: ""
     environment: {}
     environmentPropertyOrder: null
-    metaSortKey: -1613564450158
+    metaSortKey: -1613564457710
     _type: request_group
-  - _id: req_62ead9b59cd041d1ae5775317ea040a2
-    parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1613566013534
-    created: 1613566013534
-    url: ""
-    name: get-all-commodity
-    description: ""
-    method: GET
-    body: {}
-    parameters: []
-    headers: []
-    authentication: {}
-    metaSortKey: -1613566013534
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
   - _id: req_5c0ac1122eff4d7e9311f15ef5f1d5a0
-    parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1614774027436
+    parentId: fld_e03efd22f10448329f2008eb330be4be
+    modified: 1618922688568
     created: 1614773916253
-    url: "{{ _.baseURL }}/commodity/new"
+    url: "{{ _.baseURL }}/store/commodity/new"
     name: create-commodity-2
     description: ""
     method: POST
@@ -664,7 +1874,7 @@ resources:
       mimeType: multipart/form-data
       params:
         - name: name
-          value: banan
+          value: Kreps
           description: ""
           id: pair_47f00f733beb41a6bc6d03b66788cab0
         - name: image
@@ -673,11 +1883,11 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Media/Pictures/abstract-apophysis-digital-art-black-background.jpg
+          fileName: /home/trygve/Downloads/pexels-pixabay-37401.jpg
     parameters: []
     headers: []
     authentication: {}
-    metaSortKey: -1613564399640.75
+    metaSortKey: -1613564399715.75
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -687,10 +1897,10 @@ resources:
     settingFollowRedirects: global
     _type: request
   - _id: req_04adfd59b1354474b465278e752e3be7
-    parentId: fld_8f8a012370e44b2986940d66fb0bc34d
-    modified: 1614774030898
+    parentId: fld_e03efd22f10448329f2008eb330be4be
+    modified: 1618922713196
     created: 1614773921857
-    url: "{{ _.baseURL }}/commodity/new"
+    url: "{{ _.baseURL }}/store/commodity/new"
     name: create-commodity-3
     description: ""
     method: POST
@@ -698,7 +1908,7 @@ resources:
       mimeType: multipart/form-data
       params:
         - name: name
-          value: talerken
+          value: Krabbe
           description: ""
           id: pair_47f00f733beb41a6bc6d03b66788cab0
         - name: image
@@ -707,11 +1917,11 @@ resources:
           id: pair_9b4edbb8f3d54b77a932d3a48313268c
           type: file
           multiline: null
-          fileName: /home/trygve/Media/Pictures/in-interviews-with-inverse-six-nasa-astronauts-describe-the-moment-when-everything-changed.jpeg
+          fileName: /home/trygve/Downloads/pexels-tranmautritam-69433.jpg
     parameters: []
     headers: []
     authentication: {}
-    metaSortKey: -1613564370681.125
+    metaSortKey: -1613564399665.75
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -720,33 +1930,32 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_7728f2793c7f48d8bf401e04d5c58d4b
-    parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614077445272
-    created: 1613759257836
-    url: "{{ _.baseURL }}/chat/startconversation"
-    name: buyer-conversation-start
+  - _id: req_e6c3b39850794631b28ae8c1e3e97b24
+    parentId: fld_e03efd22f10448329f2008eb330be4be
+    modified: 1618922699339
+    created: 1615888011674
+    url: "{{ _.baseURL }}/store/commodity/new"
+    name: create-commodity-4
     description: ""
     method: POST
     body:
-      mimeType: application/x-www-form-urlencoded
+      mimeType: multipart/form-data
       params:
-        - name: ""
+        - name: name
+          value: Reke
+          description: ""
+          id: pair_47f00f733beb41a6bc6d03b66788cab0
+        - name: image
           value: ""
           description: ""
-          id: pair_3b1c5f90752d49b895b41539bf19781b
+          id: pair_9b4edbb8f3d54b77a932d3a48313268c
+          type: file
+          multiline: null
+          fileName: /home/trygve/Downloads/pexels-caio-69372.jpg
     parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
+    headers: []
     authentication: {}
-    metaSortKey: -1613759257836
+    metaSortKey: -1613564399690.75
     isPrivate: false
     settingStoreCookies: true
     settingSendCookies: true
@@ -755,520 +1964,6 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: fld_a0f215bfba3344af929826d49b69f335
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1613759222876
-    created: 1613759222876
-    name: chat
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1613759222876
-    _type: request_group
-  - _id: req_5fa81cb820784975ad5283bccc017b7b
-    parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614077455268
-    created: 1613945171084
-    url: "{{ _.baseURL }}/chat/sendmessage"
-    name: buyer-conversation-message
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: POST
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params:
-        - name: conversation
-          value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
-            'b64::JC5pZA==::46b', 'never', 60 %}"
-          description: ""
-          id: pair_3b1c5f90752d49b895b41539bf19781b
-        - name: body
-          value: '"Hei! Hva selger dere ?"'
-          description: ""
-          id: pair_055d476f831346e6817b38d8de2c4b96
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-    authentication: {}
-    metaSortKey: -1613666029300.5
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_7569f963e4c14d4b8d9804f49704a1e9
-    parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614077459872
-    created: 1614002844060
-    url: "{{ _.baseURL }}/chat/sendmessage"
-    name: seller-conversation-message
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: POST
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params:
-        - name: conversation
-          value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
-            'b64::JC5pZA==::46b', 'never', 60 %}"
-          description: ""
-          id: pair_3b1c5f90752d49b895b41539bf19781b
-        - name: body
-          value: '"Vi selger bare fisk"'
-          description: ""
-          id: pair_055d476f831346e6817b38d8de2c4b96
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-    authentication: {}
-    metaSortKey: -1613619415032.75
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_120528d30607470cbb19fbbe66daf83f
-    parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614077557344
-    created: 1614077415768
-    url: "{{ _.baseURL }}/chat/getmessages"
-    name: buyer-conversation-getmessages
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: GET
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params: []
-    parameters:
-      - name: conversation
-        value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_460e14c3b1fb4d349f1dc043699955c9
-      - name: to
-        value: ""
-        description: ""
-        id: pair_3f285b8413a04635bea6f7a3658c3633
-      - name: from
-        value: ""
-        description: ""
-        id: pair_d086f75175e14f3bab3a72958db96ba8
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-    authentication: {}
-    metaSortKey: -1613642722166.625
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_2f5dbbe111944aa799290036143e3c00
-    parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614250112254
-    created: 1614170160332
-    url: "{{ _.baseURL }}/chat/send"
-    name: seller-send3
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: POST
-    body: {}
-    parameters: []
-    headers:
-      - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: conversation
-        value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_831eb4a28fbe47d7ae5a5d6f877572c6
-      - name: body
-        value: '"Det tror jeg skal la seg gjøre ja."'
-        description: ""
-        id: pair_193764871bfe4df980056289309ae55b
-    authentication: {}
-    metaSortKey: -1613654375733.5625
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_45bdadca83d241c2aa9010e34c724e75
-    parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614249541199
-    created: 1614249526067
-    url: "{{ _.baseURL }}/chat/myconversations"
-    name: buyer-my-conversations
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: GET
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params: []
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-    authentication: {}
-    metaSortKey: -1613607761465.8125
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_d1b6803582014945ac961c0b523b37b9
-    parentId: fld_a0f215bfba3344af929826d49b69f335
-    modified: 1614335802336
-    created: 1614266056949
-    url: "{{ _.baseURL }}/chat/messages/range"
-    name: buyer-range-messages
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: GET
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params: []
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: conversation
-        value: "{% response 'body', 'req_7728f2793c7f48d8bf401e04d5c58d4b',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_a1725c9eb31d4c8484149c63ac747106
-        disabled: false
-      - name: from
-        value: "2"
-        description: ""
-        id: pair_35a70b0b83f74905a3aae25dd2892773
-        disabled: false
-      - name: offset
-        value: "1"
-        description: ""
-        id: pair_ffbce949b1c644d4b9ad94282c8a35e0
-        disabled: false
-    authentication: {}
-    metaSortKey: -1613625241816.2188
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_d6c62469430849b9af8366df92a78a61
-    parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614249847934
-    created: 1614249621109
-    url: "{{ _.baseURL }}/chat/start"
-    name: seller-start1
-    description: ""
-    method: POST
-    body: {}
-    parameters: []
-    headers:
-      - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: listing
-        value: "{% response 'body', 'req_51d1896e5df047b1814e6fc7419c440b',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_f927ff3eed6a4277969e17c4b78d0c88
-        disabled: false
-    authentication: {}
-    metaSortKey: -1613759257836
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: fld_01285579e70a4420852b0560d574401f
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1614249677780
-    created: 1614249621108
-    name: chat-seller->orderlisting
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1613661836517
-    _type: request_group
-  - _id: req_9ff995a63d734115aa06b4af03ef2e81
-    parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614250026075
-    created: 1614249621110
-    url: "{{ _.baseURL }}/chat/send"
-    name: seller-send2
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: POST
-    body: {}
-    parameters: []
-    headers:
-      - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: conversation
-        value: "{% response 'body', 'req_d6c62469430849b9af8366df92a78a61',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_831eb4a28fbe47d7ae5a5d6f877572c6
-      - name: body
-        value: '"Hei! Jeg kan levere fisken du etterspurde"'
-        description: ""
-        id: pair_193764871bfe4df980056289309ae55b
-    authentication: {}
-    metaSortKey: -1613666029300.5
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_2bb32d389faf4ade96b85c906bfc438c
-    parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614333400573
-    created: 1614249621111
-    url: "{{ _.baseURL }}/chat/messages/get"
-    name: seller-get-messages
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: GET
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params: []
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: conversation
-        value: "{% response 'body', 'req_d6c62469430849b9af8366df92a78a61',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_a1725c9eb31d4c8484149c63ac747106
-      - name: last-id
-        value: "2"
-        description: ""
-        id: pair_35a70b0b83f74905a3aae25dd2892773
-        disabled: true
-    authentication: {}
-    metaSortKey: -1613642722166.625
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_7085d46309c446909cd7c910f55eb45a
-    parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614250047103
-    created: 1614249621113
-    url: "{{ _.baseURL }}/chat/send"
-    name: buyer-send3
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: POST
-    body: {}
-    parameters: []
-    headers:
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-      - name: conversation
-        value: "{% response 'body', 'req_d6c62469430849b9af8366df92a78a61',
-          'b64::JC5pZA==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_831eb4a28fbe47d7ae5a5d6f877572c6
-      - name: body
-        value: '"Så flott!"'
-        description: ""
-        id: pair_193764871bfe4df980056289309ae55b
-    authentication: {}
-    metaSortKey: -1613654375733.5625
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_86f07aa68135425aa9938bc5e4082e6b
-    parentId: fld_01285579e70a4420852b0560d574401f
-    modified: 1614249771605
-    created: 1614249621114
-    url: "{{ _.baseURL }}/chat/myconversations"
-    name: seller-my-conversations
-    description: |-
-      ### What
-      Adds a message to a conversation. //WIP add conv by listing
-      ### WHo
-      user object - the buyer of a listing
-    method: GET
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params: []
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_7173b0ff35cf4c038787ce586eecfa65
-      - name: Authorization
-        value: "{% response 'header', 'req_b3eda0c72d944d25bc7ae8d3e579e913',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_1ca8152a96b741ecb9f062ce5ab78f05
-    authentication: {}
-    metaSortKey: -1613607761465.8125
-    isPrivate: false
-    settingStoreCookies: false
-    settingSendCookies: false
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: req_1b7a3ed853324ce6b73b61572c86ebad
-    parentId: fld_ede80cda17d24bd7aec62498f633ce94
-    modified: 1614772318753
-    created: 1614772200012
-    url: "{{ _.baseURL }}/resource/image/1"
-    name: getImage
-    description: ""
-    method: GET
-    body:
-      mimeType: application/x-www-form-urlencoded
-      params: []
-    parameters: []
-    headers:
-      - name: Content-Type
-        value: application/x-www-form-urlencoded
-        id: pair_29c850bcf8d04453982d40438e367aef
-        disabled: true
-      - name: Authorization
-        value: "{% response 'header', 'req_a8138b132745479697ea49486bb87653',
-          'b64::QXV0aG9yaXphdGlvbg==::46b', 'never', 60 %}"
-        description: ""
-        id: pair_a4445d2325ae4adb948bff5ecdcbc577
-        disabled: true
-    authentication: {}
-    metaSortKey: -1613564341721.5
-    isPrivate: false
-    settingStoreCookies: true
-    settingSendCookies: true
-    settingDisableRenderRequestBody: false
-    settingEncodeUrl: true
-    settingRebuildPath: true
-    settingFollowRedirects: global
-    _type: request
-  - _id: fld_ede80cda17d24bd7aec62498f633ce94
-    parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1614772187710
-    created: 1614772187710
-    name: image
-    description: ""
-    environment: {}
-    environmentPropertyOrder: null
-    metaSortKey: -1614772187710
-    _type: request_group
   - _id: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
     modified: 1611756889288
@@ -1282,7 +1977,7 @@ resources:
     _type: environment
   - _id: jar_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
-    modified: 1614772321394
+    modified: 1619618492882
     created: 1611756889289
     name: Default Jar
     cookies:
@@ -1294,7 +1989,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.749Z
         lastAccessed: 2021-02-08T14:21:10.749Z
-        id: "8137857930950383"
+        id: "1946557555777293"
       - key: Currency
         value: USD
         domain: domain.com
@@ -1303,7 +1998,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.753Z
         lastAccessed: 2021-02-08T14:21:10.753Z
-        id: "3143918306098701"
+        id: "38007440062717635"
       - key: Currency_Symbol
         value: "%24"
         domain: domain.com
@@ -1312,7 +2007,7 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.755Z
         lastAccessed: 2021-02-08T14:21:10.755Z
-        id: "9217829014342658"
+        id: "11142340866795442"
       - key: eigi-geolocated-country-code
         value: no
         expires: 2022-02-08T14:21:10.000Z
@@ -1322,15 +2017,15 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.756Z
         lastAccessed: 2021-02-08T14:21:10.756Z
-        id: "0988416237814802"
+        id: "5263466813851909"
       - key: host
-        value: U2FsdGVkX18Q0zvdgNq8p4%2BrtoGEba%2FbZgU4DobfKIy37rwTVgWoj2URhFN9xhwwCJU1xUYVkcsO9piLW1LNRWrGjjZuTKEhPmBN40MPFWo%3D
+        value: U2FsdGVkX1%2B15LaP5qxYVyZq%2FcVllQ0XY2CKmMa6WN9mFNJ7diFetHndWeFrJRAEGFP3XEajS%2BYO92dXqg8X7ODZMgDwHs5wnZo%2F5ljMTf0%3D
         domain: domain.com
         path: /
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
-        lastAccessed: 2021-03-03T11:52:01.391Z
-        id: "9481287002794316"
+        lastAccessed: 2021-03-08T11:34:04.262Z
+        id: "8537950816872013"
       - key: session_id
         value: 4ec600152db7bb3e5c806f685866d2397
         domain: domain.com
@@ -1339,17 +2034,35 @@ resources:
         hostOnly: false
         creation: 2021-02-08T14:21:10.757Z
         lastAccessed: 2021-02-08T14:21:10.757Z
-        id: "3555903066639834"
+        id: "5860965001169429"
       - key: customerpixel
-        value: "%7B%22visits%22%3A4%2C%22last_visit%22%3A%222021-02-19%2018%3A23%3A41%2\
-          2%2C%22current_visit%22%3A%222021-03-03%2011%3A52%3A01%22%2C%22first_\
+        value: "%7B%22visits%22%3A9%2C%22current_visit%22%3A%222021-04-28%2014%3A01%3A3\
+          2%22%2C%22last_visit%22%3A%222021-04-28%2014%3A01%3A27%22%2C%22first_\
           visit%22%3A%222021-02-08%2014%3A21%3A10%22%2C%22login%22%3A0%7D"
         domain: domain.com
         path: /
         hostOnly: false
         creation: 2021-02-08T14:21:10.758Z
-        lastAccessed: 2021-03-03T11:52:01.392Z
-        id: "5369516763796149"
+        lastAccessed: 2021-04-28T14:01:32.882Z
+        id: "8188777702050931"
+      - key: visid_incap_1967659
+        value: DWgEbXcFRr2aFB6Tkj1fg21qiWAAAAAAQUIPAAAAAACud/OXqAYd5U3Lma0huSlP
+        expires: 2022-04-27T14:25:06.000Z
+        domain: api.dibspayment.eu
+        path: /
+        httpOnly: true
+        hostOnly: false
+        creation: 2021-04-28T14:00:14.139Z
+        lastAccessed: 2021-04-28T14:00:14.139Z
+        id: "7535826597622464"
+      - key: incap_ses_373_1967659
+        value: kMWWau+zTDxCpCBH1SktBbJqiWAAAAAAwGms2W3L4ZDkfe0yz2/NBg==
+        domain: api.dibspayment.eu
+        path: /
+        hostOnly: false
+        creation: 2021-04-28T14:00:14.139Z
+        lastAccessed: 2021-04-28T14:01:22.497Z
+        id: "8443311198737944"
     _type: cookie_jar
   - _id: spc_360be69129b747259668373eeced49e6
     parentId: wrk_d8d0fc42a8ed4e89bbac381245ceb35e
@@ -1361,13 +2074,15 @@ resources:
     _type: api_spec
   - _id: env_0ad3b1e7fd714bcba278ee5675765f45
     parentId: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
-    modified: 1611780535048
+    modified: 1619957555642
     created: 1611779980099
     name: Development
     data:
-      baseURL: http://localhost:8080/api
+      DIBS_TEST_URL: https://test.api.dibspayment.eu/
+      baseURL: https://pc-1.uials.no/api
     dataPropertyOrder:
       "&":
+        - DIBS_TEST_URL
         - baseURL
     color: "#ff0000"
     isPrivate: false
@@ -1375,7 +2090,7 @@ resources:
     _type: environment
   - _id: env_55c845e445e6491bb74296b3d5176804
     parentId: env_4291688b6af63692cd66ec85ba1c6f6caaf7ebf0
-    modified: 1611780553415
+    modified: 1619618657863
     created: 1611780153750
     name: Production
     data:

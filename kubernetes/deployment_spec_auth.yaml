@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: fishapp
+    service: auth
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 9080
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 9443
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auth
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: auth
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  labels:
+    app: fishapp
+spec:
+  selector:
+    matchLabels:
+      app: fishapp
+      service: auth
+  template:
+    metadata:
+      labels:
+        app: fishapp
+        service: auth
+    spec:
+      volumes:
+        - name: jwt-pubkey-volume
+          persistentVolumeClaim:
+            claimName: jwt-pubkey-pvc
+      containers:
+        - name: auth-container
+          volumeMounts:
+            - mountPath: /aplication_storage/token_key
+              name: jwt-pubkey-volume
+          imagePullPolicy: Always
+          image: localhost:32000/fishapp-auth:latest
+          ports:
+            - containerPort: 9080
+            - containerPort: 9443
+          envFrom:
+            - secretRef:
+                name: inter-container-logins-secrets
+            - secretRef:
+                name: default-logins-secrets
+
+          env:
+            - name: AUTH_SERVICE_URL
+              value: "http://auth-service:80/"
+          readinessProbe: # todo:change to prod values
+            httpGet:
+              path: /health/ready
+              port: 9080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 5
+          livenessProbe: # todo:change to prod values
+            httpGet:
+              path: /health/live
+              port: 9080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 5

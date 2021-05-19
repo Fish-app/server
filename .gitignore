@@ -1,4 +1,4 @@
-/target/
+**/target/
 !.mvn/wrapper/maven-wrapper.jar
 server
 .apt_generated
@@ -26,8 +26,6 @@ server
 
 .env
 # traefik cert
-.cert.json
-# Compose is symlinked, and may be different for diff situations
-docker-compose.yml
+config/traefik/cert.json
 
 .gradle/

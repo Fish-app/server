@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fishapp-db
+spec:
+  selector:
+    app: fishapp
+    service: dev-db
+  ports:
+    - protocol: TCP
+      port: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-db
+  labels:
+    app: fishapp
+spec:
+  selector:
+    matchLabels:
+      app: fishapp
+      service: dev-db
+  template:
+    metadata:
+      labels:
+        app: fishapp
+        service: dev-db
+    spec:
+      containers:
+        - name: dev-db-container
+          # imagePullPolicy: Never
+          image: localhost:32000/fishapp-dev-db:latest
+          ports:
+            - containerPort: 80
+---
+
