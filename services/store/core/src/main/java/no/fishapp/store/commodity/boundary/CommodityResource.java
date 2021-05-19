@@ -88,7 +88,7 @@ public class CommodityResource {
         Optional<Commodity> commodity = commodityService.getCommodity(id);
 
         return commodity.map(Response::ok)
-                        .orElse(Response.ok().status(Response.Status.NOT_FOUND))// todo: kansje bedre med 404
+                        .orElse(Response.ok().status(Response.Status.NOT_FOUND))
                         .build();
 
     }

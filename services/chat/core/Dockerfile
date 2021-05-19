@@ -32,9 +32,7 @@ LABEL traefik.http.routers.chat.rule="PathPrefix(`/api/chat/`)"
 #ENV fishapp_system_url=http://host.docker.internal/
 ENV fishapp_system_url=http://remote-run.uials.no/
 
-# todo:remove inject when starting container
-ENV http_client_username="fishapp"
-ENV http_client_password="fishapp"
+
 
 COPY --chown=1001:0 src/main/liberty/config /config/
 COPY --chown=1001:0 ./config/server.env /config/

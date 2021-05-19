@@ -17,7 +17,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "messages")
 public class Message {
-    // TODO: add images to the messages in future
 
     /**
      * The identifier of the message.

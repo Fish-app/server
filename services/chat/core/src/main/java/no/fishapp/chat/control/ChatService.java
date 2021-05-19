@@ -119,10 +119,6 @@ public class ChatService {
                 .buildFromConversation(conversation)).collect(Collectors.toList());
     }
 
-    /**
-     *  todo: handle pictures somehow
-     *  todo: handle push notfications outside of app
-     */
 
     /**
      * Create a new {@link Conversation} or finds the exsiting {@link Conversation}

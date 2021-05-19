@@ -113,7 +113,6 @@ public class AuthenticationStartup {
             newAuthUserData.setPassword(password);
             newAuthUserData.setGroups(List.of(Group.CONTAINER_GROUP_NAME));
             var authUser = authenticationService.createUser(newAuthUserData);
-            //todo: chek if this has sucseded
         }
     }
 
@@ -130,7 +129,6 @@ public class AuthenticationStartup {
             newAuthUserData.setPassword(adminPassword);
             newAuthUserData.setGroups(List.of(Group.ADMIN_GROUP_NAME));
             var authUser = authenticationService.createUser(newAuthUserData);
-            //todo: chek if this has sucseded
         }
     }
 
@@ -143,7 +141,6 @@ public class AuthenticationStartup {
             newAuthUserData.setPassword(password);
             newAuthUserData.setGroups(groops);
             var authUser = authenticationService.createUser(newAuthUserData);
-            //todo: chek if this has sucseded
         }
     }
 

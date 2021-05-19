@@ -170,7 +170,6 @@ public class RestClientAuthHandler {
      * @throws ConnectException        if there is an error connecting
      */
     private PublicKey getTokenPubKey() throws RestClientHttpException, ConnectException {
-        // todo: handle errors
 
         String pkey = authClient.getPubKey();
         String publicKeyPEM = pkey.replace("-----BEGIN PUBLIC KEY-----", "").replaceAll(System.lineSeparator(), "")
