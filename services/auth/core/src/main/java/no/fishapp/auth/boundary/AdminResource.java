@@ -15,6 +15,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * Implementes the REST HTTP API for the Admin-component of the Microservice
+ * <p>
+ * Uses {@link AdminService} to process the requests.
+ */
 @Path("admin")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

@@ -11,6 +11,9 @@ import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
+/**
+ * Endpoints used by Kubernetes Health Checking
+ */
 @Readiness
 @ApplicationScoped
 public class ChatReadinessCheck implements HealthCheck {

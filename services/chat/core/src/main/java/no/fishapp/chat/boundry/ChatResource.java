@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Boundary-part of the Chat-microservice
  * Implementes the REST HTTP API for the Chat-component of the Microservice
  * <p>
  * Uses {@link ChatService} to process the requests.

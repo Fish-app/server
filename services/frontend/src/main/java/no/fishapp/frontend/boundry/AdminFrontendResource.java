@@ -9,6 +9,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Implementes the REST HTTP API for the Frontend-component of the Microservice
+ * Provides a endpoint to run Health Checks
+ * <p>
+ */
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

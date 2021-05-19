@@ -1,6 +1,7 @@
 package no.fishapp.auth.boundary;
 
 
+import no.fishapp.auth.control.AuthenticationService;
 import no.fishapp.auth.control.KeyService;
 
 import javax.enterprise.context.Dependent;
@@ -11,6 +12,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Implementes the REST HTTP API to retrieve the Public Key, which is
+ * used for the JWT signing.
+ * <p>
+ * Uses {@link AuthenticationService} to process the requests.
+ */
 @Path("key.pem")
 @Dependent
 public class KeyResource {

@@ -1,14 +1,15 @@
-# Fishapp server
+# Fishapp Server
+This server was developed as part of a bachelor thesis at NTNU Ålesund. The application used with this server can be found [here](https://github.com/Fish-app/mobile-app).
 
-## Requierments
+## Requirements
 
 To build the services,
 maven ([linux](https://packages.debian.org/search?keywords=maven) [win](https://letmegooglethat.com/?q=How+to+install+maven+on+windows) [osx](https://formulae.brew.sh/formula/maven))
 is used. [Docker](https://docs.docker.com/engine/install/) is used as the kubernetes container runtime, remember
 the [post installation steps](https://docs.docker.com/engine/install/linux-postinstall/) (I always forget).
 
-For controlling the cluster, [kubectl](https://kubernetes.io/docs/tasks/tools/) is needed (if you user microk8s(which you should) than it's not needed because it is bundeled with the install ``microk8s kubectl``). 
-You will need a kubernetes cluster to run on. If you are only testing locally, [minikube](https://minikube.sigs.k8s.io/docs/start/) can be used, but i would recommend using [Microk8s](https://microk8s.io/) given that mikrokube does not have all the features required.
+For controlling the cluster, [kubectl](https://kubernetes.io/docs/tasks/tools/) is needed (if you user microk8s(which you should) than it's not needed because it is bundled with the install ``microk8s kubectl``). 
+You will need a Kubernetes cluster to run on. If you are only testing locally, [minikube](https://minikube.sigs.k8s.io/docs/start/) can be used, but i would recommend using [Microk8s](https://microk8s.io/) given that mikrokube does not have all the features required.
 
 ## Running locally
 
@@ -18,11 +19,11 @@ These are the steps to run the project:
 1. /kubernetes/development/MicroK8s/init_node.sh
 2. /kubernetes/development/MicroK8s/build_dev_db.sh
 3. /kubernetes/development/MicroK8s/build_containers.sh
-4. Then all the ``*.env.example`` files in the ``kubernetes/secrets`` needs to have the ``.example`` suffix removed. the default values shold work for dev with the exeption of the api key for the chekout module. You can still run the cluster but most calls to the chekout modul will return ``500 -  somthing somthing server error``. A free test acount can be created [here](https://portal.dibspayment.eu/registration).
+4. Then all the ``*.env.example`` files in the ``kubernetes/secrets`` needs to have the ``.example``-suffix removed. sTthe default values shold work for dev with the exeption of the api key for the chekout module. You can still run the cluster, but most calls to the chekout modul will return ``500 -  somthing somthing server error``. A free test acount can be created [here](https://portal.dibspayment.eu/registration).
 
 ## Deployment
 
-The server is meant to run on a kubernets cluster in production. Given the nature of kubernetes a single readme is not
+The server is meant to run on a Kubernets cluster in production. Given the nature of kubernetes a single readme is not
 going to suffice. But the key things to change is:
 
 - the ```kubernetes/volumes.yaml``` file should be changed to use whatever volumes you want to use in prod. All volumes are

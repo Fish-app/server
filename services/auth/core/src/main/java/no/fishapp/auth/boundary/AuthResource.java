@@ -1,6 +1,7 @@
 package no.fishapp.auth.boundary;
 
 
+import no.fishapp.auth.control.AdminService;
 import no.fishapp.auth.control.AuthenticationService;
 import no.fishapp.auth.model.AuthenticatedUser;
 import no.fishapp.auth.model.DTO.NewAuthUserData;
@@ -17,6 +18,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
+/**
+ * Implementes the REST HTTP API for the Auth-component of the Microservice
+ * <p>
+ * Uses {@link AuthenticationService} to process the requests.
+ */
 @Path("authentication")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

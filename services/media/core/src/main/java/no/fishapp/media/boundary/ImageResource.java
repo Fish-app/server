@@ -28,7 +28,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
+ * Implementes the REST HTTP API for the Media-component of the Microservice
  * Manages all HTTP request that are about {@link Image}.
+ * <p>
  */
 @Path("image")
 @Transactional
