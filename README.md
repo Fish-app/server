@@ -23,8 +23,7 @@ These are the steps to run the project:
 
 ## Deployment
 
-The server is meant to run on a Kubernets cluster in production. Given the nature of kubernetes a single readme is not
-going to suffice. But the key things to change is:
+The server is meant to run on a Kubernets cluster in production. Given the nature of kubernetes some level of tweaking to whatever deployment enviorment is required. But the key things to change is:
 
 - the ```kubernetes/volumes.yaml``` file should be changed to use whatever volumes you want to use in prod. All volumes are
   currently set up via ``PersistentVolumeClaim``'s so changing the underlying volume should be trivial.
