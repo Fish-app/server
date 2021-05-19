@@ -13,6 +13,7 @@ You will need a kubernetes cluster to run on. If you are only testing locally, [
 ## Running locally
 
 The project is currently using microk8s.
+These are the steps to run the project:
 
 1. /kubernetes/development/MicroK8s/init_node.sh
 2. /kubernetes/development/MicroK8s/build_dev_db.sh
