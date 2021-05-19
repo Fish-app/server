@@ -9,6 +9,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
+/**
+ * Endpoints used by Kubernetes Health Checking
+ */
 @Readiness
 @ApplicationScoped
 public class AuthReadinessCheck implements HealthCheck {

@@ -9,6 +9,9 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 
 
+/**
+ * Endpoints used by Kubernetes Health Checking
+ */
 @Liveness
 @ApplicationScoped
 public class ChatLivenessCheck implements HealthCheck {
