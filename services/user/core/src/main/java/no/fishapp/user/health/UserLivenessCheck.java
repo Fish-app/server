@@ -17,11 +17,6 @@ public class UserLivenessCheck implements HealthCheck {
     long memUsed = memBean.getHeapMemoryUsage().getUsed();
     long memMax = memBean.getHeapMemoryUsage().getMax();
 
-    /**
-     * Invokes the health check procedure provided by the implementation of this interface.
-     *
-     * @return {@link HealthCheckResponse} object containing information about the health check result
-     */
     @Override
     public HealthCheckResponse call() {
         return HealthCheckResponse.named("User Service Liveness Check")
